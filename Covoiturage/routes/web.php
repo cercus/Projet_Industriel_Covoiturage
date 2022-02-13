@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LocalizationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+// Route qui permet de connaître la langue active
+Route::get('locale', [LocalizationController::class, 'getLang'])->name('getlang');
+
+// Route qui permet de modifier la langue
+Route::get('locale/{lang}', [LocalizationController::class, 'setLang'])->name('setlang');
+
+// Route test lang
+Route::get('/testLang',function () {
+    return view('testLang');
 });

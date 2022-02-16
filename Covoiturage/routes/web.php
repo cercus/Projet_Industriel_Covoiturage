@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\LocalizationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\MailsController;
+use App\Http\Middleware\Localization;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +35,7 @@ Route::get('/testLang',function () {
 Route::get('/user', function () {
     return view('user');
 });
+
+// Route pour la page Poser une question
+Route::get('/question', [Controller::class, 'showQuestionForm'])->name('question');
+Route::post('/question', [MailsController::class, 'storeQuestion'])->name('store.question');

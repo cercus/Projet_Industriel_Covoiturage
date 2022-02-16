@@ -60,7 +60,7 @@
                 <div class="row text-center d-flex justify-content-center pt-5 mb-3">
                     <div class="col-md-3 mb-1">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="#!">Qui somme-nous?</a>
+                        <a href="#!">Qui sommes-nous?</a>
                     </h6>
                     </div>
                     <div class="col-md-3 mb-1">

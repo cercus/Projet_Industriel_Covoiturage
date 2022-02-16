@@ -1,73 +1,116 @@
 /* -----------------------Navbar----------------------- */
 
+
 /* style pour le navbar */
+
 .bg-dark {
     background-color: rgb(51, 63, 80) !important;
     padding: 0px;
 }
+
+
 /* style pour les différents champ de navbar */
+
 .navbar-dark .navbar-nav .nav-link {
     font-weight: 500;
     font-size: 20px;
     color: white;
 }
+
 .navbar-dark .navbar-nav .nav-item {
     margin: 0 15px;
 }
-.nav-link{
+
+.nav-link {
     margin-top: 3px;
 }
+
+
 /* style pour le logo de site */
-#logo-img{
-    width:73px; 
+
+#logo-img {
+    width: 73px;
     background-color: white;
     background-image: linear-gradient(to bottom, rgba(255, 255, 0, 0.185), rgba(0, 0, 255, 0.472));
     border-radius: 5px;
     margin-left: 15px;
 }
+
+
 /* style pour le nom de logo */
+
 #name-logo {
     margin-top: 10px;
     width: 150px;
 }
 
+
 /* -----------------------Footer----------------------- */
 
+
 /* style pour le footer */
+
 .page-footer {
     background-color: rgb(51, 63, 80) !important;
 }
+
+
 /* style pour le copyright */
-#Copyright{
+
+#Copyright {
     font-size: 18px;
-    font-family: 'Trebuchet MS','Lucida Grande', sans-serif;
+    font-family: 'Trebuchet MS', 'Lucida Grande', sans-serif;
 }
+
+
 /* style pour le choix de la langue */
+
 .langue {
-    color : rgba(0, 204, 255, 0.911) !important;
+    color: rgba(0, 204, 255, 0.911) !important;
 }
+
+
 /* style pour les réseau sociaux */
-.fa-big{
+
+.fa-big {
     font-size: 19px;
 }
 
+
 /* -------------------Style général pour l'ensemble des pages-------------------- */
 
+
 /* Style pour le fond */
+
 body {
     background-color: rgba(241, 241, 239, 0.4);
 }
 
+
 /* Style css pour les input des formulaires et les panneaux dans certaines pages (profil, qui-sommes-nous...) (:focus : garder la couleur quand l'user clique sur le input*/
+
 .input-form,
 .input-form:focus {
-    background-color: rgb(251, 229, 200);
-    border-color: rgb(251, 229, 200);
-    border-radius: 5px;
-    box-shadow: 2px 2px 3px 0px #6e6e6e;
+    background-color: rgb(251, 229, 200) !important;
+    border-color: rgb(251, 229, 200) !important;
+    border-radius: 5px !important;
+    box-shadow: 2px 2px 3px 0px #6e6e6e !important;
+    height: 20px !important;
+    padding-left: 10px;
 }
 
+.textarea-form,
+.textarea-form:focus {
+    background-color: rgb(251, 229, 200) !important;
+    border-color: rgb(251, 229, 200) !important;
+    border-radius: 5px !important;
+    box-shadow: 2px 2px 3px 0px #6e6e6e !important;
+    padding-left: 10px;
+}
+
+
 /* Style pour les boutons de formulaires */
+
 .button-form {
     display: flex;
     align-items: center;
@@ -80,7 +123,9 @@ body {
     box-shadow: 2px 2px 3px 0px #6e6e6e;
 }
 
+
 /* Style css pour centrer les titres */
+
 .center-title {
     text-align: center;
 }

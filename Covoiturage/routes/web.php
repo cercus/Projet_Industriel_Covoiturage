@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// Route pour la page d'accueil
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 // Route qui permet de connaître la langue active
 Route::get('locale', [LocalizationController::class, 'getLang'])->name('getlang');
@@ -26,4 +26,9 @@ Route::get('locale/{lang}', [LocalizationController::class, 'setLang'])->name('s
 // Route test lang
 Route::get('/testLang',function () {
     return view('testLang');
+});
+
+//Route pour la page de profil 
+Route::get('/user', function () {
+    return view('user');
 });

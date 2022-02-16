@@ -1,0 +1,38 @@
+/* Style pour le fond */
+
+body {
+    background-color: rgba(241, 241, 239, 0.4);
+}
+
+
+/* Style css pour les input des formulaires et les panneaux dans certaines pages (profil, qui-sommes-nous...) (:focus : garder la couleur quand l'user clique sur le input*/
+
+.input-form,
+.input-form:focus {
+    background-color: rgb(251, 229, 200);
+    border-color: rgb(251, 229, 200);
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+}
+
+
+/* Style pour les boutons de formulaires */
+
+.button-form {
+    display: flex;
+    align-items: center;
+    background-color: rgb(143, 170, 220);
+    color: white;
+    border-color: rgb(143, 170, 220);
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+}
+
+
+/* Style css pour centrer les titres */
+
+.center-title {
+    text-align: center;
+}

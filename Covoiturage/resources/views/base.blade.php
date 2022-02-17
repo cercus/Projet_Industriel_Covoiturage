@@ -25,11 +25,23 @@
                 <img id="name-logo" src="/images/CoLuminy.png" alt="CoLuminy">
             </a>
 
+            <span>
+                <div id="google_translate_element"></div> 
+                <script type="text/javascript"> 
+                    function googleTranslateElementInit() { 
+                    new google.translate.TranslateElement({pageLanguage: 'ar en'},
+                    'google_translate_element'); 
+                    } 
+                </script> 
+                <script type="text/javascript"
+                    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
+            </span>
+
             <div class="ml-auto">
                 <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item ">
-                        <a class="nav-link" href="#">Recherche de trajets <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#">Recherche de trajets </a>
                         </li>
                         <li class="nav-item">
                         <a class="nav-link" href="#">Proposer un trajet</a>

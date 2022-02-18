@@ -39,3 +39,8 @@ Route::get('/user', function () {
 // Route pour la page Poser une question
 Route::get('/question', [Controller::class, 'showQuestionForm'])->name('question');
 Route::post('/question', [MailsController::class, 'storeQuestion'])->name('store.question');
+
+// ROute Page A propos
+Route::get('/apropos', function () {
+    return view('apropos');
+});

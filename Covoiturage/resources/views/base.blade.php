@@ -24,6 +24,18 @@
             <a class="navbar-brand" href="#">
                 <img id="name-logo" src="/images/CoLuminy.png" alt="CoLuminy">
             </a>
+
+            <span>
+                <div id="google_translate_element"></div> 
+                <script type="text/javascript"> 
+                    function googleTranslateElementInit() { 
+                    new google.translate.TranslateElement({pageLanguage: 'ar en'},
+                    'google_translate_element'); 
+                    } 
+                </script> 
+                <script type="text/javascript"
+                    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
+            </span>
             
             <div class="ml-auto">
                 <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false" aria-controls="navbarSupportedContent">
@@ -38,7 +50,7 @@
                         <a class="nav-link" href="#">Proposer un trajet</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">A propos</a>
+                            <a class="nav-link" href="/apropos">A propos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">News</a>

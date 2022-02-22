@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
             {{-- le titre de la page --}}
             <title>@yield('title')</title>
-
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
@@ -25,20 +25,11 @@
                 <img id="name-logo" src="/images/CoLuminy.png" alt="CoLuminy">
             </a>
 
-            <span>
-                <div id="google_translate_element"></div> 
-                <script type="text/javascript"> 
-                    function googleTranslateElementInit() { 
-                    new google.translate.TranslateElement({pageLanguage: 'ar en'},
-                    'google_translate_element'); 
-                    } 
-                </script> 
-                <script type="text/javascript"
-                    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
-            </span>
-
             <div class="ml-auto">
-                <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
+                <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false" aria-controls="navbarSupportedContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse ml-auto" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item ">
                         <a class="nav-link" href="#">Recherche de trajets </a>
@@ -58,6 +49,7 @@
                     @yield('navbarSequel')
 
                 </div>  
+                
             </div>
         </nav><br>
         
@@ -84,6 +76,18 @@
                         <h6 class="text-uppercase font-weight-bold">Choix de langue :&nbsp
                             <a class="langue" href="locale/en">en</a>&nbsp | &nbsp<a class="langue" href="locale/fr">fr</a>
                         </h6>
+                        {{-- traduction  --}}
+                        <span>
+                            <div id="google_translate_element"></div> 
+                            <script type="text/javascript"> 
+                                function googleTranslateElementInit() { 
+                                new google.translate.TranslateElement({pageLanguage: 'ar en'},
+                                'google_translate_element'); 
+                                } 
+                            </script> 
+                            <script type="text/javascript"
+                                src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
+                        </span>
                     </div>
                 </div>
                 <hr class="rgba-white-light" style="margin: 0 15%;">
@@ -104,23 +108,23 @@
                         <div class="mb-5 flex-center fa-big">
                             <!-- Facebook -->
                             <a class="fb-ic">
-                            <i class="fab fa-facebook-f font-lg white-text mr-4"> </i>
+                                <i class="fab fa-facebook-f font-lg white-text mr-4"> </i>
                             </a>
                             <!-- Twitter -->
                             <a class="tw-ic">
-                            <i class="fab fa-twitter fa-lg white-text mr-4"> </i>
+                                <i class="fab fa-twitter fa-lg white-text mr-4"> </i>
                             </a>
                             <!-- Google +-->
                             <a class="gplus-ic">
-                            <i class="fab fa-google-plus-g fa-lg white-text mr-4"> </i>
+                                <i class="fab fa-google-plus-g fa-lg white-text mr-4"> </i>
                             </a>
                             <!--Linkedin -->
                             <a class="li-ic">
-                            <i class="fab fa-linkedin-in fa-lg white-text mr-4"> </i>
+                                <i class="fab fa-linkedin-in fa-lg white-text mr-4"> </i>
                             </a>
                             <!--Instagram-->
                             <a class="ins-ic">
-                            <i class="fab fa-instagram fa-lg white-text mr-4"> </i>
+                                <i class="fab fa-instagram fa-lg white-text mr-4"> </i>
                             </a>
                         </div>
                     </div>
@@ -130,7 +134,6 @@
                 <span id="Copyright">© {{date('Y')}} Copyright-M2 CCI MARSEILLE</span> 
             </div>
         </footer>
-
 
     </body>
 </html>

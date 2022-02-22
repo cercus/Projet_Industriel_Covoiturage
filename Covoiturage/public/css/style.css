@@ -13,12 +13,12 @@
 
 .navbar-dark .navbar-nav .nav-link {
     font-weight: 500;
-    font-size: 20px;
+    font-size: 15px;
     color: white;
 }
 
 .navbar-dark .navbar-nav .nav-item {
-    margin: 0 15px;
+    margin: 0 9px;
 }
 
 .nav-link {
@@ -128,4 +128,14 @@ body {
 
 .center-title {
     text-align: center;
+}
+
+/* Style css pour la page connexion */
+
+#rememberMe {
+    margin: .4rem;
+    height: 18px;
+    width: 18px;
+    background-color : green !important;
+    box-shadow: 2px 2px 3px 0px #6e6e6e !important
 }

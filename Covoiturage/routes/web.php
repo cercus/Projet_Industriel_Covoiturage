@@ -39,3 +39,7 @@ Route::get('/user', function () {
 // Route pour la page Poser une question
 Route::get('/question', [Controller::class, 'showQuestionForm'])->name('question');
 Route::post('/question', [MailsController::class, 'storeQuestion'])->name('store.question');
+
+// Route pour la page de connexion
+Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
+Route::post('/connexion', [MailsController::class, 'storeConnexion'])->name('store.connexion');

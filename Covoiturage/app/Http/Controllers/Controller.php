@@ -16,6 +16,10 @@ class Controller extends BaseController
         return view('question');
     }
 
+    public function showInscriptionForm() {
+        return view('inscription');
+    }
+
     // fonction pour afficher la page de connexion
     public function showConnexionForm() {
         return view('connexion');

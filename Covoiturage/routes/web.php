@@ -40,6 +40,14 @@ Route::get('/user', function () {
 Route::get('/question', [Controller::class, 'showQuestionForm'])->name('question');
 Route::post('/question', [MailsController::class, 'storeQuestion'])->name('store.question');
 
+// ROute Page A propos
+Route::get('/apropos', function () {
+    return view('apropos');
+});
+
+// Route pour la page Inscription
+Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('inscription');
+
 // Route pour la page de connexion
 Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
 Route::post('/connexion', [MailsController::class, 'storeConnexion'])->name('store.connexion');

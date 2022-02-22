@@ -22,5 +22,4 @@
 @endsection
 
 @section('content')
-    Contenu de la page de profil 
 @endsection

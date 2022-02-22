@@ -23,10 +23,10 @@
     @else
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#">Inscription</a>
+                <a class="nav-link" href="/inscription">Inscription</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Connexion</a>
+                <a class="nav-link" href="/connexion">Connexion</a>
             </li>
         </ul>
     @endif
@@ -56,15 +56,18 @@
             <label for="email">{{__('Adresse mail')}}</label>
             <input type="email" id="email" name="email" class="form-control input-form @error('email') is-invalid @enderror" required value="{{old('email')}}"/>
         </div>
+    @endif
+    <div class="form-group col-md-8 mx-auto">
+        <label for="email">{{__('Adresse mail')}}</label>
+        <input type="email" id="email" name="email" class="input-form @error('email') is-invalid @enderror" required value="{{old('email')}}"/>
+    </div>
 
-        <div class="form-group col-md-8 mx-auto">
-            <label for="objet">{{__('Objet')}}</label>
-            <input type="text" id="objet" name="objet" class="form-control input-form @error('objet') is-invalid @enderror" required value="{{old('objet')}}"/>
-            @error('objet')
-            <div id="objet_feedback" class="invalid-feedback">
-                {{$message}}
-            </div>
-            @enderror
+    <div class="form-group col-md-8 mx-auto">
+        <label for="objet">{{__('Objet')}}</label>
+        <input type="text" id="objet" name="objet" class="input-form @error('objet') is-invalid @enderror" required value="{{old('objet')}}"/>
+        @error('objet')
+        <div id="objet_feedback" class="invalid-feedback">
+            {{$message}}
         </div>
 
         <div class="form-group col-md-8 mx-auto">

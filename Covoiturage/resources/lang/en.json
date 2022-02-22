@@ -2,6 +2,10 @@
     "Accueil": "Home",
     "Proposer": "Submit",
     "Liste": "List",
+<<<<<<< HEAD
+    "Contact": "Contact"
+    
+=======
     "Contact": "Contact",
     "Poser une question": "Ask a question",
     "Adresse mail": "Mail adress",
@@ -9,4 +13,5 @@
     "Message": "Message",
     "Envoyer": "Send",
     "Une question, une remarque, une idée en lien avec site ? Remplissez le formulaire et nous vous répondrons dans les plus brefs délai.": "A question, a suggestion, an idea ? Fill in the form and we will answer you as soon as possible."
+>>>>>>> 43ef79c41f21a4a5c95cb27eeac8a8320d6b16b3
 }

@@ -39,7 +39,7 @@
                 <div class="navbar-collapse collapse ml-auto" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item ">
-                        <a class="nav-link" href="#">Recherche de trajets <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#">Recherche de trajets </a>
                         </li>
                         <li class="nav-item">
                         <a class="nav-link" href="#">Proposer un trajet</a>
@@ -83,6 +83,7 @@
                         <h6 class="text-uppercase font-weight-bold">Choix de langue :&nbsp
                             <a class="langue" href="locale/en">en</a>&nbsp | &nbsp<a class="langue" href="locale/fr">fr</a>
                         </h6>
+<<<<<<< HEAD
                         <span>
                                 <div id="google_translate_element"></div> 
                                 <script type="text/javascript"> 
@@ -95,6 +96,20 @@
                                     src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
                             </span>
                         
+=======
+                        {{-- traduction  --}}
+                        <span>
+                            <div id="google_translate_element"></div> 
+                            <script type="text/javascript"> 
+                                function googleTranslateElementInit() { 
+                                new google.translate.TranslateElement({pageLanguage: 'ar en'},
+                                'google_translate_element'); 
+                                } 
+                            </script> 
+                            <script type="text/javascript"
+                                src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
+                        </span>
+>>>>>>> fefb7000f9a91f9dd40c4e487150024ef10ea2d0
                     </div>
                 </div>
                 <hr class="rgba-white-light" style="margin: 0 15%;">
@@ -115,23 +130,23 @@
                         <div class="mb-5 flex-center fa-big">
                             <!-- Facebook -->
                             <a class="fb-ic">
-                            <i class="fab fa-facebook-f font-lg white-text mr-4"> </i>
+                                <i class="fab fa-facebook-f font-lg white-text mr-4"> </i>
                             </a>
                             <!-- Twitter -->
                             <a class="tw-ic">
-                            <i class="fab fa-twitter fa-lg white-text mr-4"> </i>
+                                <i class="fab fa-twitter fa-lg white-text mr-4"> </i>
                             </a>
                             <!-- Google +-->
                             <a class="gplus-ic">
-                            <i class="fab fa-google-plus-g fa-lg white-text mr-4"> </i>
+                                <i class="fab fa-google-plus-g fa-lg white-text mr-4"> </i>
                             </a>
                             <!--Linkedin -->
                             <a class="li-ic">
-                            <i class="fab fa-linkedin-in fa-lg white-text mr-4"> </i>
+                                <i class="fab fa-linkedin-in fa-lg white-text mr-4"> </i>
                             </a>
                             <!--Instagram-->
                             <a class="ins-ic">
-                            <i class="fab fa-instagram fa-lg white-text mr-4"> </i>
+                                <i class="fab fa-instagram fa-lg white-text mr-4"> </i>
                             </a>
                         </div>
                     </div>
@@ -141,7 +156,6 @@
                 <span id="Copyright">© {{date('Y')}} Copyright-M2 CCI MARSEILLE</span> 
             </div>
         </footer>
-
 
     </body>
 </html>

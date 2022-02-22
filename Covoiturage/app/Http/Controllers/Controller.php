@@ -11,6 +11,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    // fonction pour afficher la page de poser une question
     public function showQuestionForm() {
         return view('question');
     }

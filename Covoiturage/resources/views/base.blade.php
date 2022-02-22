@@ -24,7 +24,7 @@
             <a class="navbar-brand" href="#">
                 <img id="name-logo" src="/images/CoLuminy.png" alt="CoLuminy">
             </a>
-
+            
             <div class="ml-auto">
                 <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false" aria-controls="navbarSupportedContent">
                     <span class="navbar-toggler-icon"></span>
@@ -38,7 +38,7 @@
                         <a class="nav-link" href="#">Proposer un trajet</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">A propos</a>
+                            <a class="nav-link" href="/apropos">A propos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">News</a>

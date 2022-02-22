@@ -47,3 +47,7 @@ Route::get('/apropos', function () {
 
 // Route pour la page Inscription
 Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('inscription');
+
+// Route pour la page de connexion
+Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
+Route::post('/connexion', [MailsController::class, 'storeConnexion'])->name('store.connexion');

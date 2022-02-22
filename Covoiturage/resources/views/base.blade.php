@@ -11,8 +11,6 @@
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
             <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.3/css/mdb.min.css" rel="stylesheet">
             <script src="https://kit.fontawesome.com/ae49975df8.js" crossorigin="anonymous"></script>
-            <script src="https://www.google.com/recaptcha/api.js"></script>
-            <link rel="icon" href="{!! asset('images/logo_min2.png') !!}"/>
             
             {{-- le style de la page --}}
             @yield('style')
@@ -26,11 +24,6 @@
             <a class="navbar-brand" href="#">
                 <img id="name-logo" src="/images/CoLuminy.png" alt="CoLuminy">
             </a>
-                @if(session()->get('profil') == "Conducteur")
-                    <button type="submit" class="btn button-form">Passager</button>
-                @elseif(session()->get('profil') == "Passager")<!-- Ajoute fonction possedeVoiture() -->
-                <button type="submit" class="btn button-form">Conducteur</button>
-                @endif
             
             <div class="ml-auto">
                 <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false" aria-controls="navbarSupportedContent">
@@ -76,27 +69,13 @@
                     </div>
                     <div class="col-md-3 mb-1">
                         <h6 class="text-uppercase font-weight-bold">
-                            <a href="/question">Poser une question</a>
+                            <a href="#!">Poser une question</a>
                         </h6>
                     </div>
                     <div class="col-md-3 mb-1">
                         <h6 class="text-uppercase font-weight-bold">Choix de langue :&nbsp
                             <a class="langue" href="locale/en">en</a>&nbsp | &nbsp<a class="langue" href="locale/fr">fr</a>
                         </h6>
-<<<<<<< HEAD
-                        <span>
-                                <div id="google_translate_element"></div> 
-                                <script type="text/javascript"> 
-                                    function googleTranslateElementInit() { 
-                                    new google.translate.TranslateElement({pageLanguage: 'ar en'},
-                                    'google_translate_element'); 
-                                    } 
-                                </script> 
-                                <script type="text/javascript"
-                                    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
-                            </span>
-                        
-=======
                         {{-- traduction  --}}
                         <span>
                             <div id="google_translate_element"></div> 
@@ -109,7 +88,6 @@
                             <script type="text/javascript"
                                 src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
                         </span>
->>>>>>> fefb7000f9a91f9dd40c4e487150024ef10ea2d0
                     </div>
                 </div>
                 <hr class="rgba-white-light" style="margin: 0 15%;">

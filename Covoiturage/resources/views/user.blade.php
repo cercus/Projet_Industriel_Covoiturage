@@ -66,8 +66,6 @@
                 </div>
             </button>
         </div>
-    <!--</div>
-    <div class="row">-->
         <div class="col espace-bottom" >
             <button type="button" class="button-icon" autofocus>
                 <div><h3>

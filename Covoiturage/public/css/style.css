@@ -129,3 +129,12 @@ body {
 .center-title {
     text-align: center;
 }
+
+/* Style css pour la page connexion */
+
+#rememberMe {
+    margin: .4rem;
+    height: 18px;
+    width: 18px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e !important
+}

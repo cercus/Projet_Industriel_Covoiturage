@@ -87,7 +87,7 @@ body {
 }
 
 
-/* Style css pour les input des formulaires et les panneaux dans certaines pages (profil, qui-sommes-nous...) (:focus : garder la couleur quand l'user clique sur le input*/
+/* ------------------- Style css pour les input des formulaires (:focus : garder la couleur quand l'user clique sur le input ------------------- */
 
 .input-form,
 .input-form:focus {
@@ -95,8 +95,22 @@ body {
     border-color: rgb(251, 229, 200) !important;
     border-radius: 5px !important;
     box-shadow: 2px 2px 3px 0px #6e6e6e !important;
-    height: 20px !important;
+    height: 30px !important;
     padding-left: 10px;
+    /*width: 100%; */
+}
+
+.input-form-file,
+.input-form-file:focus {
+    background-color: rgb(251, 229, 200) !important;
+    border-color: rgb(251, 229, 200) !important;
+    border-radius: 5px !important;
+    box-shadow: 2px 2px 3px 0px #6e6e6e !important;
+    height: 38px !important;
+    padding-left: 10px;
+    margin-top: 5px;
+    padding-top: 5px;
+    width: 102%;
 }
 
 .textarea-form,
@@ -106,6 +120,28 @@ body {
     border-radius: 5px !important;
     box-shadow: 2px 2px 3px 0px #6e6e6e !important;
     padding-left: 10px;
+    width: 100%;
+}
+
+
+/* Affichage de 2 input sur la même ligne pour les formulaires */
+
+@media screen and (min-width: 992px) {
+    .col-right-input {
+        display: inline-block;
+        width: 40%;
+    }
+    .col-left-input {
+        float: right;
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .col-right-input {
+        display: block;
+        padding-bottom: 20px;
+    }
 }
 
 
@@ -121,6 +157,19 @@ body {
     padding-right: 30px;
     border-radius: 5px;
     box-shadow: 2px 2px 3px 0px #6e6e6e;
+}
+
+
+/* Taille du captcha pour les petites résolution */
+
+@media screen and (max-width: 302px) {
+    .captcha-resize {
+        padding: 0 auto;
+        transform: scale(0.60);
+        -webkit-transform: scale(0.60);
+        transform-origin: center center;
+        -webkit-transform-origin: center center;
+    }
 }
 
 

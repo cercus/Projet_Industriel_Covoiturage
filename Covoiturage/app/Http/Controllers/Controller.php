@@ -14,4 +14,8 @@ class Controller extends BaseController
     public function showQuestionForm() {
         return view('question');
     }
+
+    public function showInscriptionForm() {
+        return view('inscription');
+    }
 }

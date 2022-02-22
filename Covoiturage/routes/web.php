@@ -44,3 +44,6 @@ Route::post('/question', [MailsController::class, 'storeQuestion'])->name('store
 Route::get('/apropos', function () {
     return view('apropos');
 });
+
+// Route pour la page Inscription
+Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('inscription');

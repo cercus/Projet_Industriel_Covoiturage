@@ -11,7 +11,6 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    // fonction pour afficher la page de poser une question
     public function showQuestionForm() {
         return view('question');
     }
@@ -20,7 +19,7 @@ class Controller extends BaseController
         return view('inscription');
     }
 
-    // fonction pour afficher la page de connexion
+    // FOnction pour afficher la page de connexion
     public function showConnexionForm() {
         return view('connexion');
     }

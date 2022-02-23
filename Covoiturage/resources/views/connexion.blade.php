@@ -11,10 +11,10 @@
 @section('navbarSequel')
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="#">Inscription</a>
+            <a class="nav-link" href="/inscription">Inscription</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Connexion</a>
+            <a class="nav-link" href="/connexion">Connexion</a>
         </li>
     </ul>
 @endsection

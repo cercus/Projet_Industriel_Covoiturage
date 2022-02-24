@@ -19,8 +19,13 @@ class Controller extends BaseController
         return view('inscription');
     }
 
-    // FOnction pour afficher la page de connexion
+    // Fonction pour afficher la page de connexion
     public function showConnexionForm() {
         return view('connexion');
+    }
+
+    // Fonction pour afficher la page de recherche un trajet
+    public function showSearchRoute() {
+        return view('search_route');
     }
 }

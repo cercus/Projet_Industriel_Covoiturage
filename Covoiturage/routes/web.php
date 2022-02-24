@@ -53,3 +53,6 @@ Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('in
 // Route pour la page de connexion
 Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
 Route::post('/connexion', [Controller::class, 'storeConnexion'])->name('store.connexion');
+
+// Route pour la page recherche de trajet
+Route::get('/rechercheTrajet', [Controller::class, 'showSearchRoute'])->name('search_route');

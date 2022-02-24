@@ -86,6 +86,10 @@ body {
     background-color: rgba(241, 241, 239, 0.4);
 }
 
+.bold-text {
+    font-weight: bold;
+}
+
 
 /* ------------------- Style css pour les input des formulaires (:focus : garder la couleur quand l'user clique sur le input ------------------- */
 
@@ -160,7 +164,20 @@ body {
 }
 
 
-/* Style pour la page user.php */
+/* Taille du captcha pour les petites résolution */
+
+@media screen and (max-width: 302px) {
+    .captcha-resize {
+        padding: 0 auto;
+        transform: scale(0.60);
+        -webkit-transform: scale(0.60);
+        transform-origin: center center;
+        -webkit-transform-origin: center center;
+    }
+}
+
+
+/* ------------------- Style pour la page user.php  ------------------- */
 
 
 /* Style pour les boutons avec icone de formulaires */
@@ -202,7 +219,7 @@ body {
 }
 
 
-/* Style css pour la page connexion */
+/* ------------------- Style css pour la page connexion /* ------------------- */
 
 #rememberMe {
     margin: .4rem;
@@ -212,21 +229,45 @@ body {
 }
 
 
-/* Taille du captcha pour les petites résolution */
-
-@media screen and (max-width: 302px) {
-    .captcha-resize {
-        padding: 0 auto;
-        transform: scale(0.60);
-        -webkit-transform: scale(0.60);
-        transform-origin: center center;
-        -webkit-transform-origin: center center;
-    }
-}
-
-
 /* Style css pour centrer les titres */
 
 .center-title {
     text-align: center;
+}
+
+
+/* ------------------- Style css pour la page trajet en cours ------------------- */
+
+.cadre-arrondis {
+    min-height: 100px;
+    border: 1px solid #a8a3a3;
+    border-radius: 30px;
+    text-align: center;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.small-cadre-arrondis {
+    min-height: 50px;
+    border: 1px solid #a8a3a3;
+    border-radius: 30px;
+    text-align: center;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 10px;
+}
+
+.ligne {
+    border-top: 1px solid #a8a3a3;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.button-fond {
+    background-color: rgb(249, 249, 248);
+    border: 1px solid rgb(249, 249, 248);
 }

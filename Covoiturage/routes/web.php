@@ -53,3 +53,15 @@ Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('in
 // Route pour la page de connexion
 Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
 Route::post('/connexion', [Controller::class, 'storeConnexion'])->name('store.connexion');
+
+// Route pour la page de modification du profil
+Route::get('/modification_profil', [Controller::class, 'showModificationProfilForm'])->name('modification_profil');
+Route::post('/modification_profil', [Controller::class, 'modifyProfil'])->name('modify.profil');
+
+// Route pour la page information personnels
+Route::get('/informations_personnelles', [Controller::class, 'showInfosPerso'])->name('informations_personnelles');
+Route::post('informations_personnelles')->name('informations_personnelles_post');
+
+// Route pour la page de modification technique
+Route::get('/modification_technique', [Controller::class, 'showModificationTechniqueForm'])->name('modification_technique');
+Route::post('/modification_technique', [Controller::class, 'modifyTechnique'])->name('modify.technique');

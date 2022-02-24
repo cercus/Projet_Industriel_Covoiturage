@@ -8,5 +8,17 @@
     "Objet": "Object",
     "Message": "Message",
     "Envoyer": "Send",
-    "Une question, une remarque, une idée en lien avec site ? Remplissez le formulaire et nous vous répondrons dans les plus brefs délai.": "A question, a suggestion, an idea ? Fill in the form and we will answer you as soon as possible."
+    "Une question, une remarque, une idée en lien avec site ? Remplissez le formulaire et nous vous répondrons dans les plus brefs délai.": "A question, a suggestion, an idea ? Fill in the form and we will answer you as soon as possible.",
+    "Reinitialisation": "Reset",
+    "Réinitialisation de votre mot de passe" : "Reset your password",
+    "Valider":"to validate",
+    "votre mot de passe a été reinitialisé !":"Your password has been reset !",
+    "Nous vous avons envoyé un lien de réinitialisation de mot de passe par e-mail !":"We have emailed your password reset link !",
+    "Merci de patienter avant de réessayer.":"Please wait before retrying.",
+    "Ce mot de passe de réinitialisation n'est pas valide.":"This password reset token is invalid.",
+    "Nous ne trouvons pas d'utilisateur avec cette adresse e-mail.":"We can't find a user with that email address.",
+    "Ces informations d'identification ne correspondent pas à nos dossiers.":"These credentials do not match our records.",
+    "Le mot de passe fourni est incorrect.":"The provided password is incorrect.",
+    "Trop de tentatives de connexion. Veuillez réessayer dans :seconds secondes.":"Too many login attempts. Please try again :seconds seconds."
+
 }

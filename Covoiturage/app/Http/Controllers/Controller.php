@@ -23,4 +23,8 @@ class Controller extends BaseController
     public function showConnexionForm() {
         return view('connexion');
     }
+
+    public function showreinitInputEmail() {
+        return view('reinitInputEmail');
+    }
 }

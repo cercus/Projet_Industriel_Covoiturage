@@ -52,4 +52,20 @@ class Controller extends BaseController
     public function showModificationTechniqueForm() {
         return view('modification_technique');
     }
+
+    public function showMesMessages() {
+        return view('mes_messages');
+    }
+
+    public function showEcrireMessageForm(){
+        return view('nouveau_message');
+    }
+
+    public function newMessage() {
+        return view('nouveau_message');
+    }
+
+    public function showMessagesReply() {
+        return view('repondre_message');
+    }
 }

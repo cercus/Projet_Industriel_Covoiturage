@@ -65,3 +65,13 @@ Route::post('informations_personnelles')->name('informations_personnelles_post')
 // Route pour la page de modification technique
 Route::get('/modification_technique', [Controller::class, 'showModificationTechniqueForm'])->name('modification_technique');
 Route::post('/modification_technique', [Controller::class, 'modifyTechnique'])->name('modify.technique');
+
+// Route pour la page message.php
+Route::get('/mes_messages', [Controller::class, 'showMesMessages'])->name('messages.all');
+Route::post('/mes_messages', [Controller::class, 'newMessage'])->name('message.new');
+
+// Route pour la page ecrire_message.php
+Route::get('/nouveau_message', [Controller::class, 'showEcrireMessageForm'])->name('messages.new');
+
+// Route pour la page repondre_message.php
+Route::get('/repondre_message', [Controller::class, 'showMessagesReply'])->name('messages.reply');

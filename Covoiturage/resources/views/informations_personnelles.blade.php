@@ -102,8 +102,8 @@
 </div>
 
 <div class="col justify-content-center align-items-center" style="display: flex; padding-top: 30px;">
-    <form method="POST" action="{{route('modification_profil')}}">@csrf<button type="submit" class="button-form" style="margin-right: 5%;">Modifier les informations personnelles</button></form>
-    <form method="POST" action="{{route('modification_technique')}}">@csrf<button type="submit" class="button-form" style="margin-left: 5%;">Modifier les informations techniques</button></form>
+    <form method="POST" action="{{route('modification_profil')}}">@csrf<button type="submit" class="btn button-form" style="margin-right: 5%;">Modifier les informations personnelles</button></form>
+    <form method="POST" action="{{route('modification_technique')}}">@csrf<button type="submit" class="btn button-form" style="margin-left: 5%;">Modifier les informations techniques</button></form>
 </div>
 
 @endsection

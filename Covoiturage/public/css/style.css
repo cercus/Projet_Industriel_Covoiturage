@@ -230,3 +230,288 @@ body {
 .center-title {
     text-align: center;
 }
+
+
+
+/********************************************************/
+.button-form-accueil {
+    display: flex;
+    align-items: center;
+    background-color: rgb(143, 170, 220);
+    color: white;
+    border-color: rgb(143, 170, 220);
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+}
+
+.button-form-details {
+    display: flex;
+    align-items: center;
+    background-color: rgb(143, 170, 220);
+    color: white;
+    border-color: rgb(143, 170, 220);
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+}
+
+.center-title {
+    text-align: center;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.margin-bottom-div{
+    margin-bottom: 15px;
+}
+
+.margin-bottom-accueil{
+    margin-bottom: 5%;
+}
+
+div.gallery{
+    float: left;
+    background-color: rgb(251, 229, 200);
+    border-color: rgb(251, 229, 200);
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+    margin-bottom: 15px;
+}
+
+div.floatLeft{
+    float: left;
+}
+
+div.gallery img {
+    width:150px;
+    height:150px;
+    border-radius: 50%;
+}
+
+
+
+.trajetImg {
+    width:40px;
+    height:10px;
+}
+
+.starTrajetImg {
+    width:20px;
+    height:20px;
+}
+
+.confirmationImg {
+    width:100px;
+    height:100px;
+    margin-top: 6%;
+}
+
+.trajetProfilImg {
+    width:60px;
+    height:60px;
+    border-radius: 50%;
+}
+
+.trajetVoitureImg {
+    width:60px;
+    height:60px;
+}
+  
+div.desc {
+    padding: 15px;
+    text-align: justify;
+}
+
+.center-text{
+    text-align: center;
+}
+
+.justify-text {
+    text-align: justify;
+}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+[class*="colonne-"] {
+float: left;
+padding: 15px;
+width: 100%;
+}
+
+.fond{
+    border-radius: 5px;
+    border-color: black;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+}
+
+.fond2{
+    border-radius: 5px;
+    border-color: black;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+}
+
+.bordureTd{
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+}
+
+.bordureAnnulation{
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-bottom: 3%;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+}
+
+.bordurePaiement{
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-bottom: 3%;
+    padding-top: 3%;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+}
+
+.textAnnulation{
+    padding-left: 60px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.luminyImg {
+    margin-left: 10%;
+}
+
+.button-annulation{
+    display: flex;
+    align-items: center;
+    background-color: rgb(143, 170, 220);
+    color: white;
+    border-color: rgb(143, 170, 220);
+    margin-top: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+    width:70px;
+    height:30px;
+    margin-left: 35%;
+}
+
+.button-paiement {
+    display: flex;
+    align-items: center;
+    background-color: rgb(143, 170, 220);
+    color: white;
+    border-color: rgb(143, 170, 220);
+    margin-top: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+    width:70px;
+    height:40px;
+    margin-left: 40%;
+}
+
+
+
+@media only screen and (min-width: 600px) {
+    /*Tablette et ordinateur*/
+    
+
+    div.gallery{
+        margin-right: 8.33%;
+    }
+
+    .colonne-1 {width: 8.33%;}
+    .colonne-2 {width: 16.66%;}
+    .colonne-3 {width: 25%;}
+    .colonne-4 {width: 33.33%;}
+    .colonne-5 {width: 41.66%;}
+    .colonne-6 {width: 50%;}
+    .colonne-7 {width: 58.33%;}
+    .colonne-8 {width: 66.66%;}
+    .colonne-9 {width: 75%;}
+    .colonne-10 {width: 83.33%;}
+    .colonne-11 {width: 91.66%;}
+    .colonne-12 {width: 100%;}
+
+    .luminyImg {
+        margin-left: 35%;
+    }
+
+    .button-form-accueil {
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-top: 10px;
+        width:120px;
+        height:50px;
+        margin-left: 45%;
+    }
+
+    .button-form-details {
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-top: 10px;
+        width:120px;
+        height:50px;
+        margin-left: 45%;
+    }
+
+    .button-annulation {
+        padding-left: 20px;
+        padding-right: 20px;
+        width:90px;
+        height:50px;
+        margin-left: 45%;
+    }
+
+    .button-paiement {
+        padding-left: 15px;
+        padding-right: 15px;
+        width:80px;
+        height:50px;
+        margin-left: 40%;
+    }
+    
+    .marginTrajet{
+        margin-left: 25%;
+        margin-right: 25%;
+        width:50%;
+    }
+
+    .bordureAnnulation{
+        margin-left: 25%;
+        margin-right: 25%;
+        padding-top: 3%;
+        width: 50%;
+    }
+
+    .bordurePaiement{
+        margin-left: 25%;
+        margin-right: 25%;
+        width: 50%;
+    }
+    
+    .textAnnulation{
+        padding-left: 120px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .confirmationImg {
+        width:100px;
+        height:100px;
+        margin-top: 3%;
+    }
+
+    .margin-trajetsBest{
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
+
+
+/********************************************************************************/

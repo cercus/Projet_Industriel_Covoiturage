@@ -4,6 +4,8 @@
         <meta charset="UTF-8">
             {{-- le titre de la page --}}
             <title>@yield('title')</title>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -13,6 +15,7 @@
             <script src="https://kit.fontawesome.com/ae49975df8.js" crossorigin="anonymous"></script>
             <script src="https://www.google.com/recaptcha/api.js"></script>
             <link rel="icon" href="{!! asset('images/logo_min2.png') !!}"/>
+            <link rel="stylesheet" href="/css/style.css">
             
             {{-- le style de la page --}}
             @yield('style')
@@ -39,7 +42,7 @@
                 <div class="navbar-collapse collapse ml-auto" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item ">
-                        <a class="nav-link" href="#">Recherche de trajets <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="/rechercheTrajet">Recherche de trajets <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
                         <a class="nav-link" href="#">Proposer un trajet</a>
@@ -71,7 +74,7 @@
                 <div class="row text-center d-flex justify-content-center pt-5 mb-3">
                     <div class="col-md-3 mb-1">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="#!">Qui sommes-nous?</a>
+                        <a href="/quisommesnous">Qui sommes-nous?</a>
                     </h6>
                     </div>
                     <div class="col-md-3 mb-1">

@@ -16,10 +16,7 @@ use App\Http\Middleware\Localization;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Route pour la page d'accueil
-Route::get('/', function () {
-    return view('home');
-});
+
 // Route qui permet de connaître la langue active
 Route::get('locale', [LocalizationController::class, 'getLang'])->name('getlang');
 
@@ -53,3 +50,29 @@ Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('in
 // Route pour la page de connexion
 Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
 Route::post('/connexion', [Controller::class, 'storeConnexion'])->name('store.connexion');
+
+
+//Page qui sommes nous
+Route::get('/quisommesnous', [Controller::class, 'quisommesnous'])->name('quisommesnous');
+
+//Page qui sommes nous
+Route::get('/paiement', [Controller::class, 'paiement'])->name('paiement');
+
+//Page cofirmation d'annulation
+Route::get('/confirmationannulation', [Controller::class, 'confirmationannulation'])->name('confirmationannulation');
+
+//Page accueil
+Route::get('/', [Controller::class, 'showFormAccueil'])->name('accueil');
+Route::post('/', [Controller::class, 'accueil'])->name('accueil.post');
+
+
+//Page résultats de la recherche de trajets
+Route::get('/rechercheTrajet', [Controller::class, 'accueil'])->name('rechercheTrajetResultDeAccueil');
+Route::get('/rechercheTrajet', [Controller::class, 'rechercheTrajet'])->name('rechercheTrajetResultDeTrajet');
+
+//Page recherche trajets
+Route::get('/rechercheTrajet', [Controller::class, 'showFormRechercheTrajet'])->name('rechercheTrajet');
+Route::post('/rechercheTrajet', [Controller::class, 'rechercheTrajet'])->name('rechercheTrajet.post');
+
+//Page détails résultat recherche trajet
+Route::get('/detailsResultRechercheTrajet/{trajetId}', [Controller::class, 'detailsResultRechercheTrajet'])->where('trajetId', '[0-9]+')->name('detailsResultRechercheTrajet');

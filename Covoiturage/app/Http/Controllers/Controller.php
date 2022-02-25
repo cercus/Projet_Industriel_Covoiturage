@@ -35,4 +35,12 @@ class Controller extends BaseController
     public function showNotation() {
         return view('notation');
     }
+    
+    public function showCaracteristique() {
+        return view('caracteristique');
+    }
+    
+    public function showHistoriqueTrajets() {
+        return view('historiqueTrajets');
+    }
 }

@@ -66,7 +66,7 @@
         @enderror
     </div>
     <div class="form-group col-md-8 mx-auto">
-        <label for="mail">{{__('reécrire votre nouveau mot de passe')}}</label>
+        <label for="mail">{{__('Reécrire votre nouveau mot de passe')}}</label>
         <input type="text" id="password" name="password" class="input-form @error('mail') is-invalid @enderror" required value="{{old('mail')}}"/>
         @error('password')
         <div id="mail_feedback" class="invalid-feedback">

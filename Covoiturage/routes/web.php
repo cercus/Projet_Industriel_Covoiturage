@@ -62,3 +62,8 @@ Route::get('/reinit', [Controller::class, 'showReinit'])->name('reinit');
 // Route pour la page de notation
 Route::get('/notation', [Controller::class, 'showNotation'])->name('notation');
 
+// Route pour la page de caractéristiques
+Route::get('/caracteristique', [Controller::class, 'showCaracteristique'])->name('caracteristique');
+
+// Route pour historique trajet
+Route::get('/historiqueTrajets', [Controller::class, 'showHistoriqueTrajets'])->name('historiqueTrajets');

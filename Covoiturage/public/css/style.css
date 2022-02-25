@@ -230,3 +230,54 @@ body {
 .center-title {
     text-align: center;
 }
+
+/* style rating */
+.rating-css div {
+    color: #ffe400;
+    font-size: 15px;
+    font-family: sans-serif;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 10px 0;
+  }
+  .rating-css input {
+    display: none;
+  }
+  .rating-css input + label {
+    font-size: 30px;
+    text-shadow: 1px 1px 0 #8f8420;
+    cursor: pointer;
+  }
+  .rating-css input:checked + label ~ label {
+    color: #b4afaf;
+  }
+  .rating-css label:active {
+    transform: scale(0.8);
+    transition: 0.3s ease;
+  }
+
+  /* -------------- Style css pour le model de résultat de recherche d'un trajet -------------- */
+
+/* le séparateur horizontal */
+.h-divider{
+    margin-top:20px;
+    margin-bottom:20px;
+    width:86%;
+    border-top:2px solid gray;
+}
+
+.border {
+    border-radius: 20px;
+    height: 80%;
+}
+
+.rounded-circle{
+    border: 2px solid gray;
+}
+
+.text-h6 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 21px;
+}

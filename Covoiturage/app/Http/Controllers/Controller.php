@@ -19,12 +19,20 @@ class Controller extends BaseController
         return view('inscription');
     }
 
-    // FOnction pour afficher la page de connexion
+    // Fonction pour afficher la page de connexion
     public function showConnexionForm() {
         return view('connexion');
     }
 
-    public function showreinitInputEmail() {
+    public function showReinitInputEmail() {
         return view('reinitInputEmail');
+    }
+    
+    public function showReinit() {
+        return view('reinit');
+    }
+    
+    public function showNotation() {
+        return view('notation');
     }
 }

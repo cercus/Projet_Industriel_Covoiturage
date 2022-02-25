@@ -34,50 +34,47 @@
 
 
 @section('content')
-<h1 class="center-title">{{__('Reinitialisation')}}</h1>
-
-<div style="padding-top: 60px; text-indent: 30px;" class="col-md-8 mx-auto">
-    {{__('Réinitialisation de votre mot de passe.')}}
-</div>
-
-<form style="padding-top: 60px;" method="POST" action="{{route('store.question')}}">
+<h1 class="center-title">{{__('Reinitialisation de votre mot de passe')}}</h1>
+<form>
     @csrf
     @if($errors->any())
         <div class="alert alert-warning">
-            La question n'a pas pu etre posé &#9785; {{implode('', $errors->all('<div>:message</div>'))}}
+            le mail de réinitialisation n'a pas pu etre envoyé <h1>&#9785</h1>; {{implode('', $errors->all('<div>:message</div>'))}}
         </div>
     @endif
     @if(session()->has('success'))
         <div class="alert alert-success">
-                  {{session()->get('success')}}&#9786;
+                  {{session()->get('success')}}<h1>&#9786</h1>;
         </div>
     @endif
     <div class="form-group col-md-8 mx-auto">
-        <label for="email">{{__('Adresse mail')}}</label>
-        <input type="email" id="email" name="email" class="input-form @error('email') is-invalid @enderror" required value="{{old('email')}}"/>
-    </div>
-
-    <div class="form-group col-md-8 mx-auto">
-        <label for="objet">{{__('Objet')}}</label>
-        <input type="text" id="objet" name="objet" class="input-form @error('objet') is-invalid @enderror" required value="{{old('objet')}}"/>
-        @error('objet')
-        <div id="objet_feedback" class="invalid-feedback">
+        <label for="mail">{{__('Adresse mail')}}</label>
+        <input type="text" id="mail" name="mail" class="input-form @error('mail') is-invalid @enderror" required value="{{old('mail')}}"/>
+        @error('mail')
+        <div id="mail_feedback" class="invalid-feedback">
             {{$message}}
         </div>
         @enderror
     </div>
-
     <div class="form-group col-md-8 mx-auto">
-        <label for="message">{{__('Message')}}</label>
-        <textarea class="form-control textarea-form @error('message') is-invalid @enderror" id="message" name="message" rows=3></textarea>
-        @error('message')
-        <div id="message_feedback" class="invalid-feedback">
+        <label for="mail">{{__('Nouveau mot de passe')}}</label>
+        <input type="text" id="password" name="password" class="input-form @error('mail') is-invalid @enderror" required value="{{old('mail')}}"/>
+        @error('password')
+        <div id="mail_feedback" class="invalid-feedback">
             {{$message}}
         </div>
         @enderror
     </div>
-
-    <button type="submit" class="btn button-form mx-auto">{{__('Envoyer')}}</button>
+    <div class="form-group col-md-8 mx-auto">
+        <label for="mail">{{__('reécrire votre nouveau mot de passe')}}</label>
+        <input type="text" id="password" name="password" class="input-form @error('mail') is-invalid @enderror" required value="{{old('mail')}}"/>
+        @error('password')
+        <div id="mail_feedback" class="invalid-feedback">
+            {{$message}}
+        </div>
+        @enderror
+    </div>
+    <button type="submit" class="btn button-form mx-auto">{{__('Valider')}}</button>
 </form>
 
 @endsection

@@ -52,5 +52,13 @@ Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('in
 Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
 Route::post('/connexion', [Controller::class, 'storeConnexion'])->name('store.connexion');
 
-// Route pour la page Rinitialisation de la connextion
+// Route pour la page Reinitialisation validation par envoie email
 Route::get('/reinitInputEmail', [Controller::class, 'showReinitInputEmail'])->name('reinitInputEmail');
+Route::post('/reinitInputEmail', [MailsController::class, 'storeReinit'])->name('store.reinit');
+
+// Route pour la page Reinitialisation de la connexion changement du mot de passe
+Route::get('/reinit', [Controller::class, 'showReinit'])->name('reinit');
+
+// Route pour la page de notation
+Route::get('/notation', [Controller::class, 'showNotation'])->name('notation');
+

@@ -35,7 +35,7 @@
 
 @section('content')
 <h1 class="center-title">{{__('Reinitialisation de votre mot de passe')}}</h1>
-<form>
+<form style="padding-top: 60px;" method="POST" action="{{route('store.reinit')}}">
     @csrf
     @if($errors->any())
         <div class="alert alert-warning">
@@ -48,10 +48,10 @@
         </div>
     @endif
     <div class="form-group col-md-8 mx-auto">
-        <label for="mail">{{__('Adresse mail')}}</label>
-        <input type="text" id="mail" name="mail" class="input-form @error('mail') is-invalid @enderror" required value="{{old('mail')}}"/>
-        @error('mail')
-        <div id="mail_feedback" class="invalid-feedback">
+        <label for="email">{{__('Adresse mail')}}</label>
+        <input type="text" id="email" name="email" class="input-form @error('email') is-invalid @enderror" required value="{{old('email')}}"/>
+        @error('email')
+        <div id="email_feedback" class="invalid-feedback">
             {{$message}}
         </div>
         @enderror

@@ -66,3 +66,8 @@ Route::get('/trajets_en_cours', function () {
 Route::get('/annuler_trajet', function () {
     return view('annuler_trajet');
 });
+
+// Route pour reservations en cours
+Route::get('/reservation_en_cours', function () {
+    return view('reservation_en_cours');
+});

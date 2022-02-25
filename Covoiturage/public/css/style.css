@@ -255,7 +255,7 @@ body {
 .text-h6 {
     text-align: center;
     font-weight: bold;
-    font-size: 21px;
+    font-size: 19px;
 }
 
 @media screen and (max-width: 769px) {
@@ -336,5 +336,32 @@ body {
         width: 30%;
         left: 2.5rem;
         
+    }
+}
+
+/* -------------- Style css pour la page mes réservation en cours -------------- */
+
+@media screen and (max-width: 769px) {
+    .passager-reserv div{
+        /* display: flex; */
+        font-size: 18px;
+        font-family: "Tahoma", Arial, sans-serif;
+        text-align: left !important; 
+        margin-left: 0% !important;
+    }
+    .passager-reserv label{
+        
+        padding-left: 0px;
+        padding-right: 20px;
+        
+    }
+    .btn-payer, .btn-annuler{
+        left: 4.3rem;
+    }
+    .photo-conducteur{
+        left: 6.5rem;
+    }
+    #detail-trajet{
+        left: -2rem !important;
     }
 }

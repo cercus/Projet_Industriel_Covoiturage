@@ -87,9 +87,10 @@
                 <a href="#" class="nav-user-img" >   
                     <img class="avatar-img rounded-circle mr-3" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
                 </a>
+                <!-- nom du conducteur -->
                 <span class="text-h6">Nicolas DUFOUR</span>
             </div>
-            <!-- nom du conducteur -->
+            <!-- button plus détails -->
             <div class="col-md-4 mt-2">
                 <button type="submit" class="btn button-form ml-5">PLUS DÉTAILS</button>
             </div>

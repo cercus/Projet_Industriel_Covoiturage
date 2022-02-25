@@ -21,7 +21,9 @@
 
 
 @section('content')
-    <h1 class="center-title">Connectez-vous à votre espace</h1>
+    <h1 class="center-title">
+        <strong>Connectez-vous à votre espace</strong>
+    </h1>
 
     <form style="padding-top: 60px;" method="POST" action="{{route('store.connexion')}}">
         @csrf

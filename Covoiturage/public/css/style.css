@@ -97,7 +97,7 @@ body {
     border-radius: 5px !important;
     box-shadow: 2px 2px 3px 0px #6e6e6e !important;
     height: 30px !important;
-    padding-left: 10px;
+    padding-left: 0%;
     /*width: 100%; */
 }
 
@@ -256,4 +256,85 @@ body {
     text-align: center;
     font-weight: bold;
     font-size: 21px;
+}
+
+@media screen and (max-width: 769px) {
+    .v-list-item__title{
+        margin-left: 5em !important;
+        
+    }
+    .detail-trajet, .places-dispo, .prix {
+        margin: 4px;
+        padding: 15px;
+        font-size: 18px;
+        font-family: "Tahoma", Arial, sans-serif;
+        text-align: left !important; 
+    }
+    .detail-trajet{
+        margin-bottom: 24px;
+    }
+    .h-divider{
+        width: 75%;
+    }
+    .lieu-depart{
+        width: 43%;
+        position: absolute;
+        left: -3.3em;
+    }
+    .temps-image {
+        position: absolute;
+        font-size: 16px;
+        width: 20%;
+        margin-left: 6.3em !important;
+        padding-right: 18% !important; 
+    }
+    .temps-image img {
+        width: 47px !important;
+        height: 17px;
+        margin-left: 18% !important;
+    }
+    .temps-image div {
+        padding: 0% !important;
+        margin: 0% !important;
+    }
+
+    .lieu-arrive {
+        width: 43%;
+        margin-left: 10em !important;
+        
+    }
+    .places-dispo {
+        width: 40%;
+    }
+    .prix{
+        width: 40%;
+        text-align: right !important;
+
+    }
+}
+
+/* -------------- Style css pour la page mes trajet en cours -------------- */
+.btn-md img:hover {
+    opacity: 0.5;
+}
+
+@media screen and (max-width: 769px) {
+    .user-info{
+        padding: 0% !important;
+        margin: 0% !important;
+        /* left: -1rem; */
+    }
+    .user-info span {
+        padding: 0% !important;
+        margin: 0% !important;
+    }
+    .btn-accept {
+        width: 30%;
+        left: 2.5rem;
+    }
+    .btn-refuse {
+        width: 30%;
+        left: 2.5rem;
+        
+    }
 }

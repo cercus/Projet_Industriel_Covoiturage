@@ -56,3 +56,13 @@ Route::post('/connexion', [Controller::class, 'storeConnexion'])->name('store.co
 
 // Route pour la page recherche de trajet
 Route::get('/rechercheTrajet', [Controller::class, 'showSearchRoute'])->name('search_route');
+
+// Route pour mes trajets en cours
+Route::get('/trajets_en_cours', function () {
+    return view('trajets_en_cours');
+});
+
+// Route pour annuler ou modifier un trajet
+Route::get('/annuler_trajet', function () {
+    return view('annuler_trajet');
+});

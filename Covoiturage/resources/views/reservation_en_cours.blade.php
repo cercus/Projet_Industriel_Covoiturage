@@ -77,7 +77,7 @@
             <!-- la ligne du montant -->
             <div class="row">
                 <div class="col-md-10">
-                    <label class="col-md-3 ml-5">Montant à payer </label>
+                    <label class="col-md-3 ml-5">Montant à payer</label>
                     <span class="col-md-9 text-h6 ml-5">5€</span> 
                 </div>   
             </div>
@@ -85,7 +85,7 @@
             <!-- la ligne d'etat de reservation -->
             <div class="row mt-3">
                 <div class="col-md-10">
-                    <label class="col-md-3 ml-5">Etat de réservation </label>
+                    <label class="col-md-3 ml-5">Etat de réservation</label>
                     <span class="col-md-9 text-h6 ml-5 text-success">En attente d'acceptation par le conducteur</span> 
                 </div>   
             </div>

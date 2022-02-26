@@ -71,3 +71,8 @@ Route::get('/annuler_trajet', function () {
 Route::get('/reservation_en_cours', function () {
     return view('reservation_en_cours');
 });
+
+// Route pour la page confirmation d'annuler un trajet
+Route::get('/confirmation_annuler_trajet', function () {
+    return view('confirmation_annuler_trajet');
+});

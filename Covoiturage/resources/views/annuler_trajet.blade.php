@@ -45,8 +45,24 @@
             </div>
             @enderror
         </div>
-    
-        <button type="submit" class="btn button-form mx-auto">{{__('Envoyer')}}</button>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn button-form mx-auto" data-toggle="modal" data-target="#staticBackdrop">Envoyer</button>
     </form>
+
+  
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Souhaitez-vous vraiment supprimer ce trajet ??
+                </div>
+                <div class="modal-footer m-auto">
+                    <button type="submit" class="btn btn-danger" >Oui</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal">Non</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection

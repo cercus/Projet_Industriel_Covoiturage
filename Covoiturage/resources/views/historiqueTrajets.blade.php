@@ -49,7 +49,9 @@
                     <td>7H50</td>
                     <td>Luminy 13009 Marseille</td>
                     <td>8H20</td>
-                    <td></td>
+                    <td>
+                        <button type="submit" class="btn button-form mx-auto">{{__('Noter')}}</button>
+                    </td>
                 </tr>
             </tbody>
             <tbody>
@@ -61,7 +63,9 @@
                     <td>7H50</td>
                     <td>Luminy 13009 Marseille</td>
                     <td>8H20</td>
-                    <td></td>
+                    <td>
+                        <button type="submit" class="btn button-form mx-auto">{{__('Noter')}}</button>
+                    </td>
                 </tr>
             </tbody>
             <tbody>
@@ -73,7 +77,17 @@
                     <td>7H50</td>
                     <td>Luminy 13009 Marseille</td>
                     <td>8H20</td>
-                    <td></td>
+                    <td>
+                        <div class="col rating-css" style="float:right;" >
+                            <div class="row" style="white-space:nowrap;  width:3cm;">
+                                <label class="fa fa-star"></label>
+                                <label class="fa fa-star"></label>
+                                <label class="fa fa-star"></label>
+                                <label class="fa fa-star"></label>
+                                <label class="fa fa-star"></label>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
             <tbody>
@@ -85,7 +99,17 @@
                     <td>7H50</td>
                     <td>Luminy 13009 Marseille</td>
                     <td>8H20</td>
-                    <td></td>
+                    <td>
+                        <div class="col rating-css" style="float:right;" >
+                            <div class="row" style="white-space:nowrap;  width:3cm;">
+                                <label class="fa fa-star"></label>
+                                <label class="fa fa-star"></label>
+                                <label class="fa fa-star"></label>
+                                <label class="fa fa-star"></label>
+                                <label class="fa fa-star"></label>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

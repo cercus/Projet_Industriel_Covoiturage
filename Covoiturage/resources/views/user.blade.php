@@ -23,7 +23,7 @@
 
 @section('content')
 
-<h1 class="center-title"><Strong>Bienvenue {{__('user')}} sur votre profil</Strong></h1></br>
+<h1 class="center-title"><Strong>Bienvenue {{__('user')}} sur votre profil</Strong></h1><br/>
 <div style="text-align:center">
     <div class="row">
         <div class="col espace-bottom" >

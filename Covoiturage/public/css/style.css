@@ -1,4 +1,4 @@
-/* -----------------------Navbar----------------------- */
+/* ----------------------- Navbar ----------------------- */
 
 
 /* style pour le navbar */
@@ -84,10 +84,26 @@
 
 body {
     background-color: rgba(241, 241, 239, 0.4);
+    font-family: "Tahoma", Arial, sans-serif;
 }
 
 .bold-text {
     font-weight: bold;
+}
+
+.space-bottom-title {
+    padding-top: 20px;
+}
+
+
+/* ------------------- Style css pour la page historique_trajet.php ------------------- */
+
+.fond-passager-row {
+    background-color: rgb(251, 229, 200);
+}
+
+.fond-conducteur-row {
+    background-color: rgb(247, 206, 151);
 }
 
 
@@ -138,12 +154,51 @@ body {
         float: right;
         width: 40%;
     }
+    .col-right-input-accueil {
+        display: inline-block;
+        width: 48%;
+    }
+    .col-left-input-accueil {
+        float: right;
+        width: 48%;
+    }
+    .col-right-input-trajet {
+        display: inline-block;
+        width: 60%;
+    }
+    .col-left-input-trajet {
+        float: right;
+        width: 35%;
+    }
+    .col-button-trajet {
+        padding-left: 20%;
+    }
 }
 
 @media screen and (max-width: 991px) {
     .col-right-input {
         display: block;
         padding-bottom: 20px;
+    }
+    .col-right-input-accueil {
+        display: block;
+        padding-bottom: 20px;
+    }
+    .col-right-input-trajet {
+        display: block;
+        padding-bottom: 20px;
+    }
+    /* Page notation */
+    .rating-css div {
+        white-space: nowrap;
+        color: #ffe400;
+        font-size: 15px;
+        font-family: sans-serif;
+        font-weight: 800;
+        transform: scale(0.8);
+        /*text-align: center;*/
+        text-transform: uppercase;
+        padding: 10px 0;
     }
 }
 
@@ -287,21 +342,17 @@ body {
 
 /* ------------------------ Style css pages messages ----------------------- */
 
-.balise-lu {
+.balise-message-lu {
     background-color: green;
     border: 1px solid green;
-    border-radius: 10px;
-    color: white;
-    width: 100%;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-.balise-non-lu {
+.balise-message-non-lu {
     background-color: rgb(197, 6, 6);
     border: 1px solid rgb(197, 6, 6);
+}
+
+.balise-message {
     border-radius: 10px;
     color: white;
     width: 100%;
@@ -312,17 +363,17 @@ body {
 }
 
 @media screen and (max-width: 992px) {
-    .balise-non-lu {
-        background-color: rgb(197, 6, 6);
-        border: 1px solid rgb(197, 6, 6);
-        border-radius: 10px;
-        color: white;
-        width: 100%;
-        height: 30px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .balise-non-lu-small {
         font-size: 10px;
+    }
+    /* Page Qui-sommes-nous ? */
+    .gallery {
+        background-color: rgb(251, 229, 200);
+        border-color: rgb(251, 229, 200);
+        border-radius: 5px;
+        box-shadow: 2px 2px 3px 0px #6e6e6e;
+        margin-bottom: 20px;
+        min-height: 200px;
     }
 }
 
@@ -342,7 +393,7 @@ body {
 
 .field-message {
     background-color: rgb(251, 229, 200) !important;
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 20px 20px 0px 0px;
     border: 1px solid black;
     height: 400px;
     overflow-y: auto;
@@ -351,23 +402,23 @@ body {
 
 /* Taille en largeur de la scrollbar */
 
-::-webkit-scrollbar {
-    width: 10px;
+.field-message::-webkit-scrollbar {
+    width: 20px;
     height: 280px;
 }
 
 
 /* Couleur de la scrollbar (track) */
 
-::-webkit-scrollbar-track {
+.field-message::-webkit-scrollbar-track {
     background: rgb(51, 63, 80);
-    border-radius: 0px 50px 0px 0px;
+    border-radius: 0px 40px 0px 0px;
 }
 
 
 /* Couleur de la scrollbar (thumb) */
 
-::-webkit-scrollbar-thumb {
+.field-message::-webkit-scrollbar-thumb {
     background: rgb(111, 144, 206);
     border-radius: 0px 50px 0px 0px;
     background-clip: padding-box;
@@ -381,6 +432,7 @@ body {
     padding-right: 3%;
     width: 40%;
     margin-top: 20px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e !important
 }
 
 .message-user-right {
@@ -392,6 +444,7 @@ body {
     width: 40%;
     margin-left: 60%;
     margin-top: 20px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e !important
 }
 
 .small-text-chat-left {
@@ -443,4 +496,324 @@ body {
     border-radius: 5px !important;
     box-shadow: 2px 2px 3px 0px #6e6e6e !important;
     height: 30px !important;
+}
+
+
+/* -------------- Style css pour la page mes trajet en cours -------------- */
+
+.btn-md img:hover {
+    opacity: 0.5;
+}
+
+@media screen and (max-width: 769px) {
+    /*  Css Mes trajet sen cours*/
+    .user-info {
+        padding: 0% !important;
+        margin: 0% !important;
+        /* left: -1rem; */
+    }
+    .user-info span {
+        padding: 0% !important;
+        margin: 0% !important;
+    }
+    .btn-accept,
+    .btn-refuse {
+        width: 30%;
+        left: 2.5rem;
+    }
+    /* Cs Reservation en cours */
+    .passager-reserv div {
+        font-size: 16px;
+        font-family: "Tahoma", Arial, sans-serif;
+        text-align: left !important;
+        margin-left: 0% !important;
+        margin-right: 0%;
+    }
+    .btn-payer,
+    .btn-annuler {
+        left: auto;
+        width: auto;
+    }
+    #detail-trajet {
+        left: -2.5rem !important;
+    }
+    /* Model de résultat de recherche de trajet */
+    .v-list-item__title {
+        margin-left: 5em !important;
+    }
+    .detail-trajet,
+    .places-dispo,
+    .prix {
+        margin: 4px;
+        padding: 15px;
+        font-size: 18px;
+        font-family: "Tahoma", Arial, sans-serif;
+        text-align: left !important;
+    }
+    .detail-trajet {
+        margin-bottom: 24px;
+    }
+    .h-divider {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+    .lieu-depart {
+        width: 43%;
+        position: absolute;
+        left: -3.3em;
+    }
+    .temps-image {
+        position: absolute;
+        font-size: 16px;
+        width: 20%;
+        margin-left: 6.3em !important;
+        padding-right: 18% !important;
+    }
+    .temps-image img {
+        width: 47px !important;
+        height: 17px;
+        margin-left: 18% !important;
+    }
+    .temps-image div {
+        padding: 0% !important;
+        margin: 0% !important;
+    }
+    .lieu-arrive {
+        width: 43%;
+        margin-left: 10em !important;
+    }
+    .places-dispo {
+        width: 40%;
+    }
+    .prix {
+        width: 40%;
+        text-align: right !important;
+    }
+    /* Css Mes trajets en cours */
+}
+
+
+/* -------------- Style css pour le model de résultat de recherche d'un trajet -------------- */
+
+
+/* le séparateur horizontal */
+
+.h-divider {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-top: 2px solid gray;
+}
+
+.border {
+    border-radius: 20px;
+    height: 80%;
+}
+
+.rounded-circle {
+    border: 2px solid gray;
+}
+
+.text-h6 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 19px;
+}
+
+@media screen and (max-width: 380px) {
+    .temps-image {
+        font-size: 14px;
+        margin-left: 23% !important;
+        padding-right: 0% !important;
+    }
+    .temps-image img {
+        margin-left: -1px !important;
+    }
+    .lieu-arrive {
+        width: 43%;
+        margin-left: auto !important;
+    }
+    .text-h6 {
+        text-align: center;
+        font-weight: bold;
+        font-size: 15px;
+    }
+    /* Css Mes trajets en cours */
+    .btn-accept img,
+    .btn-refuse img {
+        width: 34px;
+        height: 34px;
+        padding-left: auto;
+        margin-left: auto;
+    }
+    .btn-accept,
+    .btn-refuse {
+        left: 1.5rem;
+    }
+}
+
+
+/* -------------- Style css pour la page mes trajet en cours -------------- */
+
+.btn-md img:hover {
+    opacity: 0.5;
+}
+
+
+/* -------------- Style css pour la page confirmation d'annuler mon trajet -------------- */
+
+.media {
+    font-weight: bolder;
+    font-size: 18px;
+    padding-left: 5rem;
+}
+
+.media p {
+    padding-left: 22px;
+}
+
+.media img {
+    margin-top: 5px;
+}
+
+.btn-profil {
+    margin-left: 15rem;
+}
+
+@media screen and (max-width: 481px) {
+    .media {
+        padding-left: 0% !important;
+    }
+    .media img {
+        max-width: 40%;
+        height: auto;
+        margin-top: 20px;
+    }
+    .btn-profil {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media screen and (min-width: 482px) and (max-width: 768px) {
+    .btn-profil {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+
+/* -------------- Style css pour le modal -------------- */
+
+.modal-dialog {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+}
+
+.modal-content {
+    background-color: rgb(237, 237, 237);
+    border-radius: 5px !important;
+}
+
+.modal-body {
+    text-align: center;
+    font-weight: bold;
+}
+
+.modal-footer button {
+    padding: 14px 40px;
+    border-radius: 5px;
+    transition-duration: 0.4s;
+}
+
+@media screen and (max-width: 372px) {
+    .modal-footer button {
+        margin: auto;
+        padding: auto;
+        width: auto;
+        height: auto;
+        margin-bottom: 10px;
+    }
+}
+
+
+/* -------------- Style css pour la page notation -------------- */
+
+.rating-css div {
+    color: #ffe400;
+    font-size: 15px;
+    font-family: sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 10px 0;
+}
+
+.rating-css input {
+    display: none;
+}
+
+.rating-css input+label {
+    font-size: 30px;
+    text-shadow: 1px 1px 0 #8f8420;
+    cursor: pointer;
+}
+
+.rating-css input:checked+label~label {
+    color: #b4afaf;
+}
+
+.rating-css label:active {
+    transform: scale(0.8);
+    transition: 0.3s ease;
+}
+
+
+/* -------------- Style pour la page qui-sommes-nous -------------- */
+
+.margin-bottom-div {
+    margin-bottom: 15px;
+}
+
+.gallery {
+    background-color: rgb(251, 229, 200);
+    border-color: rgb(251, 229, 200);
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 0px #6e6e6e;
+    margin-bottom: 20px;
+    min-height: 250px;
+}
+
+div.floatLeft {
+    float: left;
+}
+
+div.gallery img {
+    width: 120px;
+    height: 130px;
+    border-radius: 50%;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 5%;
+}
+
+div.desc {
+    padding: 15px;
+    text-align: justify;
+    text-indent: 10px;
+}
+
+
+/* Test apparition div au chargement surl a page /commun/user */
+
+.vignets {
+    opacity: 0;
+    -webkit-transition: opacity 1s linear;
+    -moz-transition: opacity 1s linear;
+    -o-transition: opacity 1s linear;
+    -ms-transition: opacity 1s linear;
+    transition: opacity 1s linear;
+}
+
+.vignets.load {
+    opacity: 1;
 }

@@ -12,7 +12,7 @@ Inscription
     @if (session()->has('user'))
         <ul class="navbar-nav mr-auto"> 
             <li class="nav-item">
-                <a class="nav-link" href="#">Ismail IDBOURHIM</a>
+                <a class="nav-link" href="{{route('user')}}">Ismail IDBOURHIM</a>
             </li>
         </ul>
         <div class="pmd-user-info ">
@@ -48,7 +48,7 @@ Inscription
         </div>
     @endif
 
-    <div class="col-md-8 mx-auto" style="padding-top: 20px;">
+    <div class="col-md-8 mx-auto space-bottom_title">
 
         <!-- Nom -->
         <div class="col-right-input">

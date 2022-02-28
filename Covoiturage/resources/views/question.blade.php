@@ -5,14 +5,14 @@
 @endsection
 
 @section('style')
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 @endsection
     
 @section('navbarSequel')
     @if (session()->has('user'))
         <ul class="navbar-nav mr-auto"> 
             <li class="nav-item">
-                <a class="nav-link" href="#">Ismail IDBOURHIM</a>
+                <a class="nav-link" href="{{route('user')}}">Ismail IDBOURHIM</a>
             </li>
         </ul>
         <div class="pmd-user-info ">
@@ -23,10 +23,10 @@
     @else
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/inscription">Inscription</a>
+                <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/connexion">Connexion</a>
+                <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
             </li>
         </ul>
     @endif

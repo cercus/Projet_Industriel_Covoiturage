@@ -21,9 +21,7 @@
 
 
 @section('content')
-    <h1 class="center-title">
-        <strong>Connectez-vous à votre espace</strong>
-    </h1>
+    <h1 class="center-title">Connectez-vous à votre espace</h1>
 
     <form style="padding-top: 60px;" method="POST" action="{{route('store.connexion')}}">
         @csrf
@@ -57,13 +55,13 @@
 
         <div class="center-title">
             <strong class="psw">
-                <a href="forgot_password.php"><u>Mot de passe oublié ?</u></a>
+                <a href="{{route('reinitialisation_mdp')}}"><u>Mot de passe oublié ?</u></a>
             </strong>
         </div>
 
         <div class="center-title">
             <label>Pas encore de compte ?</label>
-            <a href="inscription.php">
+            <a href="{{route('inscription')}}">
                 <strong><u>Inscrivez-vous, c'est gratuit !</u></strong>
             </a>
         </div>

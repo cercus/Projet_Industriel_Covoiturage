@@ -39,13 +39,13 @@
                 <div class="navbar-collapse collapse ml-auto" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item ">
-                        <a class="nav-link" href="#">Recherche de trajets <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{{route('recherche_trajet')}}">Recherche de trajets <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="#">Proposer un trajet</a>
+                        <a class="nav-link" href="{{route('proposer_trajet')}}">Proposer un trajet</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/apropos">A propos</a>
+                            <a class="nav-link" href="{{route('apropos')}}">A propos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">News</a>
@@ -71,12 +71,12 @@
                 <div class="row text-center d-flex justify-content-center pt-5 mb-3">
                     <div class="col-md-3 mb-1">
                     <h6 class="text-uppercase font-weight-bold">
-                        <a href="#!">Qui sommes-nous?</a>
+                        <a href="{{route('qui_sommes_nous')}}">Qui sommes-nous?</a>
                     </h6>
                     </div>
                     <div class="col-md-3 mb-1">
                         <h6 class="text-uppercase font-weight-bold">
-                            <a href="/question">Poser une question</a>
+                            <a href="{{route('question')}}">Poser une question</a>
                         </h6>
                     </div>
                     <div class="col-md-3 mb-1">

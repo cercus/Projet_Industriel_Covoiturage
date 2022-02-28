@@ -5,22 +5,144 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
-use Exception;
-use Illuminate\Support\Facades\Cookie;
-use App\Repositories\Repository;
-use App\Repositories\Data;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function __construct(Repository $repository, Data $data)
-    {
-        $this->repository = $repository;
-        $this->data = $data;
+
+    /* ----------------- Fonctions pour les pages se trouvant dans le dossier commun ----------------- */
+
+    // Page de profil (contenant tout les accès aux différents pages )
+    public function showUserPage() {
+        return view('commun.user');
     }
+
+    // Page de l'historique des trajets d'un utilisateur
+    public function showHistoriqueTrajet() {
+        return view('commun.historique_trajets');
+    }
+
+    // page modification de profil
+    public function showModificationProfilForm(Request $request) {
+        /*
+        if(!$request->session()->has('user'))
+            return redirect()->route('connexion');
+        */
+        return view('commun.modification_profil');
+    }
+
+    // Bouton modifier info personnelles
+    public function modifyProfil() {
+        /* TODO */
+        return view('commun.modification_profil');
+    }
+
+    // Page Mes messages
+    public function showMesMessages() {
+        return view('commun.mes_messages');
+    }
+
+    // Page Informations personnelles
+    public function showInfosPerso(){
+        return view('commun.informations_personnelles');
+    }
+
+    // Bouton modifier info technique
+    public function modifyTechnique() {
+        /* TODO */
+        return view('commun.modification_technique');
+    }
+
+    // Page modification technique
+    public function showModificationTechniqueForm() {
+        return view('commun.modification_technique');
+    }
+
+    // PAge ecrire un nouveau message
+    public function showEcrireMessageForm(){
+        return view('commun.nouveau_message');
+    }
+
+    // Bouton traitement nouv message
+    public function newMessage() {
+        /* TODO */
+        return view('commun.nouveau_message');
+    }
+
+
+    //Page Repondre a un message
+    public function showMessagesReply() {
+        return view('commun.repondre_message');
+    }
+
+    // Page Notation
+    public function showNotation() {
+        return view('commun.notation');
+    }
+
+    public function showCaracteristique() {
+        return view('commun.caracteristiques');
+    }
+
+
+
+    /* ----------------- Fonctions pour les pages se trouvant dans le dossier conducteur ----------------- */
+
+    public function showTrajetEnCours() {
+        return view('conducteur.trajets_en_cours');
+    }
+
+    public function showAnnulerTrajet() {
+        return view('conducteur.annuler_trajet');
+    }
+
+    public function showConfirmAnnulationTrajet() {
+        return view('conducteur.confirmation_annuler_trajets');
+    }
+
+    public function showProposerTrajetForm(){
+        return view('conducteur.proposer_trajet');
+    }
+
+    /* ----------------- Fonctions pour les pages se trouvant dans le dossier passager ----------------- */
+
+
+    public function showReservationEnCours() {
+        return view('passager.reservation_en_cours');
+    }
+
+
+    public function showAnnulerReservation() {
+        return view('passager.annuler_reservation');
+    }
+
+    public function showConfirmAnnulationReservation() {
+        return view('passager.confirmation_annuler_reservation');
+    }
+
+    public function showPayementForm() {
+        return view('passager.payement');
+    }
+
+    public function showRechercheTrajet() {
+        return view('passager.recherche_trajet');
+    }
+
+    public function showDetailRechercheTrajet() {
+        return view('passager.details_result_recherche_trajet');
+    }
+
+
+    /* ----------------- Fonctions pour les pages restantes ----------------- */
+
+    public function showQuiSommesNous() {
+        return view('qui_sommes_nous');
+    }
+
+
     public function showQuestionForm() {
         return view('question');
     }
@@ -34,218 +156,19 @@ class Controller extends BaseController
         return view('connexion');
     }
 
-    /******************** Page qui sommes nous  ********************/
-    public function quisommesnous()
-    {
-        return view('quisommesnous');
+    public function testButton() {
+        return redirect()->route('inscription');
     }
 
-    /******************** Page paiement  ********************/
-    public function paiement()
-    {
-        return view('paiement');
+    public function showReinitialisationMdp() {
+        return view('reinitialisation_mdp');
     }
 
-    /******************** Page cofirmation d'annulation ********************/
-    public function confirmationannulation()
-    {
-        return view('confirmationannulation');
+    public function showAPropos() {
+        return view('apropos');
     }
 
-    /******************** Page accueil  ********************/
-    public function showFormAccueil()
-    {
-        return view('accueil');
-    }
-    public function accueil(Request $request)
-    {
-        $messages = [
-            'numRueDep.text' => 'Vous devez choisir un numéro de rue.',
-            'numRueDep.required' => 'Vous devez choisir un numéro de rue.',
-
-            'adresseRueDep.text' => 'Vous devez choisir une adresse.',
-            'adresseRueDep.required' => 'Vous devez choisir une adresse.',
-
-            'villeDep.text' => 'Vous devez choisir une ville.',
-            'villeDep.required' => 'Vous devez choisir une ville.',
-
-            'cpDep.integer' => 'Vous devez choisir un code postal.',
-            'cpDep.required' => 'Vous devez choisir un code postal.',
-
-            'dateDep.required' => 'Vous devez choisir une date.',
-            'dateDep.date' => 'Vous devez choisir une date valide.',
-            
-            'timeDep.required' => 'Vous devez choisir une heure.',
-            'timeDep.date_format' => 'Vous devez choisir une heure valide.',
-
-            'nbPlace.integer' => 'Vous devez choisir un nombre de place.',
-            'nbPlace.required' => 'Vous devez choisir un code postal.',
-
-            'numRueArr.text' => 'Vous devez choisir un numéro de rue.',
-            'numRueArr.required' => 'Vous devez choisir un numéro de rue.',
-
-            'adresseRueArr.text' => 'Vous devez choisir une adresse.',
-            'adresseRueArr.required' => 'Vous devez choisir une adresse.',
-
-            'villeArr.text' => 'Vous devez choisir une ville.',
-            'villeArr.required' => 'Vous devez choisir une ville.',
-
-            'cpArr.integer' => 'Vous devez choisir un code postal.',
-            'cpArr.required' => 'Vous devez choisir un code postal.',
-        ];
-
-        $rules = [
-            'dateDep' => ['required', 'date'],
-            'timeDep' => ['required', 'date_format:H:i'],
-            'numRueDep' => ['required'],
-            'adresseRueDep' => ['required'],
-            'villeDep' => ['required'],
-            'cpDep' => ['required'],
-            'nbPlace' => ['required'],
-            'numRueArr' => ['required'],
-            'adresseRueArr' => ['required'],
-            'villeArr' => ['required'],
-            'cpArr' => ['required'],
-        ];
-
-        $validatedData = $request->validate($rules, $messages);
-
-        $dateDep = $validatedData['dateDep'];
-        $timeDep = $validatedData['timeDep'];
-        $datetimeDep = "$dateDep $timeDep";
-        $numRueDep = $validatedData['numRueDep'];
-        $adresseRueDep = $validatedData['adresseRueDep'];
-        $villeDep = $validatedData['villeDep'];
-        $cpDep = $validatedData['cpDep'];
-        $nbPlace = $validatedData['nbPlace'];
-        $numRueArr = $validatedData['numRueArr'];
-        $adresseRueArr = $validatedData['adresseRueArr'];
-        $villeArr = $validatedData['villeArr'];
-        $cpArr = $validatedData['cpArr'];
-
-        //Pour récupérer les données saisies par l'utilisateur
-        $trajet=$this->repository->createDataRechercheTrajetForm($dateDep, 
-            $timeDep, $numRueDep, $adresseRueDep, $villeDep, $cpDep, $nbPlace, $numRueArr, $adresseRueArr,
-            $villeArr, $cpArr);
-
-        //Ici fictive, doit returner les résultats de la recherche de l'utilisateur
-        $trajetsProposes=$this->data->trajetsProposes();
-
-        try {
-            return view('rechercheTrajetResult', ['trajet'=>$trajet, 'trajetsProposes'=>$trajetsProposes]);
-        } catch (Exception $exception) {
-            return
-            redirect()->route('accueil')->withInput()->withErrors("Impossible d\'éffectuer la recherche.");
-        }
-    }
-
-    /******************** Page recherche trajet  ********************/
-    public function showFormRechercheTrajet()
-    {
-        //Les trajets les moins chers
-        $bestTrajets=$this->repository->bestTrajets();
-        return view('rechercheTrajet', ['bestTrajets'=>$bestTrajets]);
-    }
-
-    public function rechercheTrajet(Request $request)
-    {
-        $messages = [
-            'numRueDep.text' => 'Vous devez choisir un numéro de rue.',
-            'numRueDep.required' => 'Vous devez choisir un numéro de rue.',
-
-            'adresseRueDep.text' => 'Vous devez choisir une adresse.',
-            'adresseRueDep.required' => 'Vous devez choisir une adresse.',
-
-            'villeDep.text' => 'Vous devez choisir une ville.',
-            'villeDep.required' => 'Vous devez choisir une ville.',
-
-            'cpDep.integer' => 'Vous devez choisir un code postal.',
-            'cpDep.required' => 'Vous devez choisir un code postal.',
-
-            'dateDep.required' => 'Vous devez choisir une date.',
-            'dateDep.date' => 'Vous devez choisir une date valide.',
-            
-            'timeDep.required' => 'Vous devez choisir une heure.',
-            'timeDep.date_format' => 'Vous devez choisir une heure valide.',
-
-            'nbPlace.integer' => 'Vous devez choisir un nombre de place.',
-            'nbPlace.required' => 'Vous devez choisir un code postal.',
-
-            'numRueArr.text' => 'Vous devez choisir un numéro de rue.',
-            'numRueArr.required' => 'Vous devez choisir un numéro de rue.',
-
-            'adresseRueArr.text' => 'Vous devez choisir une adresse.',
-            'adresseRueArr.required' => 'Vous devez choisir une adresse.',
-
-            'villeArr.text' => 'Vous devez choisir une ville.',
-            'villeArr.required' => 'Vous devez choisir une ville.',
-
-            'cpArr.integer' => 'Vous devez choisir un code postal.',
-            'cpArr.required' => 'Vous devez choisir un code postal.',
-        ];
-
-        $rules = [
-            'dateDep' => ['required', 'date'],
-            'timeDep' => ['required', 'date_format:H:i'],
-            'numRueDep' => ['required'],
-            'adresseRueDep' => ['required'],
-            'villeDep' => ['required'],
-            'cpDep' => ['required'],
-            'nbPlace' => ['required'],
-            'numRueArr' => ['required'],
-            'adresseRueArr' => ['required'],
-            'villeArr' => ['required'],
-            'cpArr' => ['required'],
-        ];
-
-        $validatedData = $request->validate($rules, $messages);
-
-        $dateDep = $validatedData['dateDep'];
-        $timeDep = $validatedData['timeDep'];
-        $datetimeDep = "$dateDep $timeDep";
-        $numRueDep = $validatedData['numRueDep'];
-        $adresseRueDep = $validatedData['adresseRueDep'];
-        $villeDep = $validatedData['villeDep'];
-        $cpDep = $validatedData['cpDep'];
-        $nbPlace = $validatedData['nbPlace'];
-        $numRueArr = $validatedData['numRueArr'];
-        $adresseRueArr = $validatedData['adresseRueArr'];
-        $villeArr = $validatedData['villeArr'];
-        $cpArr = $validatedData['cpArr'];
-
-        $trajet=$this->repository->createDataRechercheTrajetForm($dateDep, 
-            $timeDep, $numRueDep, $adresseRueDep, $villeDep, $cpDep, $nbPlace, $numRueArr, $adresseRueArr,
-            $villeArr, $cpArr);
-
-        //Ici fictive, doit returner les résultats de la recherche de l'utilisateur
-        $trajetsProposes=$this->data->trajetsProposes();
-
-        try {
-            return view('rechercheTrajetResult', ['trajet'=>$trajet, 'trajetsProposes'=>$trajetsProposes]);
-        } catch (Exception $exception) {
-            return
-            redirect()->route('rechercheTrajet')->withInput()->withErrors("Impossible d\'éffectuer la recherche.");
-        }
-    }
-
-    /******************** Page détails résultat recherche trajet  ********************/
-   
-    public function detailsResultRechercheTrajet(int $trajetId)
-    {
-        //Données sur un trajet à travers son id
-        $UnTrajet = $this->repository->UnTrajet($trajetId);
-        //Données sur le conducteur d'un trajet à travers son id
-        $UnProfil = $this->repository->UnProfil($trajetId);
-        //Données sur les passager d'un trajet à travers son id
-        $passagers = $this->repository->passagers($trajetId);
-        return view('detailsResultRechercheTrajet', ['UnTrajet' => $UnTrajet, 
-        'UnProfil' => $UnProfil, 'passagers' => $passagers]);
-    }
-
-    public function reservation()
-    {
-        //Action à faire lorqu'on clique sur le bouton réserver
-        return redirect()->route('accueil');
+    public function showHome() {
+        return view('home');
     }
 }
-

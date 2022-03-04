@@ -22,7 +22,7 @@ Proposer un trajet
 @section('content')
 <h1 class="center-title">Proposer un trajet</h1>
 <div>
-    <form>
+    <form method="POST" action="{{route('store.proposer_trajet')}}">
         <div>
             <div class="col-right-input-trajet">
                 <div class="border border-dark">

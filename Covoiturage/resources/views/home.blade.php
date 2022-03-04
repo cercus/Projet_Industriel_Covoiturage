@@ -135,7 +135,7 @@ Accueil
                         </div>
                         <div class="col-left-input">
                             <label for="place">Nombre de place(s)</label>
-                            <input type="number" placeholder="1"  class="input-form @error('place') is-invalid @enderror" id="place" name="place" aria-describedby="placeError">
+                            <input type="number" placeholder="1"  class="input-form @error('place') is-invalid @enderror" id="place" name="place" aria-describedby="placeError"  min="1", max="10">
                             @error('place')
                                 <small id="placeError" class="form-text text-muted">{{$message}}</small>
                             @enderror

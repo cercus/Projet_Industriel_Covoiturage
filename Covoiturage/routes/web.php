@@ -3,6 +3,7 @@
 use App\Http\Controllers\LocalizationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DorianController;
 use App\Http\Controllers\MailsController;
 use App\Http\Middleware\Localization;
 
@@ -82,7 +83,8 @@ Route::get('/conducteur/annuler_trajet', [Controller::class, 'showAnnulerTrajet'
 Route::get('/conducteur/confirmation_annuler_trajets', [Controller::class, 'showConfirmAnnulationTrajet'])->name('confirmation_annuler_trajets');
 
 // Route proposer un trajet
-Route::get('/conducteur/proposer_trajet', [COntroller::class, 'showProposerTrajetForm'])->name('proposer_trajet');
+Route::get('/conducteur/proposer_trajet', [DorianController::class, 'showProposerTrajetForm'])->name('proposer_trajet');
+Route::post('/conducteur/proposer_trajet', [DorianController::class, 'storeProposerTrajetForm'])->name('store.proposer_trajet');
 
 
 /* ------------ Route pour les pages se trouvant dans le dossier passager ------------ */

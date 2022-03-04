@@ -17,9 +17,8 @@ use App\Http\Middleware\Localization;
 |
 */
 // Route pour la page d'accueil
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [SawdaController::class, 'showFormAccueil'])->name('accueil');
+Route::post('/', [SawdaController::class, 'accueil'])->name('accueil.post');
 
 Route::get('/', [Controller::class, 'showHome'])->name('home');
 // Route qui permet de connaître la langue active

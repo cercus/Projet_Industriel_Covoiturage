@@ -1,7 +1,7 @@
 @extends('base')
 
 @section('title')
-Accueil
+Rechercher un trajet
 @endsection
 
 @section('style')
@@ -21,20 +21,11 @@ Accueil
 
 @section('content')
 
+
 <h2 class="center-title" style="padding-bottom: 20px;">Avec Columiny, aller à luminy n'a jamais été aussi simple...</h2>
 
-<div class="margin-bottom-accueil center-title">
-    <p>Vous souhaitez etre plus écologique et priopriser le covoiturage ?</p>
-    <p>Vous souhaitez vous rendre au campus de luminy où y revenir :
-    A l'heure que vous souhaitez ? Sans vous inquiéter de la question des horaires du bus ?
-    </p>
-    <p>Vous faites des trajets vers luminy dans votre voiture, vous
-        avez de la place et vous souhaitez gagner de l'argent ?
-    </p>
-    <p>Alors Columiny est fait pour vous !</p>
-</div>
-<div style="position: sticky; top: 0; z-index: 1; position:-webkit-sticky; background-color: rgba(241, 241, 239, 0.6);">
-    <form method="POST" action="{{route('accueil.post')}}">
+<div>
+    <form>
         @csrf
         @if ($errors->any())
             <div class="alert alert-warning">
@@ -45,19 +36,19 @@ Accueil
             
             <div class="col-right-input-accueil">
                 <div class="border border-dark">
-                    <h2 class="center-title">Départ</h2>
+                <h2 class="center-title">Départ</h2>
                 
                     <div class="col-md-10 mx-auto space-bottom-title">
                         <div class="col-right-input">
                             <label for="numRueDep">Numero de rue</label>
-                            <input type="text" placeholder="3" class="input-form @error('numRueDep') is-invalid @enderror" id="numRueDep" name="numRueDep" aria-describedby="numRueDepError">
+                            <input type="text" placeholder="3" class="input-form @error('numRueDep') is-invalid @enderror" id="numRueDep" name="numRueDep" aria-describedby="numRueDepError" value="{{ $trajet['numRueDep'] }}">
                             @error('numRueDep')
                                 <small id="numRueDepError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
                         <div class="col-left-input">
                             <label for="adresseRueDep">Nom de la voie</label>
-                            <input type="text" placeholder="Boulevard Baille"  class="input-form @error('adresseRueDep') is-invalid @enderror" id="adresseRueDep" name="adresseRueDep" aria-describedby="adresseRueDepError">
+                            <input type="text" placeholder="Boulevard Baille"  class="input-form @error('adresseRueDep') is-invalid @enderror" id="adresseRueDep" name="adresseRueDep" aria-describedby="adresseRueDepError" value="{{ $trajet['adresseRueDep'] }}">
                             @error('adresseRueDep')
                                 <small id="adresseRueDepError" class="form-text text-muted">{{$message}}</small>
                             @enderror
@@ -66,14 +57,14 @@ Accueil
                     <div class="col-md-10 mx-auto space-bottom-title" style="padding-bottom: 20px;">
                         <div class="col-right-input">
                             <label for="cpDep">Code postal</label>
-                            <input type="number" placeholder="13010" class="input-form @error('cpDep') is-invalid @enderror" id="cpDep" name="cpDep" aria-describedby="cpDepError">
+                            <input type="number" placeholder="13010" class="input-form @error('cpDep') is-invalid @enderror" id="cpDep" name="cpDep" aria-describedby="cpDepError" value="{{ $trajet['cpDep'] }}">
                             @error('cpDep')
                                 <small id="cpDepError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
                         <div class="col-left-input">
                             <label for="villeDep">Ville</label>
-                            <input type="text" placeholder="Marseille"  class="input-form @error('villeDep') is-invalid @enderror" id="villeDep" name="villeDep" aria-describedby="villeDepError">
+                            <input type="text" placeholder="Marseille"  class="input-form @error('villeDep') is-invalid @enderror" id="villeDep" name="villeDep" aria-describedby="villeDepError" value="{{ $trajet['villeDep'] }}">
                             @error('rueDep')
                                 <small id="villeDepError" class="form-text text-muted">{{$message}}</small>
                             @enderror
@@ -88,30 +79,30 @@ Accueil
                     <div class="col-md-10 mx-auto space-bottom-title">
                         <div class="col-right-input">
                             <label for="numRueArr">Numero de rue</label>
-                            <input type="text" placeholder="170" class="input-form @error('numRueArr') is-invalid @enderror" id="numRueArr" name="numRueArr" aria-describedby="numRueArrError">
+                            <input type="text" placeholder="170" class="input-form @error('numRueArr') is-invalid @enderror" id="numRueArr" name="numRueArr" aria-describedby="numRueArrError" value="{{ $trajet['numRueArr'] }}">>
                             @error('numRueArr')
                                 <small id="numRueArrError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
                         <div class="col-left-input">
-                            <label for="adresseRueDep">Nom de la voie</label>
-                            <input type="text" placeholder="Avenue de Luminy"  class="input-form @error('adresseRueDep') is-invalid @enderror" id="adresseRueDep" name="adresseRueDep" aria-describedby="adresseRueDepError">
-                            @error('adresseRueDep')
-                                <small id="adresseRueDepError" class="form-text text-muted">{{$message}}</small>
+                            <label for="adresseRueArr">Nom de la voie</label>
+                            <input type="text" placeholder="Avenue de Luminy"  class="input-form @error('adresseRueArr') is-invalid @enderror" id="adresseRueArr" name="adresseRueArr" aria-describedby="adresseRueArrError" value="{{ $trajet['adresseRueArr'] }}">
+                            @error('adresseRueArr')
+                                <small id="adresseRueArrError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
                     </div>
                     <div class="col-md-10 mx-auto space-bottom-title" style="padding-bottom: 20px;">
                         <div class="col-right-input">
                             <label for="cpArr">Code postal</label>
-                            <input type="number" placeholder="13009" class="input-form @error('cpArr') is-invalid @enderror" id="cpArr" name="cpArr" aria-describedby="cpArrError">
+                            <input type="number" placeholder="13009" class="input-form @error('cpArr') is-invalid @enderror" id="cpArr" name="cpArr" aria-describedby="cpArrError" value="{{ $trajet['cpArr'] }}">
                             @error('cpArr')
                                 <small id="cpArrError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
                         <div class="col-left-input">
                             <label for="villeArr">Ville</label>
-                            <input type="text" placeholder="Marseille"  class="input-form @error('villeArr') is-invalid @enderror" id="villeArr" name="villeArr" aria-describedby="villeArrError">
+                            <input type="text" placeholder="Marseille"  class="input-form @error('villeArr') is-invalid @enderror" id="villeArr" name="villeArr" aria-describedby="villeArrError" value="{{ $trajet['villeArr'] }}">
                             @error('villeArr')
                                 <small id="villeArrError" class="form-text text-muted">{{$message}}</small>
                             @enderror
@@ -128,14 +119,14 @@ Accueil
                     <div class="col-md-10 mx-auto space-bottom-title">
                         <div class="col-right-input">
                             <label for="dateDep">Date de départ</label>
-                            <input type="datetime-local" class="input-form @error('dateDep') is-invalid @enderror" id="dateDep" name="dateDep" aria-describedby="dateDepError">
+                            <input type="datetime-local" class="input-form @error('dateDep') is-invalid @enderror" id="dateDep" name="dateDep" aria-describedby="dateDepError" value="{{ $trajet['dateDep'] }}">
                             @error('dateDep')
                                 <small id="dateDepError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
                         <div class="col-left-input">
                             <label for="nbPlace">Nombre de place(s)</label>
-                            <input type="number" placeholder="1"  class="input-form @error('nbPlace') is-invalid @enderror" id="nbPlace" name="nbPlace" aria-describedby="nbPlaceError">
+                            <input type="number" placeholder="1"  class="input-form @error('nbPlace') is-invalid @enderror" id="nbPlace" name="nbPlace" aria-describedby="nbPlaceError" value="{{ $trajet['nbPlace'] }}">
                             @error('nbPlace')
                                 <small id="nbPlaceError" class="form-text text-muted">{{$message}}</small>
                             @enderror
@@ -145,30 +136,75 @@ Accueil
                 </div>
             </div>
 
-            <div class="col-left-input-accueil">
-                <div style="padding-bottom: 5px;">
-                
-                    <div class="row justify-content-center align-items-center" style="padding-top: 40px;">
-                        <button type="submit" class="btn button-form">Rechercher</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </form>
 </div>
 
-<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img class="d-block w-100" src="/images/carousel/imagesEntreeLuminy.png" alt="First slide">
+
+<h2 class="center-title space-bottom-title">Les trajets associés</h2>
+<div>
+    @foreach ($trajetsProposes as $trajetProposes)
+    <!-- div global -->
+    <div class="border border-dark margin-trajetsBest">
+        <div class="row ml-5 mt-3">
+            <div class="v-list-item__title">
+                <div class=" text-h6">{{ $trajetProposes['dateHeureDepart'] }}</div> 
+                <div class="text-body-2">
+                {{ $trajetProposes['dateHeureDepart'] }}
+                </div>
+            </div>
+            
+            <!-- trajet -->
+            <div class="col-md-7 detail-trajet">
+                <div class="row">
+                    <div class="col-md-5 text-center lieu-depart">
+                        <span>{{ $trajetProposes['villeDep'] }}</span>
+                    </div> 
+                    <div class="col-md-2 pl-2 temps-image">
+                        <!-- photo de destination -->
+                        <img src="/images/trajet_bleu.png" width="74" height="17" alt=""/>
+                        <div class="font-weight-bold ml-2">
+                            <span>{{ $trajetProposes['min'] }} min</span>
+                        </div>
+                    </div> 
+                    <div class="col-md-5 text-center lieu-arrive">
+                        <span>{{ $trajetProposes['villeArr'] }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- nbr de place -->
+            <div class="col-md-2 places-dispo">
+            {{ $trajetProposes['nbPlace'] }} Place.s
+            </div>
+
+            <!-- prix -->
+            <div class="col-md-1 prix">
+            {{ $trajetProposes['prixTrajet'] }} €
+            </div> 
+        </div>
+
+        <!-- séparateur -->
+        <div class="h-divider ml-5"></div>
+        <!-- conducteur et button -->
+        <div class="row mb-3 mt-2 ml-5">
+            <div class="pmd-user-info col-md-8">
+                <!-- photo -->
+                <a href="#" class="nav-user-img" >   
+                    <img class="avatar-img rounded-circle mr-3" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
+                </a>
+                <!-- nom du conducteur -->
+                <span class="text-h6">D. Nicolas</span>
+            </div>
+            <!-- button plus détails -->
+            <div class="col-md-4 mt-2">
+                <a href="{{route('details_result_recherche_trajet')}}"><button class="btn button-form ml-5">PLUS DÉTAILS</button></a>
+            </div>
+        </div> 
     </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="/images/carousel/imagesAerienneLuminy.png" alt="Second slide">
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="/images/carousel/luminyBu.png" alt="Third slide">
-    </div>
-  </div>
+    &nbsp
+    @endforeach
 </div>
+
 
 @endsection

@@ -18,6 +18,7 @@ Accueil
         </li>
     </ul>
 @endsection
+           
 
 @section('content')
 
@@ -74,7 +75,7 @@ Accueil
                         <div class="col-left-input">
                             <label for="villeDep">Ville</label>
                             <input type="text" placeholder="Marseille"  class="input-form @error('villeDep') is-invalid @enderror" id="villeDep" name="villeDep" aria-describedby="villeDepError">
-                            @error('rueDep')
+                            @error('villeDep')
                                 <small id="villeDepError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
@@ -94,10 +95,10 @@ Accueil
                             @enderror
                         </div>
                         <div class="col-left-input">
-                            <label for="adresseRueDep">Nom de la voie</label>
-                            <input type="text" placeholder="Avenue de Luminy"  class="input-form @error('adresseRueDep') is-invalid @enderror" id="adresseRueDep" name="adresseRueDep" aria-describedby="adresseRueDepError">
-                            @error('adresseRueDep')
-                                <small id="adresseRueDepError" class="form-text text-muted">{{$message}}</small>
+                            <label for="adresseRueArr">Nom de la voie</label>
+                            <input type="text" placeholder="Avenue de Luminy"  class="input-form @error('adresseRueArr') is-invalid @enderror" id="adresseRueArr" name="adresseRueArr" aria-describedby="adresseRueArrError">
+                            @error('adresseRueArr')
+                                <small id="adresseRueArrError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
                     </div>

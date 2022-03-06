@@ -16,11 +16,7 @@ use App\Http\Middleware\Localization;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Route pour la page d'accueil
-Route::get('/', [SawdaController::class, 'showFormAccueil'])->name('accueil');
-Route::post('/', [SawdaController::class, 'accueil'])->name('accueil.post');
 
-Route::get('/', [Controller::class, 'showHome'])->name('home');
 // Route qui permet de connaître la langue active
 Route::get('locale', [LocalizationController::class, 'getLang'])->name('getlang');
 
@@ -97,10 +93,20 @@ Route::get('/passager/confirmation_annuler_reservation', [Controller::class, 'sh
 // ROute payement trajet
 Route::get('/passager/payement', [Controller::class, 'showPayementForm'])->name('payement');
 
-// Route recherche de trajet
-Route::get('/passager/recherche_trajet', [Controller::class, 'showRechercheTrajet'])->name('recherche_trajet');
+// Route pour la page d'accueil
+Route::get('/', [SawdaController::class, 'showFormAccueil'])->name('accueil');
+Route::post('/', [SawdaController::class, 'accueil'])->name('accueil.post');
 
-Route::get('/passager/details_result_recherche_trajet', [Controller::class, 'showDetailRechercheTrajet'])->name('details_result_recherche_trajet');
+//Page résultats de la recherche de trajets
+Route::get('/passager/recherche_trajet', [SawdaController::class, 'accueil'])->name('rechercheTrajetResultDeAccueil');
+Route::get('/passager/recherche_trajet', [SawdaController::class, 'rechercheTrajet'])->name('rechercheTrajetResultDeTrajet');
+
+//Page recherche trajets
+Route::get('/passager/recherche_trajet', [SawdaController::class, 'showFormRechercheTrajet'])->name('recherche_trajet');
+Route::post('/passager/recherche_trajet', [SawdaController::class, 'rechercheTrajet'])->name('recherche_trajet.post');
+
+//Page détails résultat recherche trajet
+Route::get('/passager/details_result_recherche_trajet/{trajetId}', [SawdaController::class, 'detailsResultRechercheTrajet'])->where('trajetId', '[0-9]+')->name('detailsResultRechercheTrajet');
 
 
 /* ------------ Route pour les autres pages ------------ */
@@ -108,7 +114,6 @@ Route::get('/passager/details_result_recherche_trajet', [Controller::class, 'sho
 // Route pour la page Poser une question
 Route::get('/question', [Controller::class, 'showQuestionForm'])->name('question');
 Route::post('/question', [MailsController::class, 'storeQuestion'])->name('store.question');
-
 
 // ROute a propos
 Route::get('/apropos', [Controller::class, 'showAPropos'])->name('apropos');

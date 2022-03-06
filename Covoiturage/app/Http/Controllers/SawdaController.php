@@ -20,11 +20,12 @@ class SawdaController extends BaseController
         $this->repository = $repository;
     }
 
-    /******************** Page accueil  ********************/
+    /******************** Page accueil ********************/
     public function showFormAccueil()
     {
         return view('home');
     }
+
     public function accueil(Request $request, SawdaRepository $repository)
     {
         $messages = [
@@ -41,7 +42,6 @@ class SawdaController extends BaseController
             'cpDep.required' => 'Vous devez choisir un code postal.',
 
             'dateDep.required' => 'Vous devez choisir une date.',
-            //'dateDep.datetime' => 'Vous devez choisir une date valide.',
 
             'nbPlace.integer' => 'Vous devez choisir un nombre de place.',
             'nbPlace.required' => 'Vous devez choisir un code postal.',
@@ -85,20 +85,35 @@ class SawdaController extends BaseController
         $villeArr = $validatedData['villeArr'];
         $cpArr = $validatedData['cpArr'];
 
+        /*$trajet= [
+            'dateDep' => '2022-02-21 07:00:00',
+            'numRueDep' => 'rue',
+            'adresseRueDep' => 'rue',
+            'villeDep' => 'Marseille',
+            'cpDep' => 13013,
+            'nbPlace' => 3,
+            'numRueArr' => 3,
+            'adresseRueArr' => 'rue',
+            'villeArr' => 'Marseille',
+            'cpArr' => 13009
+        ];*/
+
         //Pour récupérer les données saisies par l'utilisateur
         $trajet=$this->repository->createDataRechercheTrajetForm(
             $dateDep, $numRueDep, $adresseRueDep, $villeDep, $cpDep, $nbPlace, $numRueArr, $adresseRueArr,
             $villeArr, $cpArr);
 
-        //Ici fictive, doit returner les résultats de la recherche de l'utilisateur
+        //Les résultats de la recherche de l'utilisateur
         $trajetsProposes=$this->repository->trajetsProposes($trajet);
+        $bestTrajets=$this->repository->bestTrajets();
 
-       // try {
-            return view('recherche_trajet_result', ['trajet'=>$trajet, 'trajetsProposes'=>$trajetsProposes]);
-        //} catch (Exception $exception) {
-           // return
-        //    redirect()->route('home')->withInput()->withErrors("Impossible d\'éffectuer la recherche.");
-        //}
+        try {
+            return 
+            view('passager.recherche_trajet_result', ['trajet'=>$trajet, 'trajetsProposes'=>$trajetsProposes, 'bestTrajets'=>$bestTrajets]);
+        } catch (Exception $exception) {
+            return
+            redirect()->route('accueil')->withInput()->withErrors("Impossible d\'éffectuer la recherche.");
+        }
     }
 
     /******************** Page recherche trajet  ********************/
@@ -106,10 +121,10 @@ class SawdaController extends BaseController
     {
         //Les trajets les moins chers
         $bestTrajets=$this->repository->bestTrajets();
-        return view('rechercheTrajet', ['bestTrajets'=>$bestTrajets]);
+        return view('passager.recherche_trajet', ['bestTrajets'=>$bestTrajets]);
     }
 
-    public function rechercheTrajet(Request $request)
+    public function rechercheTrajet(Request $request, SawdaRepository $repository)
     {
         $messages = [
             'numRueDep.text' => 'Vous devez choisir un numéro de rue.',
@@ -125,10 +140,6 @@ class SawdaController extends BaseController
             'cpDep.required' => 'Vous devez choisir un code postal.',
 
             'dateDep.required' => 'Vous devez choisir une date.',
-            'dateDep.date' => 'Vous devez choisir une date valide.',
-            
-            'timeDep.required' => 'Vous devez choisir une heure.',
-            'timeDep.date_format' => 'Vous devez choisir une heure valide.',
 
             'nbPlace.integer' => 'Vous devez choisir un nombre de place.',
             'nbPlace.required' => 'Vous devez choisir un code postal.',
@@ -147,8 +158,7 @@ class SawdaController extends BaseController
         ];
 
         $rules = [
-            'dateDep' => ['required', 'date'],
-            'timeDep' => ['required', 'date_format:H:i'],
+            'dateDep' => ['required'],
             'numRueDep' => ['required'],
             'adresseRueDep' => ['required'],
             'villeDep' => ['required'],
@@ -163,8 +173,6 @@ class SawdaController extends BaseController
         $validatedData = $request->validate($rules, $messages);
 
         $dateDep = $validatedData['dateDep'];
-        $timeDep = $validatedData['timeDep'];
-        $datetimeDep = "$dateDep $timeDep";
         $numRueDep = $validatedData['numRueDep'];
         $adresseRueDep = $validatedData['adresseRueDep'];
         $villeDep = $validatedData['villeDep'];
@@ -175,33 +183,51 @@ class SawdaController extends BaseController
         $villeArr = $validatedData['villeArr'];
         $cpArr = $validatedData['cpArr'];
 
-        $trajet=$this->repository->createDataRechercheTrajetForm($dateDep, 
-            $timeDep, $numRueDep, $adresseRueDep, $villeDep, $cpDep, $nbPlace, $numRueArr, $adresseRueArr,
+        /*$trajet= [
+            'dateDep' => '2022-02-21 07:00:00',
+            'numRueDep' => 'rue',
+            'adresseRueDep' => 'rue',
+            'villeDep' => 'Marseille',
+            'cpDep' => 13013,
+            'nbPlace' => 3,
+            'numRueArr' => 3,
+            'adresseRueArr' => 'rue',
+            'villeArr' => 'Marseille',
+            'cpArr' => 13009
+        ];*/
+
+        //Pour récupérer les données saisies par l'utilisateur
+        $trajet=$this->repository->createDataRechercheTrajetForm(
+            $dateDep, $numRueDep, $adresseRueDep, $villeDep, $cpDep, $nbPlace, $numRueArr, $adresseRueArr,
             $villeArr, $cpArr);
 
-        //Ici fictive, doit returner les résultats de la recherche de l'utilisateur
-        $trajetsProposes=$this->data->trajetsProposes();
+        //Les résultats de la recherche de l'utilisateur
+        $trajetsProposes=$this->repository->trajetsProposes($trajet);
+        $bestTrajets=$this->repository->bestTrajets();
 
         try {
-            return view('rechercheTrajetResult', ['trajet'=>$trajet, 'trajetsProposes'=>$trajetsProposes]);
+            return 
+            view('passager.recherche_trajet_result', ['trajet'=>$trajet, 'trajetsProposes'=>$trajetsProposes, 'bestTrajets'=>$bestTrajets]);
         } catch (Exception $exception) {
             return
-            redirect()->route('rechercheTrajet')->withInput()->withErrors("Impossible d\'éffectuer la recherche.");
+            redirect()->route('passager.recherche_trajet')->withInput()->withErrors("Impossible d\'éffectuer la recherche.");
         }
     }
 
     /******************** Page détails résultat recherche trajet  ********************/
    
-    public function detailsResultRechercheTrajet(int $trajetId)
+    public function detailsResultRechercheTrajet(int $trajetId, SawdaRepository $repository)
     {
         //Données sur un trajet à travers son id
-        $UnTrajet = $this->repository->UnTrajet($trajetId);
+        $unTrajet = $this->repository->unTrajet($trajetId);
         //Données sur le conducteur d'un trajet à travers son id
-        $UnProfil = $this->repository->UnProfil($trajetId);
+        $unProfil = $this->repository->unProfil($trajetId);
+        //Données sur le conducteur d'un trajet à travers son id
+        $uneNote = $this->repository->uneNote($unProfil['idUtilisateur']);
         //Données sur les passager d'un trajet à travers son id
         $passagers = $this->repository->passagers($trajetId);
-        return view('detailsResultRechercheTrajet', ['UnTrajet' => $UnTrajet, 
-        'UnProfil' => $UnProfil, 'passagers' => $passagers]);
+        return view('passager.details_result_recherche_trajet', ['unTrajet' => $unTrajet, 
+        'unProfil' => $unProfil, 'uneNote' => $uneNote, 'passagers' => $passagers]);
     }
 
     public function reservation()

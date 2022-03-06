@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use PDO;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use IlluminateSupportCarbon;
 use Tests\TestCase;
 use App\Repositories\SawdaRepository;
 
@@ -30,22 +31,8 @@ class SawdaRepositoryTest extends TestCase
             'villeArr' => 'Marseille',
             'cpArr' => 13009
         ];
-        var_dump($this->repository->trajetsProposes($tableau));
-    }
-
-    function testUnProfil(): void
-    {
-
-    }
-
-    function testBestTrajets(): void
-    {
-
-    }
-
-    function testPassagers(): void
-    {
-
+        //var_dump($this->repository->trajetsProposes($tableau));
+        
     }
 
     function testUnTrajet(): void
@@ -61,12 +48,30 @@ class SawdaRepositoryTest extends TestCase
             'idLieuArrivee'=>1,
             'immatriculation'=>'AB100AA'
         ];
-        var_dump($this->repository->unTrajet(1));
-        $this->assertEquals(
-            $this->repository->unTrajet(1)
-            ,
-            $trajet
-        );
+        //var_dump($this->repository->unTrajet(1));
     }
+
+    function testUnProfil(): void
+    {
+        //var_dump($this->repository->unProfil(1));
+    }
+
+    function testUneNote(): void
+    {
+        //La note est un string
+        //var_dump($this->repository->uneNote(101));
+    }
+
+    function testBestTrajets(): void
+    {
+        //var_dump($this->repository->bestTrajets());
+
+    }
+
+    function testPassagers(): void
+    {
+        //var_dump($this->repository->passagers(11));
+    }
+
 
 }

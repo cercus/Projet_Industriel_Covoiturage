@@ -24,11 +24,11 @@
 @section('content')
 
 <h1 class="center-title">Historique de mes trajets</h1>
-
+<h3 class="center-title" style="padding-top: 30px;">Trajets en tant que conducteur</h3>
 <div class="row justify-content-center align-items-center space-bottom-title">
     <div class="table-responsive">
-        <table class="table">
-            <thead>
+        <table class="table table-striped">
+            <thead class="thead-dark">
                 <tr>
                     <th>Date</th>
                     <th>Conducteur</th>
@@ -41,72 +41,101 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="fond-conducteur-row">
-                    <td>24/01/2022</td>
-                    <td>Nicolas Dufour</td>
-                    <td>Ismail IDBOURHIM</td>
-                    <td>Metro Malpassé 13013 Marseille</td>
-                    <td>7H50</td>
-                    <td>Luminy 13009 Marseille</td>
-                    <td>8H20</td>
-                    <td><button type="submit" class="btn button-form mx-auto">{{__('Noter')}}</button></td>
-                </tr>
+                @if(count($trajetsConducteur) == 0)
+                    <tr>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                    </tr>
+                @else
+                    
+                    @foreach ((array)$trajetsConducteur as $conducteur)
+                        <tr>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{$conducteur['date']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['conducteur']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['passager']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['adresseDepart']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['heureDepart']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['adresseArrivee']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['heureArrivee']}}</td>
+                            @if($conducteur['notation'] < 0)
+                                <td style="font-size: 12px; padding-bottom: -10px;"><button type="submit" class="btn button-form mx-auto small-button-form">{{__('Noter')}}</button></td>
+                            @else
+                            <td>
+                                @for ($i = 0; $i < $conducteur['notation']; $i++)
+                                    <label class="fa fa-star" style="color: #ffe400; text-shadow: 0 0 3px #000"></label>
+                                @endfor
+                                @for($i = 5; $i > $conducteur['notation']; $i--)
+                                <label class="fa fa-star"></label>
+                                @endfor
+                            </td>
+                            @endif
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
-            <tbody>
-                <tr class="fond-conducteur-row">
-                    <td>24/01/2022</td>
-                    <td>Nicolas Dufour</td>
-                    <td>Ismail IDBOURHIM</td>
-                    <td>Metro Malpassé 13013 Marseille</td>
-                    <td>7H50</td>
-                    <td>Luminy 13009 Marseille</td>
-                    <td>8H20</td>
-                    <td><button type="submit" class="btn button-form mx-auto">{{__('Noter')}}</button></td>
+        </table>
+    </div>
+</div>
+
+<h3 class="center-title">Trajets en tant que passager</h3>
+<div class="row justify-content-center align-items-center space-bottom-title">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Date</th>
+                    <th>Conducteur</th>
+                    <th>Passager</th>
+                    <th>Adresse départ</th>
+                    <th>Heure départ</th>
+                    <th>Adresse destination</th>
+                    <th>Heure d'arrivée</th>
+                    <th>Action</th>
                 </tr>
-            </tbody>
+            </thead>
             <tbody>
-                <tr class="fond-passager-row">
-                    <td>24/01/2022</td>
-                    <td>Ismail IDBOURHIM</td>
-                    <td>Nicolas Dufour</td>
-                    <td>Metro Malpassé 13013 Marseille</td>
-                    <td>7H50</td>
-                    <td>Luminy 13009 Marseille</td>
-                    <td>8H20</td>
-                    <td>
-                        <div class="col rating-css" >
-                            <div class="row" style="white-space:nowrap;  width:3cm; text-shadow: 0 0 3px #000;">
+                @if(count($trajetsPassager) == 0)
+                    <tr>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                        <td>----</td>
+                    </tr>
+                @else
+                    @foreach ((array)$trajetsPassager as $passager)
+                        <tr>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['date']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['conducteur']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['passager']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['adresseDepart']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['heureDepart']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['adresseArrivee']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['heureArrivee']}}</td>
+                            @if($passager['notation'] < 0)
+                                <td style="font-size: 12px; padding-bottom: -10px;"><button type="submit" class="btn button-form mx-auto small-button-form">{{__('Noter')}}</button></td>
+                            @else
+                            <td>
+                                @for ($i = 0; $i < $passager['notation']; $i++)
+                                    <label class="fa fa-star" style="color: #ffe400; text-shadow: 0 0 3px #000"></label>
+                                @endfor
+                                @for($i = 5; $i > $passager['notation']; $i--)
                                 <label class="fa fa-star"></label>
-                                <label class="fa fa-star"></label>
-                                <label class="fa fa-star"></label>
-                                <label class="fa fa-star"></label>
-                                <label class="fa fa-star"></label>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-            <tbody>
-                <tr class="fond-conducteur-row">
-                    <td>24/01/2022</td>
-                    <td>Nicolas Dufour</td>
-                    <td>Ismail IDBOURHIM</td>
-                    <td>Metro Malpassé 13013 Marseille</td>
-                    <td>7H50</td>
-                    <td>Luminy 13009 Marseille</td>
-                    <td>8H20</td>
-                    <td>
-                        <div class="col rating-css" >
-                            <div class="row" style="white-space:nowrap;  width:3cm; text-shadow: 0 0 3px #000;">
-                                <label class="fa fa-star"></label>
-                                <label class="fa fa-star"></label>
-                                <label class="fa fa-star"></label>
-                                <label class="fa fa-star"></label>
-                                <label class="fa fa-star"></label>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
+                                @endfor
+                            </td>
+                            @endif
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
     </div>

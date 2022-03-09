@@ -41,7 +41,7 @@ Route::get('/testLang',function () {
 Route::get('/commun/user', [Controller::class, 'showUserPage'])->name('user');
 
 // Route pour la page historique des trajets
-Route::get('/commun/historique_trajets', [Controller::class, 'showHistoriqueTrajet'])->name('historique_trajets');
+Route::get('/commun/historique_trajets/{idUtilisateur}', [DorianController::class, 'showHistoriqueTrajet'])->where('idUtilisateur', '[0-9]+')->name('historique_trajets');
 
 // Route pour la page de modification du profil
 Route::get('/commun/modification_profil', [Controller::class, 'showModificationProfilForm'])->name('modification_profil');
@@ -84,7 +84,7 @@ Route::get('/conducteur/confirmation_annuler_trajets', [Controller::class, 'show
 
 // Route proposer un trajet
 Route::get('/conducteur/proposer_trajet', [DorianController::class, 'showProposerTrajetForm'])->name('proposer_trajet');
-Route::post('/conducteur/proposer_trajet', [DorianController::class, 'storeProposerTrajetForm'])->name('store.proposer_trajet');
+Route::post('/conducteur/submit_proposer_trajet', [DorianController::class, 'storeProposerTrajetForm'])->name('store.proposer_trajet');
 
 
 /* ------------ Route pour les pages se trouvant dans le dossier passager ------------ */
@@ -128,3 +128,7 @@ Route::get('/reinitialisation_mdp', [Controller::class, 'showReinitialisationMdp
 
 // Route pour la page Qui-sommes-nous
 Route::get('qui_sommes_nous', [Controller::class, 'showQuiSommesNous'])->name('qui_sommes_nous');
+
+
+#Route::get('/testAPIMap', [Controller::class, 'showAPIMap'])->name('testapimap');
+#Route::post('/submit-testAPIMap', [DorianController::class, 'storeTestAjax'])->name('store.testapimap');

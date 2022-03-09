@@ -104,9 +104,11 @@ class Controller extends BaseController
         return view('conducteur.confirmation_annuler_trajets');
     }
 
+    /*
     public function showProposerTrajetForm(){
         return view('conducteur.proposer_trajet');
     }
+    */
 
     /* ----------------- Fonctions pour les pages se trouvant dans le dossier passager ----------------- */
 
@@ -172,4 +174,10 @@ class Controller extends BaseController
     public function showHome() {
         return view('home');
     }
+
+    public function showAPIMap() {
+        return view("testMApAPI");
+    }
+
+
 }

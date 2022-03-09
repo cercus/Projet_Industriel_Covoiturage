@@ -230,6 +230,12 @@ body {
     transform: scale(1.1);
 }
 
+.small-button-form {
+    font-size: 12px;
+    height: 25px !important;
+    margin-top: -10px;
+}
+
 
 /* Taille du captcha pour les petites résolution */
 

@@ -22,6 +22,11 @@
 @endsection
 
 @section('content')
+    @if(session()->has('success'))
+            <div class="alert alert-success">
+                    {{session()->get('success')}}&#9786;
+            </div>
+        @endif
     <h1 class="center-title">
         <Strong>Mes trajets en cours</Strong>
     </h1><br>

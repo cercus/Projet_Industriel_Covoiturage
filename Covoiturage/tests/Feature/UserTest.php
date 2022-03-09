@@ -29,6 +29,7 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /*
     public function test_get_user(){
         //var_dump($this->repository->testGetUser());
         if(DB::connection()->getDatabaseName()){
@@ -37,4 +38,5 @@ class UserTest extends TestCase
         }
         echo json_encode(DB::table('Messages')->where('idMessage', 1)->get()->toArray());
     }
+    */
 }

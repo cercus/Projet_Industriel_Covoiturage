@@ -139,7 +139,7 @@ class NicolasController extends BaseController
             }
 
                 
-        return redirect()->route('inscription');
+        return redirect()->route('connexion');
     }
     
     public function Connexion(Request $request, NicolasRepository $repository)
@@ -166,7 +166,7 @@ class NicolasController extends BaseController
         } catch (Exception $e) {
             return redirect()->back()->withInput()->withErrors("Impossible de vous authentifier.".$e->getMessage());
         }
-        return redirect()->route('inscription');
+        return redirect()->route('connexion');
     }
     
     public function logout(Request $request) {

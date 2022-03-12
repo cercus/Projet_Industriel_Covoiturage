@@ -3,6 +3,7 @@
 use App\Http\Controllers\LocalizationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\NicolasController;
 use App\Http\Controllers\MailsController;
 use App\Http\Middleware\Localization;
 
@@ -116,10 +117,11 @@ Route::get('/apropos', [Controller::class, 'showAPropos'])->name('apropos');
 
 // Route pour la page Inscription
 Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('inscription');
+Route::post('/inscription', [NicolasController::class, 'inscriptionForm'])->name('store.inscription');
 
 // Route pour la page de connexion
 Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
-Route::post('/connexion', [Controller::class, 'storeConnexion'])->name('store.connexion');
+Route::post('/connexion', [NicolasController::class, 'storeConnexion'])->name('store.connexion');
 
 // Route pour la page Reinitialisation mdp
 Route::get('/reinitialisation_mdp', [Controller::class, 'showReinitialisationMdp'])->name('reinitialisation_mdp');

@@ -31,9 +31,10 @@ class NicolasRepository
         $user=$user[0];
 
         if (! Hash::check($password, $user->password)) // si le password n'est pas hashé ou que le paswoord n'est pa bon
-            throw new Exception('Utilisateur inconnu'); 
+            throw new Exception('Utilisateur inconnu');
+    
 
-        return ['idUtilisateur'=> $user->idUtilisateur,'emailUtilisateur'=> $user->email];
+        return ['email'=> $user->emailUtilisateur,'password'=> $user->password,'id'=> $user->idUtilisateur];
     }
     
     //modifierle mot de passe d'un utilisateur

@@ -121,7 +121,7 @@ Route::post('/inscription', [NicolasController::class, 'inscriptionForm'])->name
 
 // Route pour la page de connexion
 Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
-Route::post('/connexion', [NicolasController::class, 'storeConnexion'])->name('store.connexion');
+Route::post('/connexion', [NicolasController::class, 'Connexion'])->name('store.connexion');
 
 // Route pour la page Reinitialisation mdp
 Route::get('/reinitialisation_mdp', [Controller::class, 'showReinitialisationMdp'])->name('reinitialisation_mdp');

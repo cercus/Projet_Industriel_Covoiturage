@@ -17,8 +17,8 @@ class NicolasController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function __construct(NicolasRepository $NicolasRepository) {
-        $this->NicolasRepository=$NicolasRepository;
+    public function __construct(NicolasRepository $repository) {
+        $this->NicolasRepository=$repository;
     }
 
     public function inscriptionForm(Request $request)
@@ -116,7 +116,6 @@ class NicolasController extends BaseController
                         "numeroIdentite" => $nni
                 ];
                 $idUser= $this->NicolasRepository->addUser($user);
-                //dd($idUser);
 
                 if (!empty($immatriculation))
                 {
@@ -131,18 +130,15 @@ class NicolasController extends BaseController
                             "idUtilisateur"=> $idUser
                     ];
 
-                    //dd($voiture);
                     $this->NicolasRepository->addCar($voiture);
                 }
             } catch (Exception $e) {
                 return redirect()->back()->withInput()->withErrors("Impossible de vous authentifier.".$e->getMessage(). "->".$e->getLine(). "->".$e->getFile());
             }
-
-                
         return redirect()->route('connexion');
     }
     
-    public function Connexion(Request $request, NicolasRepository $repository)
+    public function Connexion()
     {
         $rules = [
             'email' => ['required', 'email', 'exists:Utilisateurs,emailUtilisateur'],
@@ -154,27 +150,27 @@ class NicolasController extends BaseController
             'email.exists' => "Cet utilisateur n'existe pas.",
             'password.required' => "Vous devez saisir un mot de passe.",
         ];
-        $validatedData = $request->validate($rules, $messages);
+        $validatedData = Request()->validate($rules, $messages);
 
         try {
             # lever exception si password incorrect et se souvenir de l'authentification
             $email= $validatedData['email'];
             $password= $validatedData['password'];
-            $user = $repository->getUser($email, $password);
-            $request->session()->put('user',$user);
+            $user = $this->NicolasRepository->getUser($email, $password);
+            Request()->session()->put('user',$user);
 
+            return redirect()->Route('user');
         } catch (Exception $e) {
             return redirect()->back()->withInput()->withErrors("Impossible de vous authentifier.".$e->getMessage());
         }
-        return redirect()->route('connexion');
-    }
+     }
     
-    public function logout(Request $request) {
+    public function logout() {
         
-        $validatedData = $request->validate();
+        $validatedData = Request()->validate();
         $email = $validatedData['email'];
         $password = $validatedData['password'];
-        $request->session()->forget([$this->repository->getUser($email,$password)]);
+        Request()->session()->forget([$this->NicolasRepository->getUser($email,$password)]);
     }
     
 }

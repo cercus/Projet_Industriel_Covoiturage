@@ -1,3 +1,4 @@
+
 @extends('base')
 
 @section('title')
@@ -56,21 +57,21 @@
                     
                     @foreach ((array)$trajetsConducteur as $conducteur)
                         <tr>
-                            <td style="font-size: 12px; padding-bottom: -10px;">{{$conducteur['date']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{explode(' ', $conducteur['dateHeureDepart'])[0]}}</td>
                             <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['conducteur']}}</td>
                             <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['passager']}}</td>
                             <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['adresseDepart']}}</td>
-                            <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['heureDepart']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px; ">{{explode(' ', $conducteur['dateHeureDepart'])[1]}}</td>
                             <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['adresseArrivee']}}</td>
-                            <td style="font-size: 12px; padding-bottom: -10px; ">{{$conducteur['heureArrivee']}}</td>
-                            @if($conducteur['notation'] < 0)
-                                <td style="font-size: 12px; padding-bottom: -10px;"><button type="submit" class="btn button-form mx-auto small-button-form">{{__('Noter')}}</button></td>
+                            <td style="font-size: 12px; padding-bottom: -10px; ">{{explode(' ', $conducteur['dateHeureArrivee'])[1]}}</td>
+                            @if($conducteur['note'] < 0)
+                                <td style="font-size: 12px; padding-bottom: -10px;"><a href="/commun/notation_conducteur/{{$conducteur['idPassager']}}/{{$conducteur['idReservation']}}" class="btn button-form mx-auto small-button-form">{{__('Noter')}}</a></td>
                             @else
                             <td>
-                                @for ($i = 0; $i < $conducteur['notation']; $i++)
+                                @for ($i = 0; $i < $conducteur['note']; $i++)
                                     <label class="fa fa-star" style="color: #ffe400; text-shadow: 0 0 3px #000"></label>
                                 @endfor
-                                @for($i = 5; $i > $conducteur['notation']; $i--)
+                                @for($i = 5; $i > $conducteur['note']; $i--)
                                 <label class="fa fa-star"></label>
                                 @endfor
                             </td>
@@ -112,23 +113,23 @@
                         <td>----</td>
                     </tr>
                 @else
-                    @foreach ((array)$trajetsPassager as $passager)
+                    @foreach ($trajetsPassager as $passager)
                         <tr>
-                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['date']}}</td>
-                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['conducteur']}}</td>
-                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['passager']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{explode(' ', $passager['dateHeureRDV'])[0]}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['conducteur']}} </td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['passager']}} </td>
                             <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['adresseDepart']}}</td>
-                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['heureDepart']}}</td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{explode(' ', $passager['dateHeureRDV'])[1]}}</td>
                             <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['adresseArrivee']}}</td>
-                            <td style="font-size: 12px; padding-bottom: -10px;">{{$passager['heureArrivee']}}</td>
-                            @if($passager['notation'] < 0)
-                                <td style="font-size: 12px; padding-bottom: -10px;"><button type="submit" class="btn button-form mx-auto small-button-form">{{__('Noter')}}</button></td>
+                            <td style="font-size: 12px; padding-bottom: -10px;">{{explode(' ', $passager['dateHeureArrivee'])[1]}}</td>
+                            @if($passager['note'] < 0)
+                                <td style="font-size: 12px; padding-bottom: -10px;"><a href="/commun/notation_passager/{{$passager['idConducteur']}}/{{$passager['idReservation']}}" class="btn button-form mx-auto small-button-form">{{__('Noter')}}</a></td>
                             @else
                             <td>
-                                @for ($i = 0; $i < $passager['notation']; $i++)
+                                @for ($i = 0; $i < $passager['note']; $i++)
                                     <label class="fa fa-star" style="color: #ffe400; text-shadow: 0 0 3px #000"></label>
                                 @endfor
-                                @for($i = 5; $i > $passager['notation']; $i--)
+                                @for($i = 5; $i > $passager['note']; $i--)
                                 <label class="fa fa-star"></label>
                                 @endfor
                             </td>

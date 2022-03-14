@@ -66,10 +66,21 @@ Route::get('/commun/nouveau_message', [Controller::class, 'showEcrireMessageForm
 Route::get('/commun/repondre_message', [Controller::class, 'showMessagesReply'])->name('messages.reply');
 
 // Route pour la page de notation
-Route::get('/commun/notation', [Controller::class, 'showNotation'])->name('notation');
+
+Route::get('/commun/notation_conducteur/{idUtilisateur}/{idReservation}', [DorianController::class, 'showTrajetForNotationConducteur'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('notation.conducteur');
+Route::post('/commun/notation_conducteur/{idUtilisateur}/{idReservation}', [DorianController::class, 'storeNotationPassager'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation.passager');
+#/idUtilisateur : Celui qui est noté
+
+// Notation si l'user est passager -> Il note le conducteur
+Route::get('/commun/notation_passager/{idUtilisateur}/{idReservation}', [DorianController::class, 'showTrajetForNotationPassager'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('notation.passager');
+Route::post('/commun/notation_passager/{idUtilisateur}/{idReservation}', [DorianController::class, 'storeNotationConducteur'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation.conducteur');
+
+
+#Route::get('/commun/notation/{idUtilisateur}/{idReservation}', [DorianController::class, 'showTrajetForNotation'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('notation');
+#Route::post('/commun/notation/{idUtilisateur}/{idReservation}', [DorianController::class, 'storeNotation'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation');
 
 // Route pour la page caractéristique d'un user
-Route::get('/commun/caracteristiques', [Controller::class, 'showCaracteristique'])->name('caracteristiques');
+Route::get('/commun/caracteristiques/', [Controller::class, 'showCaracteristique'])->name('caracteristiques');
 
 /* ------------ Route pour les pages se trouvant dans le dossier conducteur ------------ */
 

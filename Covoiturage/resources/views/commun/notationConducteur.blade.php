@@ -27,34 +27,22 @@
         <div class="alert alert-warning">
             notation &#9785; {{implode('', $errors->all('<div>:message</div>'))}}
         </div>
-    @endif
+@endif
 
 <h1 class="center-title">
-    <Strong>Notation  {{$trajetConducteur['idReservation']}}</Strong>
+    <Strong>Notation de {{$trajet['prenomPassager']}} {{$trajet['nomPassager']}} qui est passager</Strong>
 </h1><br>
-<!-- div global -->
-@if($_GET['Conducteur'] == 'True')
-    <form method="POST", action="{{route('store.notation', ['idReservation' => $trajetConducteur['idReservation'], 'idUtilisateur' => $trajetConducteur['idPassager']])}}">
-@elseif($_GET['Conducteur'] == 'False')
-    <form method="POST", action="{{route('store.notation', ['idReservation' => $trajetPassager['idReservation'], 'idUtilisateur' => $trajetPassager['idConducteur']])}}">
-@endif
+
+<form method="POST" action="{{route('store.notation.passager', ['idUtilisateur' => $trajet['idPassager'], 'idReservation' => $trajet['idReservation']])}}">
     @csrf
     <div class="border border-dark">
         <div class="row ml-5 mt-3 justify-content-center align-items-center">
             <div class="v-list-item__title">
                 <div class=" text-h6">
-                    @if($_GET['Conducteur'] == 'True')
-                        {{date('H:i', strtotime($trajetConducteur['heureDepart']))}}
-                    @elseif($_GET['Conducteur'] == 'False')
-                        {{date('H:i', strtotime($trajetPassager['heureDepart']))}}    
-                    @endif
+                    {{date('H:i', strtotime(explode(' ', $trajet['dateHeureRDV'])[1]))}}
                 </div> 
                 <div class="text-body-2">
-                    @if($_GET['Conducteur'] == 'True')
-                        {{strftime('%a %d %b', strtotime($trajetConducteur['date']))}}
-                    @elseif($_GET['Conducteur'] == 'False')
-                        {{strftime('%a %d %b', strtotime($trajetPassager['date']))}}
-                    @endif
+                    {{strftime('%a %d %b', strtotime(explode(' ', $trajet['dateHeureRDV'])[0]))}}
                 </div>
             </div>
             
@@ -62,41 +50,29 @@
             <div class="col-md-7 detail-trajet">
                 <div class="row">
                     <div class="col-md-5 text-center lieu-depart">
-                        @if($_GET['Conducteur'] == 'True')
-                            <span>{{$trajetConducteur['adresseDepart']}}</span>
-                        @elseif($_GET['Conducteur'] == 'False')
-                            <span>{{$trajetPassager['adresseDepart']}}</span>
-                        @endif
+                        {{$trajet['numRueDepart']}} {{$trajet['rueDepart']}} {{$trajet['cpDepart']}} {{$trajet['villeDepart']}}
                     </div> 
                     <div class="col-md-2 pl-2 temps-image">
                         <!-- photo de destination -->
                         <img src="/images/trajet_bleu.png" width="74" height="17" alt=""/>
                         <div class="font-weight-bold ml-2">
-                            @if($_GET['Conducteur'] == 'True')
-                            <span>{{date('H:i', strtotime($trajetConducteur['heureArrivee'])-strtotime($trajetConducteur['heureDepart']))}}</span>
-                            @elseif($_GET['Conducteur'] == 'False')
-                            <span>{{date('H:i', strtotime($trajetPassager['heureArrivee'])-strtotime($trajetPassager['heureDepart']))}}</span>
-                            @endif
+                            {{date('H:i', strtotime(explode(' ', $trajet['dateHeureArrivee'])[1])-strtotime(explode(' ', $trajet['dateHeureRDV'])[1]))}}
                         </div>
                     </div> 
                     <div class="col-md-5 text-center lieu-arrive">
-                        @if($_GET['Conducteur'] == 'True')
-                            <span>{{$trajetConducteur['adresseArrivee']}}</span>
-                        @elseif($_GET['Conducteur'] == 'False')
-                            <span>{{$trajetPassager['adresseArrivee']}}</span>
-                        @endif
+                        {{$trajet['numRueArrivee']}} {{$trajet['rueArrivee']}} {{$trajet['cpArrivee']}} {{$trajet['villeArrivee']}}
                     </div>
                 </div>
             </div>
 
             <!-- nbr de place -->
             <div class="col-md-2 places-dispo">
-                3 Places
+                {{$trajet['nbPlace']}} Place.s
             </div>
 
             <!-- prix -->
             <div class="col-md-1 prix">
-                5€       
+                {{$trajet['prixResa']}}€       
             </div> 
         </div>
 
@@ -111,13 +87,7 @@
                     <a href="#" class="nav-user-img" >   
                         <img class="avatar-img rounded-circle mr-3" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar"><br/>
                     </a>
-
-                    <!-- nom du conducteur -->
-                    @if($_GET['Conducteur'] == 'True')
-                        <span class="text-h6">{{$trajetConducteur['passager']}}</span>
-                    @elseif($_GET['Conducteur'] == 'False')
-                        <span class="text-h6">{{$trajetPassager['conducteur']}}</span>
-                    @endif                
+                    <span class="text-h6">{{$trajet['prenomPassager']}} {{$trajet['nomPassager']}}</span>         
                 </div>
 
             <!-- notation d'un utilisateur -->
@@ -214,5 +184,6 @@
         }
     }
 </script>
+
 
 @endsection

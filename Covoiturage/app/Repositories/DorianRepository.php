@@ -33,6 +33,7 @@ class DorianRepository {
             "cP" => $trajet["cpDep"],
             "pointGPS" =>  DB::raw('POINT('.$trajet['debutLon'].','.$trajet['debutLat'].')')
         ];
+        $idDepart = DB::table('Lieux')->insertGetId($lieuxDepart);
         $lieuxArrive = [
             "numRue" => $trajet['numRueArr'],
             "adresseRue" => $trajet["rueArr"],
@@ -40,14 +41,16 @@ class DorianRepository {
             "cP" => $trajet["cpArr"],
             "pointGPS" =>  DB::raw('POINT('.$trajet['finLon'].','.$trajet['finLat'].')') 
         ];
+
+        $idArrive = DB::table('Lieux')->insertGetId($lieuxArrive);
         $trajetTab = [
             "dateHeureDepart" => $trajet['dateDepart'],
             "nbPlace" => $trajet['place'],
             "dateHeureArrivee" => $this->addSecondes($trajet['dateDepart'], $trajet['tempsTrajet']),
             "prixTrajet" => $trajet['prix'],
             "rayon" => 200,
-            "idLieuDepart" => 29, //$idDepart,
-            "idLieuArrivee" => 30, //$idArrive,
+            "idLieuDepart" => $idDepart,
+            "idLieuArrivee" => $idArrive,
             "immatriculation" => $this->getImmatriculationOfUser(1)["immatriculation"]
             //"distance" => $trajet["distance"],
             //"trajetPoints" => $trajet['polyline']
@@ -69,47 +72,66 @@ class DorianRepository {
 
     /* Fonction pour obtenir tout les trajets d'un utilisateur */
     function getAllTrajetsConducteur($idUtilisateur) {
-        $res = DB::table("Trajets as T")
-                        ->join("Voitures as V", "V.immatriculation", "=", "T.immatriculation")
+
+        $res = DB::table('Trajets as T')
+                        ->join("Voitures as V", "T.immatriculation", "=", "V.immatriculation")
                         ->join("Utilisateurs as U", "U.idUtilisateur", "=", "V.idUtilisateur")
                         ->join("Reservations as R", "R.idTrajet", "=", "T.idTrajet")
-                        ->join("Utilisateurs as U1", "U1.idUtilisateur", "=", "R.idPassager")
+                        ->join("Lieux as Ld", "Ld.idLieu", "=", "T.idLieuDepart")
+                        ->join("Lieux as La", "La.idLieu", "=", "T.idLieuArrivee")
+                        ->Join("Utilisateurs as U1", "U1.idUtilisateur", "=", "R.idPassager")
                         ->where("U.idUtilisateur", $idUtilisateur)
-                        ->distinct()
-                        ->get(["T.dateHeureDepart", "T.dateHeureArrivee", "U.prenomUtilisateur as conducteurPrenom", "U.nomUtilisateur as conducteurNom", "U1.prenomUtilisateur as passagerPrenom", "U1.nomUtilisateur as passagerNom", "T.idLieuDepart", "T.idLieuArrivee", "T.idTrajet", "R.idPassager", "R.idReservation"])
-                        ->toArray();
-        $listeTrajet = $this->stdToArray($res);
-        if(count($listeTrajet) != 0) {
-            $listeTrajetConducteur = [];
-            for($i = 0;  $i < count($listeTrajet); $i++){
-                $idDepart = $this->stdToArray($this->getAdresseForOneLieu($listeTrajet[$i]['idLieuDepart']));
-                $idArrive = $this->stdToArray($this->getAdresseForOneLieu($listeTrajet[$i]['idLieuArrivee']));
-
-                $adresseDepart = implode(" ", $idDepart);
-                $adresseArrive = implode(" ", $idArrive);
-                $split = explode(" ", $listeTrajet[$i]["dateHeureDepart"]);
-                $date = $split[0];
-                $heureDepart = $split[1];
-                $heureArrivee =  explode(" ", $listeTrajet[$i]["dateHeureArrivee"])[1];
-                $tmpTraj = [
-                    "date" => $date,
-                    "conducteur" => $listeTrajet[$i]["conducteurPrenom"]. " ". $listeTrajet[$i]["conducteurNom"],
-                    "passager" => $listeTrajet[$i]["passagerPrenom"]. " ". $listeTrajet[$i]["passagerNom"],
-                    "adresseDepart" => $adresseDepart,
-                    "heureDepart" => $heureDepart,
-                    "adresseArrivee" => $adresseArrive,
-                    "heureArrivee" => $heureArrivee,
-                    "idTrajet" => $listeTrajet[$i]["idTrajet"],
-                    "idPassager" => $listeTrajet[$i]['idPassager'],
-                    "idReservation" => $listeTrajet[$i]['idReservation'],
-                    "notation" => $this->getNotationForOneUser($listeTrajet[$i]['idReservation'], $listeTrajet[$i]["passagerPrenom"], $listeTrajet[$i]["passagerNom"])
-                ];
-                array_push($listeTrajetConducteur, $tmpTraj);
-            }
-            return $listeTrajetConducteur;
-        } else {
+                        ->get(["T.dateHeureDepart", "Ld.numRue as numRueDepart", "Ld.adresseRue as rueDepart", "Ld.cP as cpDepart",
+                                "Ld.ville as villeDepart", "T.dateHeureArrivee", "La.numRue as numRueArrivee", "La.adresseRue as rueArrivee",
+                                "La.cP as cpArrivee", "La.ville as villeArrivee", "R.nbPlace", "R.prixResa",
+                                "U.prenomUtilisateur as prenomConducteur", "U.nomUtilisateur as nomConducteur", 
+                                "U1.prenomUtilisateur as prenomPassager", "U1.nomUtilisateur as nomPassager", "U1.idUtilisateur as idPassager", 
+                                "U.idUtilisateur as idConducteur", "R.idReservation"])->toArray();
+        if(count($res) == 0) {
             return [];
+        } else {
+            $tConducteur = [];
+            for($i=0; $i<count($res); $i++) {
+                $res2 = DB::table("Notations")->where("idReservation", $res[$i]->idReservation)->get()->toArray();
+                if(count($res2) == 0) {
+                    $tmpTrajet = [
+                        "dateHeureDepart" => $res[$i]->dateHeureDepart,
+                        "adresseDepart" => $res[$i]->numRueDepart." ".$res[$i]->rueDepart." ".$res[$i]->cpDepart." ".$res[$i]->villeDepart,
+                        "dateHeureArrivee" => $res[$i]->dateHeureArrivee,
+                        "adresseArrivee" => $res[$i]->numRueArrivee." ".$res[$i]->rueArrivee." ".$res[$i]->cpArrivee." ".$res[$i]->villeArrivee,
+                        "nbPlace" => $res[$i]->nbPlace,
+                        "prixResa" => $res[$i]->prixResa,
+                        "passager" => $res[$i]->prenomPassager." ".$res[$i]->nomPassager,
+                        "conducteur" => $res[$i]->prenomConducteur." ".$res[$i]->nomConducteur,
+                        "idConducteur" => $res[$i]->idConducteur,
+                        "idPassager" => $res[$i]->idPassager,
+                        "idReservation" => $res[$i]->idReservation,
+                        "note" => -4
+                    ]; 
+                } else {
+                    $tmpTrajet = [
+                        "dateHeureDepart" => $res[$i]->dateHeureDepart,
+                        "adresseDepart" => $res[$i]->numRueDepart." ".$res[$i]->rueDepart." ".$res[$i]->cpDepart." ".$res[$i]->villeDepart,
+                        "dateHeureArrivee" => $res[$i]->dateHeureArrivee,
+                        "adresseArrivee" => $res[$i]->numRueArrivee." ".$res[$i]->rueArrivee." ".$res[$i]->cpArrivee." ".$res[$i]->villeArrivee,
+                        "nbPlace" => $res[$i]->nbPlace,
+                        "prixResa" => $res[$i]->prixResa,
+                        "passager" => $res[$i]->prenomPassager." ".$res[$i]->nomPassager,
+                        "conducteur" => $res[$i]->prenomConducteur." ".$res[$i]->nomConducteur,
+                        "idConducteur" => $res[$i]->idConducteur,
+                        "idPassager" => $res[$i]->idPassager,
+                        "idReservation" => $res[$i]->idReservation,
+                        "note" => $res2[0]->note
+                    ];
+                }
+                
+                array_push($tConducteur, $tmpTrajet);
+            }
+            return $tConducteur;
+
         }
+        
+        
     }
 
     /* FOnction pour obtenir toutes les reservations d'un utilisateur */
@@ -121,41 +143,55 @@ class DorianRepository {
                         ->join("Trajets as T", "T.idTrajet", "=", "R.idTrajet")
                         ->join("Voitures as V", "V.immatriculation", "=", "T.immatriculation")
                         ->join("Utilisateurs as U1", "V.idUtilisateur", "=", "U1.idUtilisateur")
+                        ->join("Lieux as Ld", "Ld.idLieu", "=", "R.idLieuRencontre")
+                        ->join("Lieux as La", "La.idLieu", "=", "R.idLieuDepot")
                         ->where("R.idPassager", $idUtilisateur)
-                        ->get(["T.dateHeureDepart", "T.dateHeureArrivee", "U.prenomUtilisateur as passagerPrenom", "U.nomUtilisateur as passagerNom", "U1.prenomUtilisateur as conducteurPrenom", "U1.nomUtilisateur as conducteurNom", "T.idLieuDepart", "T.idLieuArrivee", "T.idTrajet", "R.idPassager", "R.idReservation"])->toArray();
-        $listeTrajet = $this->stdToArray($res);
-        if(count($listeTrajet) != 0) {
-
-            $listTrajetPassager = [];
-            
-            // On parcourt tout les trajets du conducteurs qu'on ajoute a une liste
-            for($i = 0; $i < count($listeTrajet); $i++) {
-                $idDepart = $this->stdToArray($this->getAdresseForOneLieu($listeTrajet[$i]['idLieuDepart']));
-                $idArrive = $this->stdToArray($this->getAdresseForOneLieu($listeTrajet[$i]['idLieuArrivee']));
-                $adresseDepart = implode(" ", $idDepart);
-                $adresseArrive = implode(" ", $idArrive);
-                $split = explode(" ", $listeTrajet[$i]["dateHeureDepart"]);
-                $date = $split[0];
-                $heureDepart = $split[1];
-                $heureArrivee =  explode(" ", $listeTrajet[$i]["dateHeureArrivee"])[1];
-                $tmpTraj = [
-                    "date" => $date,
-                    "conducteur" => $listeTrajet[$i]["conducteurPrenom"]. " ". $listeTrajet[$i]["conducteurNom"],
-                    "passager" => $listeTrajet[$i]["passagerPrenom"]. " ". $listeTrajet[$i]["passagerNom"],
-                    "adresseDepart" => $adresseDepart,
-                    "heureDepart" => $heureDepart,
-                    "adresseArrivee" => $adresseArrive,
-                    "heureArrivee" => $heureArrivee,
-                    "idTrajet" => $listeTrajet[$i]["idTrajet"],
-                    "idPassager" => $listeTrajet[$i]["idPassager"],
-                    "idReservation" => $listeTrajet[$i]['idReservation'],
-                    "notation" => $this->getNotationForOneUser($listeTrajet[$i]['idReservation'], $listeTrajet[$i]["conducteurPrenom"], $listeTrajet[$i]["conducteurNom"])
-                ];
-                array_push($listTrajetPassager, $tmpTraj);
-            }
-            return $listTrajetPassager;
-        } else {
+                        ->get(["R.dateHeureRDV", "Ld.numRue as numRueDepart", "Ld.adresseRue as rueDepart", "Ld.cP as cpDepart", 
+                        "Ld.ville as villeDepart", "T.dateHeureArrivee", "La.numRue as numRueArrivee", "La.adresseRue as rueArrivee", 
+                        "La.cP as cpArrivee", "La.ville as villeArrivee", "R.nbPlace", "R.prixResa", "U.prenomUtilisateur as prenomPassager", 
+                        "U.nomUtilisateur as nomPassager", "U1.prenomUtilisateur as prenomConducteur", "U1.nomUtilisateur as nomConducteur", 
+                        "U1.idUtilisateur as idConducteur", "U.idUtilisateur as idPassager", "R.idReservation"])->toArray();
+        if(count($res) == 0) {
             return [];
+        } else {
+            $tPassager = [];
+            for($i=0; $i<count($res); $i++) {
+                $res2 = DB::table("Notations")->where("idReservation", $res[$i]->idReservation)->get()->toArray();
+                if(count($res2) == 0) {
+                    $tmpTrajet = [
+                        "dateHeureRDV" => $res[$i]->dateHeureRDV,
+                        "adresseDepart" => $res[$i]->numRueDepart." ".$res[$i]->rueDepart." ".$res[$i]->cpDepart." ".$res[$i]->villeDepart,
+                        "dateHeureArrivee" => $res[$i]->dateHeureArrivee,
+                        "adresseArrivee" => $res[$i]->numRueArrivee." ".$res[$i]->rueArrivee." ".$res[$i]->cpArrivee." ".$res[$i]->villeArrivee,
+                        "nbPlace" => $res[$i]->nbPlace,
+                        "prixResa" => $res[$i]->prixResa,
+                        "passager" => $res[$i]->prenomPassager." ".$res[$i]->nomPassager,
+                        "conducteur" => $res[$i]->prenomConducteur." ".$res[$i]->nomConducteur,
+                        "idConducteur" => $res[$i]->idConducteur,
+                        "idPassager" => $res[$i]->idPassager,
+                        "idReservation" => $res[$i]->idReservation,
+                        "note" => -4
+                    ]; 
+                } else {
+                    $tmpTrajet = [
+                        "dateHeureRDV" => $res[$i]->dateHeureRDV,
+                        "adresseDepart" => $res[$i]->numRueDepart." ".$res[$i]->rueDepart." ".$res[$i]->cpDepart." ".$res[$i]->villeDepart,
+                        "dateHeureArrivee" => $res[$i]->dateHeureArrivee,
+                        "adresseArrivee" => $res[$i]->numRueArrivee." ".$res[$i]->rueArrivee." ".$res[$i]->cpArrivee." ".$res[$i]->villeArrivee,
+                        "nbPlace" => $res[$i]->nbPlace,
+                        "prixResa" => $res[$i]->prixResa,
+                        "passager" => $res[$i]->prenomPassager." ".$res[$i]->nomPassager,
+                        "conducteur" => $res[$i]->prenomConducteur." ".$res[$i]->nomConducteur,
+                        "idConducteur" => $res[$i]->idConducteur,
+                        "idPassager" => $res[$i]->idPassager,
+                        "idReservation" => $res[$i]->idReservation,
+                        "note" => $res2[0]->note
+                    ];
+                }
+                
+                array_push($tPassager, $tmpTrajet);
+            }
+            return $tPassager;
         }
     }
 
@@ -173,4 +209,80 @@ class DorianRepository {
         return $note[0]['note'];
                         
     }
+
+    function getCaracteristiquesVoiture($idUtilisateur) {
+        $res = DB::table("Voitures")->where("idUtilisateur", $idUtilisateur)->get()->toArray();
+        if(count($res) != 0) {
+            return [
+                "immatriculation" => $res[0]->immatriculation,
+                "marqueModelVoiture" => $res[0]->marqueModelVoiture,
+                "photoVoiture" => $res[0]->photoVoiture,
+                "nbPlaceMax" => $res[0]->nbPlaceMax,
+                "couleurVoiture" => $res[0]->couleurVoiture,
+                "autoriserAnimal" => $res[0]->autoriserAnimal,
+                "autoriserFumer" => $res[0]->autoriserFumer,
+            ];
+        } else {
+            return null;
+        }
+    }
+
+
+    function getTrajetWithIdTrajetAndIdReservationPassager($idUtilisateur, $idTrajet, $idReservation) {
+        $trajets = $this->getAllTrajetsPassager($idUtilisateur);
+        if(count($trajets) != 0) {
+            foreach ($trajets as $trajet) {
+                if($trajet['idTrajet'] == $idTrajet && $trajet['idReservation'] == $idReservation)
+                    return $trajet;
+            }
+        } else {
+            return [];
+        }
+    }
+
+    function getTrajetWithIdTrajetAndIdReservationConducteur($idUtilisateur, $idTrajet, $idReservation) {
+        $trajets = $this->getAllTrajetsConducteur($idUtilisateur);
+        if(count($trajets) != 0) {
+            foreach ($trajets as $trajet) {
+                if($trajet['idTrajet'] == $idTrajet && $trajet['idReservation'] == $idReservation)
+                    return $trajet;
+            }
+        } else {
+            return [];
+        }
+    }
+
+    function insertNotation($note, $message, $idReservation, $idUtilisateur) {
+        return DB::table("Notations")->insertGetId(["note" => $note, "texteMessage" => $message, "dateNotation" => date(DATE_ATOM, time()), "idReservation" => $idReservation, "idUtilisateur" => $idUtilisateur]);
+    }
+
+
+    public function getTrajetFromIdReservation($idReservation) {
+        $res = DB::table("Reservations as R")
+                    ->join("Lieux as Ld", "R.idLieuRencontre", "=", "Ld.idLieu")
+                    ->join("Lieux as La", "R.idLieuDepot", "=", "La.idLieu")
+                    ->join("Trajets as T", "T.idTrajet", "=", "R.idTrajet")
+                    ->join("Utilisateurs as U", "U.idUtilisateur", "=", "R.idPassager")
+                    ->join("Voitures as V", "V.immatriculation", "=", "T.immatriculation")
+                    ->Join("Utilisateurs as U1", "U1.idUtilisateur", "=", "V.idUtilisateur")
+                    ->where("R.idReservation", $idReservation)
+                    ->get(["R.dateHeureRDV", "Ld.numRue as numRueDepart", "Ld.adresseRue as rueDepart", "Ld.cP as cpDepart", 
+                            "Ld.ville as villeDepart", "T.dateHeureArrivee", "La.numRue as numRueArrivee", "La.adresseRue as rueArrivee", 
+                            "La.cP as cpArrivee", "La.ville as villeArrivee", "R.nbPlace", "R.prixResa", "U.prenomUtilisateur as prenomPassager", 
+                            "U.nomUtilisateur as nomPassager", "U1.prenomUtilisateur as prenomConducteur", "U1.nomUtilisateur as nomConducteur", 
+                            "U1.idUtilisateur as idConducteur", "U.idUtilisateur as idPassager", "R.idReservation"])
+                    ->toArray();
+        
+        if(count($res) == 0) {
+            return [];
+        } else {
+            $trajet = [
+                
+
+            ];
+            return $this->stdToArray($res)[0];
+        }
+    }
+
+
 }

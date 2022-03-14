@@ -165,30 +165,30 @@ Proposer un trajet
     var debutLon;// = 2.54;
     var finLat;// = 43.78;
     var finLon;// = 2.65;
+    var numRueDep = 0;
 
     
     $('#mapForm').on('submit',function(e){
     e.preventDefault();
+    console.log("Csrf = " + "{{ csrf_token() }}");
     // Récupération des variables du formulaire
-    let numRueDep = $('#numRueDep').val();
+    numRueDep = $('#numRueDep').val();
+    console.log("Numero de rue : " + numRueDep);
     let rueDep = $('#rueDep').val();
     let cpDep = $('#cpDep').val();
     let villeDep = $('#villeDep').val();
 
-    let numRueArr = $('#numRueDep').val();
-    let rueArr = $('#rueDep').val();
-    let cpArr = $('#cpDep').val();
-    let villeArr = $('#villeDep').val();
+    let numRueArr = $('#numRueArr').val();
+    let rueArr = $('#rueArr').val();
+    let cpArr = $('#cpArr').val();
+    let villeArr = $('#villeArr').val();
 
     let date = $('#date').val();
     let place = $('#place').val();
     let prix = $('#prix').val();
     
-    $.ajax({
-      url: "/conducteur/submit_proposer_trajet", // Url de post
-      type:"POST", // Type
-      data:{ // Toutes les données qu'on envoie au serveur
-        "_token": "{{ csrf_token() }}", //Le token du formulaire
+    var newData = {
+        "_token": "{{ csrf_token() }}",
         numRueDep:numRueDep,
         rueDep:rueDep,
         cpDep:cpDep,
@@ -197,7 +197,7 @@ Proposer un trajet
         rueArr:rueArr,
         cpArr:cpArr,
         villeArr:villeArr,
-        date: date,
+        dateDepart: date,
         place: place,
         prix: prix,
         debutLat:debutLat,
@@ -205,9 +205,18 @@ Proposer un trajet
         finLat:finLat,
         finLon:finLon,
         distance:distanceTotale,
-        temps:tempsTrajet,
-        polyline:polyline,
-      },
+        tempsTrajet:tempsTrajet,
+        polyline:polyline
+    };
+
+    var dataJson = JSON.stringify(newData);
+
+    $.ajax({
+      url: "/conducteur/submit_proposer_trajet", // Url de post
+      type:"POST", // Type
+      data:dataJson, // Toutes les données qu'on envoie au serveur
+      dataType: "json",
+      contentType: "application/json",
       success:function(response){ // En cas de succès
         $('#successMsg').show();
         console.log(response);
@@ -277,9 +286,9 @@ Proposer un trajet
             distanceTotale = parseJson["routes"][0]["legs"][0]["distance"]["value"];
             tempsTrajet = parseJson["routes"][0]["legs"][0]["duration"]["value"];
             debutLat = parseJson["routes"][0]["legs"][0]["start_location"]["lat"];
-            debutLon = parseJson["routes"][0]["legs"][0]["start_location"]["lat"];
+            debutLon = parseJson["routes"][0]["legs"][0]["start_location"]["lng"];
             finLat = parseJson["routes"][0]["legs"][0]["end_location"]["lat"];
-            finLon = parseJson["routes"][0]["legs"][0]["end_location"]["lat"];
+            finLon = parseJson["routes"][0]["legs"][0]["end_location"]["lng"];
             console.log(distanceTotale +" / " + tempsTrajet + "/ (" + debutLat + ", " + debutLon +") / (" + finLat+", " + finLon + " )");
             //console.log(parseJSON);
             document.getElementById("valider").disabled = false;

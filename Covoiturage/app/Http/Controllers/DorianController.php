@@ -11,6 +11,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\DorianRepository;
 use Illuminate\Contracts\Support\ValidatedData;
+use Illuminate\Support\Facades\Validator;
 
 class DorianController extends BaseController
 {
@@ -26,7 +27,7 @@ class DorianController extends BaseController
     }
 
     public function storeProposerTrajetForm(Request $request) {
-
+        //return $request->json()->all();
         $messages = [
             'rueDep.required' => "Vous devez entrer un nom de voie de départ.",
             'cpDep.required' => "Vous devez entrer un code postal de départ.",
@@ -54,40 +55,22 @@ class DorianController extends BaseController
             'villeArr' => ['required'],
             'prix' => ['required', 'integer', 'between:1,10'],
             'place' => ['required'],
-            'date' => ['required', 'after:'.date(DATE_ATOM, time())]
-        ];
-        $validatedData = $request->validate($rules, $messages);
-        try {
+            'dateDepart' => ['required', 'after:'.date(DATE_ATOM, time())],
+            'debutLat' => ['required'],
+            'debutLon' => ['required'],
+            'finLat' => ['required'],
+            'finLon' => ['required'],
+            'tempsTrajet' => ['required']
             
-            $trajet = [
-                "numRueDep" => $validatedData['numRueDep'],
-                "rueDep" => $validatedData['rueDep'],
-                "villeDep" => $validatedData['villeDep'],
-                "cpDep" => $validatedData['cpDep'], 
-                "numRueArr" => $validatedData['numRueArr'],
-                "rueArr" => $validatedData['rueArr'],
-                "villeArr" => $validatedData['villeArr'],
-                "cpArr" => $validatedData['cpArr'],
-                "dateDepart" => $validatedData['date'],
-                "place" => $validatedData['place'],
-                "prix" => $validatedData['prix'],
-                "distance" => $request->input("distance"),
-                "tempsTrajet" => $request->input("temps"),
-                "debutLon" => $request->input("debutLon"),
-                "debutLat" => $request->input("debutLat"),
-                "finLon" => $request->input("finLon"),
-                "finLat" => $request->input("finLat"),
-                "polyline" => $request->input("polyline")
+        ];
+        $validator = Validator::make($request->json()->all(), $rules, $messages);
 
-            ];
-
-            //$this->dorianRepository->insertTrajet($trajet);
-            //return response()->json(['success'=>'Successfully']);
-            return redirect()->route('trajets_en_cours')->withInput()->with('success', 'Le trajet a bien été crée');
-        } catch(Exception $exception) {
-            return response()->json(array('error' =>$exception->getMessage()), 400);
-            //return redirect()->back()->withInput()->withErrors($exception->getMessage()." ->".$exception->getLine()." -> ".$exception->getFile());
+        if($validator->failed()) {
+            return redirect()->back()->withInput()->withErrors($validator);
         }
+        $this->dorianRepository->insertTrajet($validator->validated());
+        return $request->json()->all();
+        
     }
 
 
@@ -106,6 +89,84 @@ class DorianController extends BaseController
         ]);
 
         return response()->json(['success'=>'Successfully']);
+    }
+
+
+    public function showTrajetForNotation($idUtilisateur, $idReservation) {
+        $idTrajet = $this->dorianRepository->getIdTrajetFromIdReservation($idReservation, $idUtilisateur);
+        $trajetsConducteur = $this->dorianRepository->getTrajetWithIdTrajetAndIdReservationConducteur($idUtilisateur, $idTrajet, $idReservation);
+        $trajetsPassager = $this->dorianRepository->getTrajetWithIdTrajetAndIdReservationPassager($idUtilisateur, $idTrajet, $idReservation);
+        return view('commun.notation', ['trajetConducteur' => $trajetsConducteur, 'trajetPassager' => $trajetsPassager]);
+    }
+
+    // Les passagers notent les conducteurs
+    public function showTrajetForNotationPassager($idUtilisateur, $idReservation) {
+        return view('commun.notationPassager', ["trajet" => $this->dorianRepository->getTrajetFromIdReservation($idReservation)]);
+    }
+
+    public function showTrajetForNotationConducteur($idUtilisateur, $idReservation) {
+        return view('commun.notationConducteur', ['trajet'=> $this->dorianRepository->getTrajetFromIdReservation($idReservation)]);
+    }
+
+    /* Fonction pour noter un conducteur après un trajet (storeNotationConducteur) */ 
+    public function storeNotationConducteur(Request $request, $idUtilisateur, $idReservation) {
+        
+        $rules = [
+            "message" => ['nullable'],
+            "star1" => ["nullable"],
+            "star2" => ["nullable"],
+            "star3" => ["nullable"],
+            "star4" => ["nullable"],
+            "star5" => ["nullable"],
+        ]; 
+
+        $messages = [];
+
+        $validatedData = $request->validate($rules, $messages);
+        $note = 0;
+        if(isset($validatedData['star5']))
+            $note = $validatedData['star5'];
+        else if(isset($validatedData['star4']))
+            $note = $validatedData['star4'];
+        else if(isset($validatedData['star3']))
+            $note = $validatedData['star3'];
+        else if(isset($validatedData['star2']))
+            $note = $validatedData['star2'];
+        else if(isset($validatedData['star1']))
+            $note = $validatedData['star1'];
+        $this->dorianRepository->insertNotation($note, $validatedData['message'], $idReservation, $idUtilisateur);
+        return redirect()->route('user');
+        
+    }
+
+    public function storeNotationPassager(Request $request, $idUtilisateur, $idReservation) {
+        
+        $rules = [
+            "message" => ['nullable'],
+            "star1" => ["nullable"],
+            "star2" => ["nullable"],
+            "star3" => ["nullable"],
+            "star4" => ["nullable"],
+            "star5" => ["nullable"],
+        ]; 
+
+        $messages = [];
+
+        $validatedData = $request->validate($rules, $messages);
+        $note = 0;
+        if(isset($validatedData['star5']))
+            $note = $validatedData['star5'];
+        else if(isset($validatedData['star4']))
+            $note = $validatedData['star4'];
+        else if(isset($validatedData['star3']))
+            $note = $validatedData['star3'];
+        else if(isset($validatedData['star2']))
+            $note = $validatedData['star2'];
+        else if(isset($validatedData['star1']))
+            $note = $validatedData['star1'];
+        $this->dorianRepository->insertNotation($note, $validatedData['message'], $idReservation, $idUtilisateur);
+        return redirect()->route('home');
+        
     }
 
 }

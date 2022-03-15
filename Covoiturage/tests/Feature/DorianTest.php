@@ -128,5 +128,9 @@ class DorianTest extends TestCase {
     public function testNotation() {
         $test = $this->dorianRepository->getTrajetFromIdReservation(25);
     }
+
+    public function test_lieu_deja_entree(){
+        $this->assertEquals($this->dorianRepository->lieuDejaEntree(170, "Avenue de Luminy", 13009, "Marseille"), 26);
+    }
     
 }

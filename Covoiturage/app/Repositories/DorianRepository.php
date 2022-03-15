@@ -11,6 +11,9 @@ use function PHPUnit\Framework\isNull;
 
 class DorianRepository {
 
+    /**
+     * Fonction pour obtenir la plaque d'immatriculation d'un user
+     */
     function getImmatriculationOfUser(int $idUtilisateur) : array {
         $res = DB::table("Voitures")->join("Utilisateurs", "Voitures.idUtilisateur", "=", "Utilisateurs.idUtilisateur")->where("Utilisateurs.idUtilisateur", "=", $idUtilisateur)->distinct()->get('Voitures.immatriculation')->toArray();
         $immatriculation = json_decode(json_encode($res), true); // Convertion de stdClass en Array
@@ -20,11 +23,17 @@ class DorianRepository {
         return $immatriculation[0];
     }
 
+    /**
+     * Fonction pour ajouter des secondes à une date
+     */
     function addSecondes($date, $secondes) {
         $sec = strtotime($date)+$secondes;
         return date('Y-m-d H:i:s', $sec);
     }
 
+    /**
+     * Fonction pour insérer un trajet
+     */
     function insertTrajet(array $trajet) {
         $lieuxDepart = [
             "numRue" => $trajet['numRueDep'],
@@ -33,7 +42,12 @@ class DorianRepository {
             "cP" => $trajet["cpDep"],
             "pointGPS" =>  DB::raw('POINT('.$trajet['debutLon'].','.$trajet['debutLat'].')')
         ];
-        $idDepart = DB::table('Lieux')->insertGetId($lieuxDepart);
+        $idLieuDepart = $this->lieuDejaEntree($trajet['numRueDep'], $trajet["rueDep"], $trajet["cpDep"], $trajet["villeDep"]);
+        if($idLieuDepart < 0)
+            $idDepart = DB::table('Lieux')->insertGetId($lieuxDepart);
+        else
+            $idDepart = $idLieuDepart;
+        
         $lieuxArrive = [
             "numRue" => $trajet['numRueArr'],
             "adresseRue" => $trajet["rueArr"],
@@ -42,7 +56,12 @@ class DorianRepository {
             "pointGPS" =>  DB::raw('POINT('.$trajet['finLon'].','.$trajet['finLat'].')') 
         ];
 
-        $idArrive = DB::table('Lieux')->insertGetId($lieuxArrive);
+        $idLieuArrivee = $this->lieuDejaEntree($trajet['numRueArr'], $trajet["rueArr"], $trajet["cpArr"], $trajet["villeArr"]);
+        if($idLieuArrivee < 0)
+            $idArrive = DB::table('Lieux')->insertGetId($lieuxArrive);
+        else
+            $idArrive = $idLieuArrivee;
+
         $trajetTab = [
             "dateHeureDepart" => $trajet['dateDepart'],
             "nbPlace" => $trajet['place'],
@@ -195,6 +214,9 @@ class DorianRepository {
         }
     }
 
+    /**
+     * Fonction pour obtenir une note a partir d'un idReservation, d'un nom et prenom
+     */
     function getNotationForOneUser($idReservation, $prenomUtilisateur, $nomUtilisateur){
         $res = DB::table("Notations as N")
                         ->join("Utilisateurs as U", "U.idUtilisateur", "=", "N.idUtilisateur")
@@ -210,6 +232,9 @@ class DorianRepository {
                         
     }
 
+    /**
+     * Fonction pour obtenir les infos d'une voiture d'un utilisateur
+     */
     function getCaracteristiquesVoiture($idUtilisateur) {
         $res = DB::table("Voitures")->where("idUtilisateur", $idUtilisateur)->get()->toArray();
         if(count($res) != 0) {
@@ -227,7 +252,9 @@ class DorianRepository {
         }
     }
 
-
+    /**
+     * FOnction pour obtenir un trajet a partir d'un idTrajet et d'un idReservation d'un passager
+     */
     function getTrajetWithIdTrajetAndIdReservationPassager($idUtilisateur, $idTrajet, $idReservation) {
         $trajets = $this->getAllTrajetsPassager($idUtilisateur);
         if(count($trajets) != 0) {
@@ -240,6 +267,9 @@ class DorianRepository {
         }
     }
 
+    /**
+     * FOnction pour obtenir un trajet a partir d'un idTrajet et d'un idReservation d'un conducteur
+     */
     function getTrajetWithIdTrajetAndIdReservationConducteur($idUtilisateur, $idTrajet, $idReservation) {
         $trajets = $this->getAllTrajetsConducteur($idUtilisateur);
         if(count($trajets) != 0) {
@@ -252,11 +282,17 @@ class DorianRepository {
         }
     }
 
+    /**
+     * Fonction pour insérer une note
+     */
     function insertNotation($note, $message, $idReservation, $idUtilisateur) {
         return DB::table("Notations")->insertGetId(["note" => $note, "texteMessage" => $message, "dateNotation" => date(DATE_ATOM, time()), "idReservation" => $idReservation, "idUtilisateur" => $idUtilisateur]);
     }
 
 
+    /**
+     * Fonction pour obtenir un trajet depuis un idReservation
+     */
     public function getTrajetFromIdReservation($idReservation) {
         $res = DB::table("Reservations as R")
                     ->join("Lieux as Ld", "R.idLieuRencontre", "=", "Ld.idLieu")
@@ -284,5 +320,22 @@ class DorianRepository {
         }
     }
 
+
+    /**
+     * Fonction qui retourne l'id du lieu s'il existe (a partir de l'adresse) ou -4 si il existe pas
+     */
+    public function lieuDejaEntree($numRue, $adresseRue, $cp, $ville) : int {
+        $res = DB::table('Lieux')->where('numRue', $numRue)
+                    ->where('adresseRue', $adresseRue)
+                    ->where('cp', $cp)
+                    ->where('ville', $ville)
+                    ->get()->toArray();
+
+        if(count($res) == 0)
+            return -4;
+        else
+            return $res[0]->idLieu;
+
+    }
 
 }

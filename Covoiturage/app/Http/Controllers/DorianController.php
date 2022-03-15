@@ -22,10 +22,16 @@ class DorianController extends BaseController
         $this->dorianRepository  = $dorianRepository;
     }
 
+    /**
+     * FOnction pour retourner la vue proposre un trajet
+     */
     public function showProposerTrajetForm(){
         return view('conducteur.proposer_trajet');
     }
 
+    /**
+     * Fonction pour stocker un trajet
+     */
     public function storeProposerTrajetForm(Request $request) {
         //return $request->json()->all();
         $messages = [
@@ -73,7 +79,9 @@ class DorianController extends BaseController
         
     }
 
-
+    /**
+     * Fonction pour afficher la vue historique trajet
+     */
     public function showHistoriqueTrajet($idUtilisateur) {
         $trajetsConducteur = $this->dorianRepository->getAllTrajetsConducteur($idUtilisateur);
         $trajetsPassager = $this->dorianRepository->getAllTrajetsPassager($idUtilisateur);
@@ -92,6 +100,9 @@ class DorianController extends BaseController
     }
 
 
+    /**
+     * FOnction pour afficher la vue notation
+     */
     public function showTrajetForNotation($idUtilisateur, $idReservation) {
         $idTrajet = $this->dorianRepository->getIdTrajetFromIdReservation($idReservation, $idUtilisateur);
         $trajetsConducteur = $this->dorianRepository->getTrajetWithIdTrajetAndIdReservationConducteur($idUtilisateur, $idTrajet, $idReservation);
@@ -139,6 +150,9 @@ class DorianController extends BaseController
         
     }
 
+    /**
+     * FOnction pour stocker une notation
+     */
     public function storeNotationPassager(Request $request, $idUtilisateur, $idReservation) {
         
         $rules = [

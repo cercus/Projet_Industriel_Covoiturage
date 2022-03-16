@@ -235,4 +235,169 @@ class SawdaController extends BaseController
         //Action à faire lorqu'on clique sur le bouton réserver
         return redirect()->route('accueil');
     }
+
+    public function showFormNvMsg(Request $request, SawdaRepository $repository)
+    {
+        /*Si on suppose que pour la page de connexion il existe
+        Un code qui permet de se souvenir de l'authentification de l'utilisateur
+        $value=$this->repository->getUserId($email, $password);
+        $key='idUser';
+        $request->session()->put($key, $value); 
+        $teams=$this->repository->teams();
+        if (!$request->session()->has('idUser')) {
+            return redirect(route('connexion'));
+        }
+        $idProfil = $request->session()->get('idUser');*/
+        $idProfil = 101;
+        $trajetsReservations= $this->repository->trajetsReservationsProfil($idProfil);
+        return view('commun.nouveau_message', ['trajetsReservations'=>$trajetsReservations]);
+    }
+
+    public function nvMsg(Request $request) 
+    {
+        /*Si on suppose que pour la page de connexion il existe
+        Un code qui permet de se souvenir de l'authentification de l'utilisateur
+        $value=$this->repository->getUserId($email, $password);
+        $key='idUser';
+        $request->session()->put($key, $value); 
+        $teams=$this->repository->teams();
+        if (!$request->session()->has('idUser')) {
+            return redirect(route('connexion'));
+        }
+        $idProfil = $request->session()->get('idUser');*/
+        $idProfil = 101;
+        $messagesProfil= $this->repository->messagesProfil($idProfil);
+
+        $messages = [
+            'destinataire.required' => 'Vous devez choisir un.e destinataire.',
+            'destinataire.exists' => 'Vous devez choisir un.e destinataire qui existe.',
+            'objet.required' => 'Vous devez écrire un objet.',
+            'message.required' => 'Vous devez écrire un message.'
+        ];
+
+        $rules = [
+            'destinataire' => ['required'],
+            'objet' => ['required'],
+            'message' => ['required']
+        ];
+
+        $validatedData = $request->validate($rules, $messages);
+
+        $msg=[
+            'objet'=>$validatedData['objet'],
+            'texteMessage'=>$validatedData['message'],
+            'idEmetteur'=>$idProfil,
+            'idDestinataire'=>$validatedData['destinataire']
+        ];
+        $this->repository->insertMsg($msg);
+        try {
+            return redirect()->route('messages.all', ['messagesProfil' => $messagesProfil]);
+        }catch (Exception $exception) {
+            return 
+            redirect()->route('messages.new')->withInput()->withErrors("Impossible de créer le match.");
+        }
+    }
+
+    public function showFormMsg(Request $request, SawdaRepository $repository)
+    {
+        /*Si on suppose que pour la page de connexion il existe
+        Un code qui permet de se souvenir de l'authentification de l'utilisateur
+        $value=$this->repository->getUserId($email, $password);
+        $key='idUser';
+        $request->session()->put($key, $value); 
+        $teams=$this->repository->teams();
+        if (!$request->session()->has('idUser')) {
+            return redirect(route('connexion'));
+        }
+        $idProfil = $request->session()->get('idUser');*/
+        $idProfil = 101;
+        $messagesProfil= $this->repository->messagesProfil($idProfil);
+        return view('commun.mes_messages', ['messagesProfil' => $messagesProfil]);
+    }
+
+    public function showFormRepondreMsg(int $msgId,SawdaRepository $repository,Request $request)
+    {
+        /*Si on suppose que pour la page de connexion il existe
+        Un code qui permet de se souvenir de l'authentification de l'utilisateur
+        $value=$this->repository->getUserId($email, $password);
+        $key='idUser';
+        $request->session()->put($key, $value); 
+        $teams=$this->repository->teams();
+        if (!$request->session()->has('idUser')) {
+            return redirect(route('connexion'));
+        }
+        $idProfil = $request->session()->get('idUser');*/
+        $idProfil =101;
+        $unMessages= $this->repository->unMessages($msgId);
+        return view('commun.repondre_message', 
+        ['unMessages' => $unMessages], ['idProfil' => $idProfil]);
+    }
+
+    public function repondreMsg(Request $request,SawdaRepository $repository)
+    {
+        /*Si on suppose que pour la page de connexion il existe
+        Un code qui permet de se souvenir de l'authentification de l'utilisateur
+        $value=$this->repository->getUserId($email, $password);
+        $key='idUser';
+        $request->session()->put($key, $value); 
+        $teams=$this->repository->teams();
+        if (!$request->session()->has('idUser')) {
+            return redirect(route('connexion'));
+        }
+        $idProfil = $request->session()->get('idUser');*/
+        $idProfil =101;
+        $messagesProfil= $this->repository->messagesProfil($idProfil);
+        $messages = [
+            'message.required' => "Vous devez saisir un message.",
+            'objet.required' => "Vous devez saisir un message.",
+            'idEmetteur.required' => "Vous devez saisir un message.",
+            'idDestinataire.required' => "Vous devez saisir un message."
+          ];
+        $rules = ['message' => ['required'], 'objet' => ['required'],
+        'idEmetteur' => ['required'], 'idDestinataire' => ['required']];
+        $validatedData = $request->validate($rules, $messages);
+        $msg=[
+            'objet'=>$validatedData['objet'],
+            'texteMessage'=>$validatedData['message'],
+            'idEmetteur'=>$validatedData['idEmetteur'],
+            'idDestinataire'=>$validatedData['idDestinataire']
+        ];
+        $msgId=$this->repository->insertMsg($msg);
+        try {
+            return redirect()->route('messages.reply', ['msgId' => $msgId]);
+            //return redirect()->route('messages.all', ['messagesProfil' => $messagesProfil]);
+        }catch (Exception $exception) {
+            return 
+            redirect()->route('messages.reply')->withInput()->withErrors("Impossible d'envoyer le message.");
+        }
+    }
+
+    public function supprimerMsg(Request $request,SawdaRepository $repository)
+    {
+        /*Si on suppose que pour la page de connexion il existe
+        Un code qui permet de se souvenir de l'authentification de l'utilisateur
+        $value=$this->repository->getUserId($email, $password);
+        $key='idUser';
+        $request->session()->put($key, $value); 
+        $teams=$this->repository->teams();
+        if (!$request->session()->has('idUser')) {
+            return redirect(route('connexion'));
+        }
+        $idProfil = $request->session()->get('idUser');*/
+        $idProfil =101;
+        $messagesProfil= $this->repository->messagesProfil($idProfil);
+        $messages = [
+            'idMessage.required' => "Vous devez saisir un message."
+          ];
+        $rules = ['idMessage' => ['required']];
+        $validatedData = $request->validate($rules, $messages);
+        $msgId=$validatedData['idMessage'];
+        $this->repository->deleteMsg($msgId);
+        try {
+            return redirect()->route('acceuil');
+        }catch (Exception $exception) {
+            return 
+            redirect()->route('messages.all')->withInput()->withErrors("Impossible de supprimer le message.");
+        }
+    }
 }

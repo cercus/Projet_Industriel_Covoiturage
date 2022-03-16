@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use IlluminateSupportCarbon;
 use Tests\TestCase;
 use App\Repositories\SawdaRepository;
-
+//php vendor/phpunit/phpunit/phpunit --testdox
 class SawdaRepositoryTest extends TestCase
 {
     public function setUp(): void
@@ -25,6 +25,7 @@ class SawdaRepositoryTest extends TestCase
 
     function testUnTrajet(): void
     {
+        var_dump(date('Y-m-d H:i:s', time()));
         $trajet=[
             "idTrajet"=>1,
             "dateHeureDepart"=> "2022-02-21 07:00:00",
@@ -64,7 +65,7 @@ class SawdaRepositoryTest extends TestCase
     function testUneNote(): void
     {
         $uneNote= [
-            "notation"=>"4.6667"
+            "notation"=>"3.5000"
         ];
         //var_dump($this->repository->uneNote(101));
         $this->assertEquals($this->repository->uneNote(101), $uneNote);
@@ -92,5 +93,39 @@ class SawdaRepositoryTest extends TestCase
         $this->assertEquals($this->repository->passagers(11), $passagers);
     }
 
+    /*function testTrajetsReservationsProfil(): void
+    {
+        var_dump($this->repository->trajetsReservationsProfil(101));
+
+    }*/
+
+    /*function testMessagesProfil(): void
+    {
+        var_dump($this->repository->messagesProfil(101));
+
+    }*/
+
+    /*function testUnMessages(): void
+    {
+        var_dump($this->repository->unMessages(1));
+
+    }*/
+
+    /*function testInsertMsg(): void
+    {
+        $msg= [
+            //"idMessage"=>100,
+            "texteMessage"=>"pour tester",
+            "objet"=>"heure rdv",
+            "idEmetteur"=>104,
+            "idDestinataire"=>101
+        ];
+        $this->repository->insertMsg($msg);
+    }*/
+
+    /*function testDeleteMsg(): void
+    {
+        $this->repository->deleteMsg(103);
+    }*/
 
 }

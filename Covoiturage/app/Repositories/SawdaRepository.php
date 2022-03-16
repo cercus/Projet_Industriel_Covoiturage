@@ -9,6 +9,24 @@ use IlluminateSupportCarbon;
 
 class SawdaRepository
 {
+    //
+    function getUserId(string $email, string $password): int
+    {
+        $users=json_decode(json_encode(DB::table('Utilisateurs')->where('emailUtilisateur', $email)->get()->toArray()), true);
+        
+        if(empty($users)){
+            throw new Exception("Utilisateur inconnu"); 
+        }
+        $user=$users[0];
+        $passwordHash=$user["password_hash"];
+        $ok = Hash::check($password, $passwordHash);
+        if(!$ok){
+            throw new Exception("Utilisateur inconnu"); 
+        }
+        
+        return $user['idUtilisateur'];
+    }
+
     function createDataRechercheTrajetForm(string $dateDep, 
     string $numRueDep, string $adresseRueDep, string $villeDep, int $cpDep, int $nbPlace, 
     string $numRueArr, string $adresseRueArr, string $villeArr, int $cpArr): array 
@@ -41,6 +59,7 @@ class SawdaRepository
             ->where('lArrivee.cP', $tableau['cpArr'])
             ->where('t.dateHeureDepart', '>=', $tableau['dateDep'])
             ->where('t.nbPlace', '>=', $tableau['nbPlace'])
+            ->limit(10)
             ->get(['t.*', 'lDepart.numRue as numRueDep', 'lDepart.adresseRue as adresseRueDep',
             'lDepart.ville as villeDep', 'lDepart.cP as cpDep',
             'lArrivee.numRue as numRueArr', 'lArrivee.adresseRue as adresseRueArr',
@@ -127,7 +146,7 @@ class SawdaRepository
     //Requete permettant d'extraire les trajets les moins chers du jour
     function bestTrajets(): array 
     {
-        $dateToday = "2022-02-21 07:00:00";
+        $dateToday = date('Y-m-d H:i:s', time());
         return
         json_decode(json_encode(
             DB::table('Trajets as t')
@@ -144,5 +163,136 @@ class SawdaRepository
             'u.prenomUtilisateur as prenom', 'u.nomUtilisateur as nom'])
             ->toArray()
         ), true);
+    }
+
+    //Requete permettant d'extraire la liste des messages d'un utilisateur à travers son id
+    function messagesProfil(int $idProfil): array 
+    {
+        return
+        json_decode(json_encode(
+            DB::table('Messages as m')
+            ->join('Utilisateurs as e', 'm.idEmetteur', '=', 'e.idUtilisateur')
+            ->join('Utilisateurs as d', 'm.idDestinataire', '=', 'd.idUtilisateur')
+            ->where('m.idEmetteur', $idProfil)
+            ->orWhere('m.idDestinataire', $idProfil)
+            ->orderBy('m.dateMessage', 'desc')
+            ->get(['m.*', 'e.prenomUtilisateur as prenomEmetteur', 'e.nomUtilisateur as nomEmetteur',
+            'd.prenomUtilisateur as prenomDestinataire', 'd.nomUtilisateur as nomDestinataire'])
+            ->toArray()
+        ), true);
+    }
+
+    //Requete permettant d'extraire la liste des messages d'un utilisateur avec un autre sur un objet précis
+    function unMessages(int $idMsg): array 
+    {
+        $leMsg=json_decode(json_encode(
+            DB::table('Messages as m')
+            ->where('m.idMessage', $idMsg)
+            ->get()
+            ->toArray()
+        ), true);
+
+        $idEmetteur=$leMsg[0]['idEmetteur'];
+        $idDestinataire=$leMsg[0]['idDestinataire'];
+        $objet=$leMsg[0]['objet'];
+
+        return
+        json_decode(json_encode(
+            DB::table('Messages as m')
+            ->join('Utilisateurs as e', 'm.idEmetteur', '=', 'e.idUtilisateur')
+            ->join('Utilisateurs as d', 'm.idDestinataire', '=', 'd.idUtilisateur')
+            ->whereIn('m.idEmetteur', [$idEmetteur,$idDestinataire])
+            ->whereIn('m.idEmetteur', [$idEmetteur,$idDestinataire])
+            ->where('m.objet',$objet)
+            ->orderBy('m.dateMessage')
+            ->get(['m.*', 'e.prenomUtilisateur as prenomEmetteur', 'e.nomUtilisateur as nomEmetteur',
+            'd.prenomUtilisateur as prenomDestinataire', 'd.nomUtilisateur as nomDestinataire'])
+            ->toArray()
+        ), true);
+    }
+
+    //Requete permettant d'extraire les trajets et réservations à partir d'un id profil
+    function trajetsReservationsProfil(int $idProfil): array 
+    {
+        $trajetsProfil=json_decode(json_encode(
+            DB::table('Utilisateurs as u')
+            ->join('Voitures as v', 'v.idUtilisateur', '=', 'u.idUtilisateur')
+            ->join('Trajets as t', 't.immatriculation', '=', 'v.immatriculation')
+            ->where('u.idUtilisateur', $idProfil)
+            ->get(['t.idTrajet as id'])
+            ->toArray()
+        ), true);
+
+        $reservationsProfil=json_decode(json_encode(
+            DB::table('Reservations as r')
+            ->where('r.idPassager', $idProfil)
+            ->get(['r.idTrajet as id'])
+            ->toArray()
+        ), true);
+
+        $trajetsReservationsProfil=json_decode(json_encode(
+            DB::table('Reservations as r')
+            ->join('Utilisateurs as u', 'r.idPassager', '=', 'u.idUtilisateur')
+            ->whereIn('r.idTrajet', $trajetsProfil)
+            ->orWhereIn('r.idTrajet', $reservationsProfil)
+            ->distinct('u.idUtilisateur')
+            ->get(['u.idUtilisateur','u.prenomUtilisateur as prenom', 'u.nomUtilisateur as nom'])
+            ->toArray()
+        ), true);
+
+        $trajetsReservationsProfil2=json_decode(json_encode(
+            DB::table('Utilisateurs as u')
+            ->join('Voitures as v', 'v.idUtilisateur', '=', 'u.idUtilisateur')
+            ->join('Trajets as t', 't.immatriculation', '=', 'v.immatriculation')
+            ->orWhereIn('t.idTrajet', $reservationsProfil)
+            ->distinct('u.idUtilisateur')
+            ->get(['u.idUtilisateur','u.prenomUtilisateur as prenom', 'u.nomUtilisateur as nom'])
+            ->toArray()
+        ), true);
+        
+        $trajetsReservationsProfil[]=$trajetsReservationsProfil2[0];
+
+        return $trajetsReservationsProfil;
+    }
+
+    /*ajouter un message et retourner son identifiant */
+    function insertMsg(array $msg): int
+    {   
+        return array_key_exists("idMessage", $msg) ? 
+        DB::table('Messages')
+            ->insertGetId([ 'idMessage' =>$msg['idMessage'],
+                            'objet' =>$msg['objet'],
+                            'texteMessage' =>$msg['texteMessage'],
+                            'dateMessage' =>date('Y-m-d H:i:s', time()),
+                            'messageLu' =>'1',
+                            'idEmetteur' =>$msg['idEmetteur'],
+                            'idDestinataire' =>$msg['idDestinataire'],
+                        ])
+        : DB::table('Messages')
+        ->insertGetId([ 'objet' =>$msg['objet'],
+                        'texteMessage' =>$msg['texteMessage'],
+                        'dateMessage' =>date('Y-m-d H:i:s', time()),
+                        'messageLu' =>'1',
+                        'idEmetteur' =>$msg['idEmetteur'],
+                        'idDestinataire' =>$msg['idDestinataire'],
+                    ])
+        ;
+    }
+
+    function deleteMsg(int $msgId) : void{
+        $msg=json_decode(json_encode(
+        DB::table('Messages')
+        ->where('idMessage', '=', $msgId)
+        ->get()->toArray()
+        ), true);
+        
+        if(empty($msg)){
+            throw new Exception("Match inconnu"); 
+        }
+
+        $msg=$msg[0];
+        DB::table('Messages')
+        ->where('idMessage', '=', $msg['idMessage'])
+        ->delete();
     }
 }

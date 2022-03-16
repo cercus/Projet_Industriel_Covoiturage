@@ -26,10 +26,7 @@
 <h1 class="center-title">Mes messages</h1>
 
 <div class="row justify-content-center align-items-center space-bottom-title">
-    <form method="POST" action="{{route('message.new')}}">
-        @csrf
-        <button type="submit" class="btn button-form">Ecrire un nouveau message</button>
-    </form>
+    <button class="btn button-form"><a href="{{route('messages.new')}}">Ecrire un nouveau message</button>
 </div>
 
 <div class="row justify-content-center align-items-center space-bottom-title">
@@ -40,92 +37,38 @@
                     <th>Date</th>
                     <th>Destinataire</th>
                     <th>Objet</th>
-                    <th>Identifiant du trajet</th>
+                    <th>Emetteur</th>
                     <th>Message</th>
                     <th>Etat</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
+            @foreach($messagesProfil as $messageProfil)
                 <tr>
-                    <td>24/01/2022 16:54:12</td>
-                    <td>Nicolas Dufour</td>
-                    <td>Covoiturage</td>
-                    <td>12</td>
-                    <td>Bonjour, j'ai un petit...</td>
+                    <td>{{ date('d/m/Y H:i',strtotime($messageProfil['dateMessage'])) }}</td>
+                    <td>{{ ucfirst(strtolower($messageProfil['prenomDestinataire'])) }} {{ ucfirst(strtolower($messageProfil['nomDestinataire'])) }}</td>
+                    <td>{{ $messageProfil['objet'] }}</td>
+                    <td>{{ ucfirst(strtolower($messageProfil['prenomEmetteur'])) }} {{ ucfirst(strtolower($messageProfil['nomEmetteur'])) }}</td>
+                    <td>{{ $messageProfil['texteMessage'] }}</td>
                     <td><p class="balise-message balise-message-lu">Lu</p></td>
                     <td style="display: flex;" class="justify-content-center align-items-center">
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/check_button.png" width="40" height="40"></button></form>
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/cancel_button.png" width="40" height="40"></button></form>
+                        <a href="{{route('messages.reply', ['msgId'=>$messageProfil['idMessage']])}}">
+                            <img src="/images/check_button.png" width="40" height="40">  
+                        </a>
+                        <form method="POST" action="{{route('messagessup.all')}}">
+                            @csrf
+                            <div style="display: none;">
+                                <input type="number" name="idMessage" id="idMessage" 
+                                value="{{ $messageProfil['idMessage'] }}">
+                            </div>
+                            <button type="submit" class="button-fond">
+                                <img src="/images/cancel_button.png" width="40" height="40">
+                            </button>
+                        </form>          
                     </td>
-                </tr>
-
-                <tr>
-                    <td>24/01/2022 16:57:12</td>
-                    <td>Jacques Freder</td>
-                    <td>Salut</td>
-                    <td>4</td>
-                    <td>Hello, petit probleme...</td>
-                    <td><p class="balise-message balise-message-non-lu balise-non-lu-small">Non lu</p></td>
-                    <td style="display: flex;" class="justify-content-center align-items-center">
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/check_button.png" width="40" height="40"></button></form>
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/cancel_button.png" width="40" height="40"></button></form>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>24/01/2022 16:54:12</td>
-                    <td>Nicolas Dufour</td>
-                    <td>Covoiturage</td>
-                    <td>12</td>
-                    <td>Bonjour, j'ai un petit...</td>
-                    <td><p class="balise-message balise-message-lu">Lu</p></td>
-                    <td style="display: flex;" class="justify-content-center align-items-center">
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/check_button.png" width="40" height="40"></button></form>
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/cancel_button.png" width="40" height="40"></button></form>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>24/01/2022 16:54:12</td>
-                    <td>Nicolas Dufour</td>
-                    <td>Covoiturage</td>
-                    <td>12</td>
-                    <td>Bonjour, j'ai un petit...</td>
-                    <td><p class="balise-message balise-message-lu">Lu</p></td>
-                    <td style="display: flex;" class="justify-content-center align-items-center">
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/check_button.png" width="40" height="40"></button></form>
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/cancel_button.png" width="40" height="40"></button></form>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>24/01/2022 16:54:12</td>
-                    <td>Nicolas Dufour</td>
-                    <td>Covoiturage</td>
-                    <td>12</td>
-                    <td>Bonjour, j'ai un petit...</td>
-                    <td><p class="balise-message balise-message-lu">Lu</p></td>
-                    <td style="display: flex;" class="justify-content-center align-items-center">
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/check_button.png" width="40" height="40"></button></form>
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/cancel_button.png" width="40" height="40"></button></form>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>24/01/2022 16:54:12</td>
-                    <td>Nicolas Dufour</td>
-                    <td>Covoiturage</td>
-                    <td>12</td>
-                    <td>Bonjour, j'ai un petit...</td>
-                    <td><p class="balise-message balise-message-lu">Lu</p></td>
-                    <td style="display: flex;" class="justify-content-center align-items-center">
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/check_button.png" width="40" height="40"></button></form>
-                        <form>@csrf<button type="submit" class="button-fond"><img src="/images/cancel_button.png" width="40" height="40"></button></form>
-                    </td>
-                </tr>
-
-                
+                </tr>  
+            @endforeach
             </tbody>
         </table>
     </div>

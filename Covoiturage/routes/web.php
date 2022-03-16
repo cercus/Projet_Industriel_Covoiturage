@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MailsController;
 use App\Http\Middleware\Localization;
+use App\Http\Controllers\SawdaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,10 +42,6 @@ Route::get('/commun/historique_trajets', [Controller::class, 'showHistoriqueTraj
 Route::get('/commun/modification_profil', [Controller::class, 'showModificationProfilForm'])->name('modification_profil');
 Route::post('/commun/modification_profil', [Controller::class, 'modifyProfil'])->name('modify.profil');
 
-// Route pour la page Mes messages
-Route::get('/commun/mes_messages', [Controller::class, 'showMesMessages'])->name('messages.all');
-Route::post('/commun/mes_messages', [Controller::class, 'newMessage'])->name('message.new');
-
 // Route pour la page information personnels
 Route::get('/commun/informations_personnelles', [Controller::class, 'showInfosPerso'])->name('informations_personnelles');
 Route::post('/commun/informations_personnelles')->name('informations_personnelles_post');
@@ -53,11 +50,17 @@ Route::post('/commun/informations_personnelles')->name('informations_personnelle
 Route::get('/commun/modification_technique', [Controller::class, 'showModificationTechniqueForm'])->name('modification_technique');
 Route::post('/commun/modification_technique', [Controller::class, 'modifyTechnique'])->name('modify.technique');
 
+// Route pour la page Mes messages
+Route::get('/commun/mes_messages', [SawdaController::class, 'showFormMsg'])->name('messages.all');
+Route::post('/commun/mes_messages', [SawdaController::class, 'supprimerMsg'])->name('messagessup.all');
+
 // Route pour la page ecrire_message.php
-Route::get('/commun/nouveau_message', [Controller::class, 'showEcrireMessageForm'])->name('messages.new');
+Route::get('/commun/nouveau_message', [SawdaController::class, 'showFormNvMsg'])->name('messages.new');
+Route::post('/commun/nouveau_message', [SawdaController::class, 'nvMsg'])->name('messages.new_post');
 
 // Route pour la page repondre_message.php
-Route::get('/commun/repondre_message', [Controller::class, 'showMessagesReply'])->name('messages.reply');
+Route::get('/commun/repondre_message/{msgId}', [SawdaController::class, 'showFormRepondreMsg'])->where('msgId', '[0-9]+')->name('messages.reply');
+Route::post('/commun/repondre_message/', [SawdaController::class, 'repondreMsg'])->name('messages.reply_post');
 
 // Route pour la page de notation
 Route::get('/commun/notation', [Controller::class, 'showNotation'])->name('notation');

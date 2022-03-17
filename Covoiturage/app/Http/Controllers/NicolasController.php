@@ -159,18 +159,15 @@ class NicolasController extends BaseController
             $user = $this->NicolasRepository->getUser($email, $password);
             Request()->session()->put('user',$user);
 
-            return redirect()->Route('user');
+            return redirect()->Route('user', ['idUtilisateur'=>$user['id']]);
         } catch (Exception $e) {
             return redirect()->back()->withInput()->withErrors("Impossible de vous authentifier.".$e->getMessage());
         }
      }
     
-    public function logout() {
-        
-        $validatedData = Request()->validate();
-        $email = $validatedData['email'];
-        $password = $validatedData['password'];
-        Request()->session()->forget([$this->NicolasRepository->getUser($email,$password)]);
+    public function logout(Request $request) {
+        $request->session()->forget('user'); 
+        return redirect()->route('home');
     }
     
 }

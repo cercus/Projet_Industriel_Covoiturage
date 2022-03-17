@@ -38,7 +38,8 @@ Route::get('/testLang',function () {
 /* ------------ Route pour les pages se trouvant dans le dossier commun ------------ */
 
 //Route pour la page de profil 
-Route::get('/commun/user', [Controller::class, 'showUserPage'])->name('user');
+Route::get('/commun/user/{idUtilisateur}', [Controller::class, 'showUserPage'])->where('idUtilisateur','[0-9]+')->name('user');
+
 
 // Route pour la page historique des trajets
 Route::get('/commun/historique_trajets', [Controller::class, 'showHistoriqueTrajet'])->name('historique_trajets');
@@ -122,6 +123,9 @@ Route::post('/inscription', [NicolasController::class, 'inscriptionForm'])->name
 // Route pour la page de connexion
 Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
 Route::post('/connexion', [NicolasController::class, 'Connexion'])->name('store.connexion');
+
+//Route de deconnexion
+Route::post('/deconnexion', [NicolasController::class, 'logout'])->name('logout.post');
 
 // Route pour la page Reinitialisation mdp
 Route::get('/reinitialisation_mdp', [Controller::class, 'showReinitialisationMdp'])->name('reinitialisation_mdp');

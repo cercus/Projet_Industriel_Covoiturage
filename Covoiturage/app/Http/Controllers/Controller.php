@@ -6,18 +6,23 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
+use App\Repositories\NicolasRepository;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public function __construct(NicolasRepository $repository) {
+        $this->NicolasRepository=$repository;
+    }
+
 
     /* ----------------- Fonctions pour les pages se trouvant dans le dossier commun ----------------- */
 
     // Page de profil (contenant tout les accès aux différents pages )
-    public function showUserPage() {
-        return view('commun.user');
+    public function showUserPage(int $idUtilisateur) {
+       return view('commun.user',['Utilisateur' => $this->NicolasRepository->getUserSvtId($idUtilisateur)]);
     }
 
     // Page de l'historique des trajets d'un utilisateur

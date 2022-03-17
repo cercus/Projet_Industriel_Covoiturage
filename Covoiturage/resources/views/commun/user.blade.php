@@ -10,20 +10,34 @@
 
 @section('navbarSequel')
     <ul class="navbar-nav mr-auto"> 
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('user')}}">Ismail IDBOURHIM</a>
-            </li>
-        </ul>
-        <div class="pmd-user-info ">
-            <a href="javascript:void(0);" class="nav-user-img" >   
-                <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
-            </a>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('user',['idUtilisateur'=>$Utilisateur['idUtilisateur']])}}"> {{ $Utilisateur['prenom'] }} {{ $Utilisateur['nom'] }}</a>
+        </li>
+    </ul>
+    <div class="pmd-user-info ">
+        <a href="javascript:void(0);" class="nav-user-img" > 
+            @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+            @endif
+
+            <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
+        </a>
+    </div>
+    <div class="nav-item">
+        <form method="POST" href="{{route('logout.post')}}">
+            @csrf
+            <button type="submit" >
+                <img  width="30" src="/images/quit.png" height="30" style="float:left" >
+            </button>
+        </form>
     </div>
 @endsection
 
 @section('content')
 
-<h1 class="center-title">Bienvenue Ismail Idbourhim sur votre profil</h1>
+<h1 class="center-title">Bienvenue {{ $Utilisateur['prenom'] }} {{ $Utilisateur['nom'] }} sur votre profil</h1> 
 
 <div style="text-align:center" class="space-bottom-title">
     <div class="row">

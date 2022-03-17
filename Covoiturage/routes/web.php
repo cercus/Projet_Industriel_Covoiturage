@@ -3,7 +3,8 @@
 use App\Http\Controllers\LocalizationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\DorianController;
+use App\Http\Controllers\ConducteurController;
+use App\Http\Controllers\PassagerController;
 use App\Http\Controllers\MailsController;
 use App\Http\Middleware\Localization;
 
@@ -18,11 +19,14 @@ use App\Http\Middleware\Localization;
 |
 */
 // Route pour la page d'accueil
+/*
 Route::get('/', function () {
     return view('home');
-});
+}); */
 
-Route::get('/', [Controller::class, 'showHome'])->name('home');
+Route::get('/', [Controller::class, 'showFormAccueil'])->name('accueil');
+Route::post('/', [Controller::class, 'accueil'])->name('accueil.post');
+
 // Route qui permet de connaître la langue active
 Route::get('locale', [LocalizationController::class, 'getLang'])->name('getlang');
 
@@ -38,10 +42,10 @@ Route::get('/testLang',function () {
 /* ------------ Route pour les pages se trouvant dans le dossier commun ------------ */
 
 //Route pour la page de profil 
-Route::get('/commun/user', [Controller::class, 'showUserPage'])->name('user');
+Route::get('/commun/user/{idUtilisateur}', [Controller::class, 'showUserPage'])->where('idUtilisateur', '[0-9]+')->name('user');
 
 // Route pour la page historique des trajets
-Route::get('/commun/historique_trajets/{idUtilisateur}', [DorianController::class, 'showHistoriqueTrajet'])->where('idUtilisateur', '[0-9]+')->name('historique_trajets');
+Route::get('/commun/historique_trajets/{idUtilisateur}', [Controller::class, 'showHistoriqueTrajet'])->where('idUtilisateur', '[0-9]+')->name('historique_trajets');
 
 // Route pour la page de modification du profil
 Route::get('/commun/modification_profil', [Controller::class, 'showModificationProfilForm'])->name('modification_profil');
@@ -66,21 +70,15 @@ Route::get('/commun/nouveau_message', [Controller::class, 'showEcrireMessageForm
 Route::get('/commun/repondre_message', [Controller::class, 'showMessagesReply'])->name('messages.reply');
 
 // Route pour la page de notation
-
-Route::get('/commun/notation_conducteur/{idUtilisateur}/{idReservation}', [DorianController::class, 'showTrajetForNotationConducteur'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('notation.conducteur');
-Route::post('/commun/notation_conducteur/{idUtilisateur}/{idReservation}', [DorianController::class, 'storeNotationPassager'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation.passager');
-#/idUtilisateur : Celui qui est noté
+Route::get('/commun/notation_conducteur/{idUtilisateur}/{idReservation}', [Controller::class, 'showTrajetForNotationConducteur'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('notation.conducteur');
+Route::post('/commun/notation_conducteur/{idUtilisateur}/{idReservation}', [Controller::class, 'storeNotationPassager'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation.passager');
 
 // Notation si l'user est passager -> Il note le conducteur
-Route::get('/commun/notation_passager/{idUtilisateur}/{idReservation}', [DorianController::class, 'showTrajetForNotationPassager'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('notation.passager');
-Route::post('/commun/notation_passager/{idUtilisateur}/{idReservation}', [DorianController::class, 'storeNotationConducteur'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation.conducteur');
-
-
-#Route::get('/commun/notation/{idUtilisateur}/{idReservation}', [DorianController::class, 'showTrajetForNotation'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('notation');
-#Route::post('/commun/notation/{idUtilisateur}/{idReservation}', [DorianController::class, 'storeNotation'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation');
+Route::get('/commun/notation_passager/{idUtilisateur}/{idReservation}', [Controller::class, 'showTrajetForNotationPassager'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('notation.passager');
+Route::post('/commun/notation_passager/{idUtilisateur}/{idReservation}', [Controller::class, 'storeNotationConducteur'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation.conducteur');
 
 // Route pour la page caractéristique d'un user
-Route::get('/commun/caracteristiques/', [Controller::class, 'showCaracteristique'])->name('caracteristiques');
+Route::get('/commun/caracteristiques', [Controller::class, 'showCaracteristique'])->name('caracteristiques');
 
 /* ------------ Route pour les pages se trouvant dans le dossier conducteur ------------ */
 
@@ -94,8 +92,8 @@ Route::get('/conducteur/annuler_trajet', [Controller::class, 'showAnnulerTrajet'
 Route::get('/conducteur/confirmation_annuler_trajets', [Controller::class, 'showConfirmAnnulationTrajet'])->name('confirmation_annuler_trajets');
 
 // Route proposer un trajet
-Route::get('/conducteur/proposer_trajet', [DorianController::class, 'showProposerTrajetForm'])->name('proposer_trajet');
-Route::post('/conducteur/submit_proposer_trajet', [DorianController::class, 'storeProposerTrajetForm'])->name('store.proposer_trajet');
+Route::get('/conducteur/proposer_trajet', [ConducteurController::class, 'showProposerTrajetForm'])->name('proposer_trajet');
+Route::post('/conducteur/submit_proposer_trajet', [ConducteurController::class, 'storeProposerTrajet'])->name('store.proposer_trajet');
 
 
 /* ------------ Route pour les pages se trouvant dans le dossier passager ------------ */
@@ -112,10 +110,18 @@ Route::get('/passager/confirmation_annuler_reservation', [Controller::class, 'sh
 Route::get('/passager/payement', [Controller::class, 'showPayementForm'])->name('payement');
 
 // Route recherche de trajet
-Route::get('/passager/recherche_trajet', [Controller::class, 'showRechercheTrajet'])->name('recherche_trajet');
 
-Route::get('/passager/details_result_recherche_trajet', [Controller::class, 'showDetailRechercheTrajet'])->name('details_result_recherche_trajet');
+//Page résultats de la recherche de trajets
+Route::get('/passager/recherche_trajet', [Controller::class, 'accueil'])->name('rechercheTrajetResultDeAccueil');
+Route::get('/passager/recherche_trajet', [PassagerController::class, 'rechercheTrajet'])->name('rechercheTrajetResultDeTrajet');
 
+//Page recherche trajets
+Route::get('/passager/recherche_trajet', [PassagerController::class, 'showFormRechercheTrajet'])->name('recherche_trajet');
+Route::post('/passager/recherche_trajet', [PassagerController::class, 'rechercheTrajet'])->name('recherche_trajet.post');
+
+//Route::get('/passager/recherche_trajet', [Controller::class, 'showRechercheTrajet'])->name('recherche_trajet');
+
+Route::get('/passager/details_result_recherche_trajet/{trajetId}', [PassagerController::class, 'detailsResultRechercheTrajet'])->where('trajetId', '[0-9]+')->name('detailsResultRechercheTrajet');
 
 /* ------------ Route pour les autres pages ------------ */
 
@@ -129,17 +135,17 @@ Route::get('/apropos', [Controller::class, 'showAPropos'])->name('apropos');
 
 // Route pour la page Inscription
 Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('inscription');
+Route::post('/inscription', [Controller::class, 'storeInscription'])->name('store.inscription');
 
 // Route pour la page de connexion
 Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
-Route::post('/connexion', [Controller::class, 'storeConnexion'])->name('store.connexion');
+Route::post('/connexion', [Controller::class, 'Connexion'])->name('store.connexion');
+
+//Route de deconnexion
+Route::post('/logout', [Controller::class, 'logout'])->name('logout.post');
 
 // Route pour la page Reinitialisation mdp
 Route::get('/reinitialisation_mdp', [Controller::class, 'showReinitialisationMdp'])->name('reinitialisation_mdp');
 
 // Route pour la page Qui-sommes-nous
 Route::get('qui_sommes_nous', [Controller::class, 'showQuiSommesNous'])->name('qui_sommes_nous');
-
-
-#Route::get('/testAPIMap', [Controller::class, 'showAPIMap'])->name('testapimap');
-#Route::post('/submit-testAPIMap', [DorianController::class, 'storeTestAjax'])->name('store.testapimap');

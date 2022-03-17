@@ -13,12 +13,6 @@
             <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.3/css/mdb.min.css" rel="stylesheet">
             <script src="https://kit.fontawesome.com/ae49975df8.js" crossorigin="anonymous"></script>
             <script src="https://www.google.com/recaptcha/api.js"></script>
-            <!--
-            <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-            <script src="https://ajax.googleapis.com/ajax/libs/handlebars/4.7.7/handlebars.min.js"></script>
-            <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-            -->
-
             <link rel="icon" href="{!! asset('images/logo_min2.png') !!}"/>
             
             {{-- le style de la page --}}

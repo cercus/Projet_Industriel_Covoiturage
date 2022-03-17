@@ -9,16 +9,27 @@
 @endsection
 
 @section('navbarSequel')
-    <ul class="navbar-nav mr-auto"> 
+    @if(session()->has('user'))
+        <ul class="navbar-nav mr-auto"> 
             <li class="nav-item">
-                <a class="nav-link" href="{{route('user')}}">Ismail IDBOURHIM</a>
+                <a class="nav-link" href="{{route('user')}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}} </a>
             </li>
         </ul>
         <div class="pmd-user-info ">
             <a href="javascript:void(0);" class="nav-user-img" >   
                 <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
             </a>
-    </div>
+        </div>
+    @else
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
+            </li>
+        </ul>
+    @endif
 @endsection
 
 @section('content')

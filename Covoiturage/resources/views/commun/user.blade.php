@@ -9,9 +9,15 @@
 @endsection
 
 @section('navbarSequel')
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('logout.post')}}">Déconnexion</a>
+                <!--<form method="POST" action="{{route('logout.post')}}">@csrf<button type="submit">Déconnexion</button></form>-->
+        </li>
+    </ul>
     <ul class="navbar-nav mr-auto"> 
             <li class="nav-item">
-                <a class="nav-link" href="{{route('user')}}">Ismail IDBOURHIM</a>
+                <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a>
             </li>
         </ul>
         <div class="pmd-user-info ">
@@ -23,12 +29,12 @@
 
 @section('content')
 
-<h1 class="center-title">Bienvenue Ismail Idbourhim sur votre profil</h1>
+<h1 class="center-title">Bienvenue {{session()->get('user')['prenom']}} {{session()->get('user')['nom']}} sur votre profil</h1>
 
 <div style="text-align:center" class="space-bottom-title">
     <div class="row">
         <div class="col espace-bottom vignets" >
-            <a href="{{route('historique_trajets')}}">
+            <a href="{{route('historique_trajets', ['idUtilisateur' => session()->get('user')['id']])}}">
                 <button type="button" class="button-icon" autofocus>
                     <div>
                         <h3>Trajet effectué</h3>
@@ -97,31 +103,35 @@
                 </button>
             </a>
         </div>
-        <div class="col espace-bottom vignets">
-            <a href="{{route('trajets_en_cours')}}">
-                <button type="button" class="button-icon" autofocus>
-                    <div>
-                        <h3>Mes trajets en cours</h3>
-                    </div> 
-                    <div class="icon-button">
-                        <img src="/images/icons/car-side-solid.svg" style="float:left" >
-                    </div>
-                </button>
-            </a>
-        </div>
-        <div class="col espace-bottom vignets">
-            <a href="{{route('proposer_trajet')}}">
-                <button type="button" class="button-icon" autofocus>
-                    <div>
-                        <h3>Proposer un trajet</h3>
-                    </div>
-                    <div class="icon-button">
-                        <img src="/images/icons/plus-solid.svg" style="float:left" width="30%" height="30%">
-                        <img src="/images/icons/itineraire.svg" style="float:left" width="80%" height="80%">
-                    </div>
-                </button>
-            </a>
-        </div>
+        @if($conducteur)
+            <div class="col espace-bottom vignets">
+                <a href="{{route('trajets_en_cours')}}">
+                    <button type="button" class="button-icon" autofocus>
+                        <div>
+                            <h3>Mes trajets en cours</h3>
+                        </div> 
+                        <div class="icon-button">
+                            <img src="/images/icons/car-side-solid.svg" style="float:left" >
+                        </div>
+                    </button>
+                </a>
+            </div>
+        
+
+            <div class="col espace-bottom vignets">
+                <a href="{{route('proposer_trajet')}}">
+                    <button type="button" class="button-icon" autofocus>
+                        <div>
+                            <h3>Proposer un trajet</h3>
+                        </div>
+                        <div class="icon-button">
+                            <img src="/images/icons/plus-solid.svg" style="float:left" width="30%" height="30%">
+                            <img src="/images/icons/itineraire.svg" style="float:left" width="80%" height="80%">
+                        </div>
+                    </button>
+                </a>
+            </div>
+        @endif
         <div class="col espace-bottom vignets">
             <a href="{{route('reservation_en_cours')}}">
                 <button type="button" class="button-icon" autofocus>

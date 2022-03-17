@@ -9,27 +9,44 @@ Proposer un trajet
 @endsection
 
 @section('navbarSequel')
-<ul class="navbar-nav mr-auto">
-    <li class="nav-item">
-        <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
-    </li>
-</ul>
+    @if(session()->has('user'))
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('logout.post')}}">Déconnexion</a>
+                <!--<form method="POST" action="{{route('logout.post')}}">@csrf<button type="submit">Déconnexion</button></form>-->
+            </li>
+        </ul>
+        <ul class="navbar-nav mr-auto"> 
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}} </a>
+            </li>
+        </ul>
+        <div class="pmd-user-info ">
+            <a href="javascript:void(0);" class="nav-user-img" >   
+                <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
+            </a>
+        </div>
+    @else
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
+            </li>
+        </ul>
+    @endif
 @endsection
 
 @section('content')
 <h1 class="center-title">Proposer un trajet</h1>
-<div class="alert alert-success" role="alert" id="successMsg" style="display: none" >
-  Thank you for getting in touch! 
-</div>
+<div class="alert alert-success" role="alert" id="successMsg" style="display: none" ></div>
 <div>
     <form id="mapForm">
         @csrf
         @if($errors->any())
         <div class="alert alert-warning">
-            Le trajet n'a pas pu être ajouté &#9785; {{implode('', $errors->all('<div>:message</div>'))}}
+            Le trajet n'a pas pu être ajouté &#9785; {{implode('', $errors->all(':message'))}}
         </div>
         @endif
         @if(session()->has('success'))
@@ -138,18 +155,6 @@ Proposer un trajet
     </form>
 </div>
 <script>
-    /*
-    var poly = "}ukgGyq~_@d@x@JDARAp@DlA?zBEn@BZHLv@x@Zb@Zr@hAnD`@pADl@Dr@DVRb@PTt@lA\TNDVDRDvAP`@?H?@e@@UHc@fAmCNc@IE[Sq@k@e@]~@uChAoDb@uAj@oBJ_@bCmHX}@Nc@Ry@?m@SUe@m@w@sA_BiD{AoDcD_HeCkFm@qAeAsBm@iA}CiFcCcDaAiAiEaFgGiHMQM]yAoBuAmB{BsDu@uAGM_@u@iAeCs@mBSgATUTMfAYdAKlAIbBErAAxB@bCL^EvCHrEFjA@~DF~GBz@Ap@I|Bm@hB}@|EiCjAm@`AYrCm@pBSdFk@~Ei@hBSjGk@nCSd@ElCOdEO~E?lB?tCFbGVnBNfDVtEX|DXrFZnHd@pAFrFLXDvA?xA?tBErGOvFQpEYFBT@pACv@EbAK\Gz@Sv@MzAS~Aq@ZU^c@L_@Pm@f@Y|@YpDqAbEy@h@KbACrBCx@DVB|ABrDD|A@tBThAPz@XXJzBr@rAr@~FlEfFxDzF~DrCpBbCjB|BpAfC`AjFzAnEpAz@RlFlBlAb@jBt@PDZLlAt@xAz@dAl@fBhA~GrEl@d@jA~@vBjBj@b@?D?BBHBFLBLIBQ?Cf@g@f@a@zAoAtCaDtAsAxDkDRWLIFCBCj@s@j@eAZc@z@s@xAo@`ACr@KTCt@W`@Un@g@dCaCbAeAl@i@j@QZCVBVFBFBDHDN?JS@Er@OPEt@CtBMzCUt@MVInDcC`EcDdAs@tB}@`Bq@h@]X]j@mAb@{@zBcFp@}ATWTE@BJBHAHIDM?MCMGIIESc@w@qB}AcE[_AWiAc@gCUyBg@qLAaACeA?k@@YDKBO?MEQB_@JcE@aAFc@VeAP_@V[`@[d@QVGJ?vAQpBYtAk@hDk@nBUhBM`Eo@xB]^C\Bp@NTNXXR\N^R~@n@xFVfAb@r@XVXNz@n@BLRNHCHKDSRW`@MnAUtCY~Ec@xAIhBHhDZ|@DrAKz@IX?z@Mn@_@TRfAI";
-    document.cookie = "distance_total=15311";
-    document.cookie = "temps_trajet=1241";
-    document.cookie = "polyline="+poly;
-    document.cookie = "debutLat=43.3188657";
-    document.cookie = "debutLon=5.4046122";
-    document.cookie = "endLat=43.231462";
-    document.cookie = "endLon=5.4361815";
-    */
-
-
     
     var geocoder;
     var map;
@@ -290,22 +295,8 @@ Proposer un trajet
             finLat = parseJson["routes"][0]["legs"][0]["end_location"]["lat"];
             finLon = parseJson["routes"][0]["legs"][0]["end_location"]["lng"];
             console.log(distanceTotale +" / " + tempsTrajet + "/ (" + debutLat + ", " + debutLon +") / (" + finLat+", " + finLon + " )");
-            //console.log(parseJSON);
             document.getElementById("valider").disabled = false;
-            
-
-            //var distanceTotale = response["routes"][0]["legs"][0]["distance"]["value"];
-            //var tempsTrajet = response["routes"][0]["legs"][0]["duration_in_traffic"]["value"];
-            //var polyline = response["routes"][0]["overview_polyline"];
-            //var debutLat = response["routes"][0]["legs"][0]["start_location"]["lat"];
-            //var debutLon = response["routes"][0]["legs"][0]["start_location"]["lon"];
-
-            //var finLat = response["routes"][0]["legs"][0]["end_location"]["lat"];
-            //var finLon = response["routes"][0]["legs"][0]["end_location"]["lon"];
-
-
-
-            //var json = JSON.stringify(response);
+        
             
             
         }).catch((e) => window.alert("Directions request failed du to " + status));

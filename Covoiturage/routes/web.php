@@ -3,7 +3,12 @@
 use App\Http\Controllers\LocalizationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+<<<<<<< HEAD
 use App\Http\Controllers\NicolasController;
+=======
+use App\Http\Controllers\ConducteurController;
+use App\Http\Controllers\PassagerController;
+>>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
 use App\Http\Controllers\MailsController;
 use App\Http\Middleware\Localization;
 
@@ -18,11 +23,14 @@ use App\Http\Middleware\Localization;
 |
 */
 // Route pour la page d'accueil
+/*
 Route::get('/', function () {
     return view('home');
-});
+}); */
 
-Route::get('/', [Controller::class, 'showHome'])->name('home');
+Route::get('/', [Controller::class, 'showFormAccueil'])->name('accueil');
+Route::post('/', [Controller::class, 'accueil'])->name('accueil.post');
+
 // Route qui permet de connaître la langue active
 Route::get('locale', [LocalizationController::class, 'getLang'])->name('getlang');
 
@@ -38,11 +46,15 @@ Route::get('/testLang',function () {
 /* ------------ Route pour les pages se trouvant dans le dossier commun ------------ */
 
 //Route pour la page de profil 
+<<<<<<< HEAD
 Route::get('/commun/user/{idUtilisateur}', [Controller::class, 'showUserPage'])->where('idUtilisateur','[0-9]+')->name('user');
 
+=======
+Route::get('/commun/user/{idUtilisateur}', [Controller::class, 'showUserPage'])->where('idUtilisateur', '[0-9]+')->name('user');
+>>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
 
 // Route pour la page historique des trajets
-Route::get('/commun/historique_trajets', [Controller::class, 'showHistoriqueTrajet'])->name('historique_trajets');
+Route::get('/commun/historique_trajets/{idUtilisateur}', [Controller::class, 'showHistoriqueTrajet'])->where('idUtilisateur', '[0-9]+')->name('historique_trajets');
 
 // Route pour la page de modification du profil
 Route::get('/commun/modification_profil', [Controller::class, 'showModificationProfilForm'])->name('modification_profil');
@@ -67,7 +79,12 @@ Route::get('/commun/nouveau_message', [Controller::class, 'showEcrireMessageForm
 Route::get('/commun/repondre_message', [Controller::class, 'showMessagesReply'])->name('messages.reply');
 
 // Route pour la page de notation
-Route::get('/commun/notation', [Controller::class, 'showNotation'])->name('notation');
+Route::get('/commun/notation_conducteur/{idUtilisateur}/{idReservation}', [Controller::class, 'showTrajetForNotationConducteur'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('notation.conducteur');
+Route::post('/commun/notation_conducteur/{idUtilisateur}/{idReservation}', [Controller::class, 'storeNotationPassager'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation.passager');
+
+// Notation si l'user est passager -> Il note le conducteur
+Route::get('/commun/notation_passager/{idUtilisateur}/{idReservation}', [Controller::class, 'showTrajetForNotationPassager'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('notation.passager');
+Route::post('/commun/notation_passager/{idUtilisateur}/{idReservation}', [Controller::class, 'storeNotationConducteur'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation.conducteur');
 
 // Route pour la page caractéristique d'un user
 Route::get('/commun/caracteristiques', [Controller::class, 'showCaracteristique'])->name('caracteristiques');
@@ -84,7 +101,8 @@ Route::get('/conducteur/annuler_trajet', [Controller::class, 'showAnnulerTrajet'
 Route::get('/conducteur/confirmation_annuler_trajets', [Controller::class, 'showConfirmAnnulationTrajet'])->name('confirmation_annuler_trajets');
 
 // Route proposer un trajet
-Route::get('/conducteur/proposer_trajet', [COntroller::class, 'showProposerTrajetForm'])->name('proposer_trajet');
+Route::get('/conducteur/proposer_trajet', [ConducteurController::class, 'showProposerTrajetForm'])->name('proposer_trajet');
+Route::post('/conducteur/submit_proposer_trajet', [ConducteurController::class, 'storeProposerTrajet'])->name('store.proposer_trajet');
 
 
 /* ------------ Route pour les pages se trouvant dans le dossier passager ------------ */
@@ -101,10 +119,18 @@ Route::get('/passager/confirmation_annuler_reservation', [Controller::class, 'sh
 Route::get('/passager/payement', [Controller::class, 'showPayementForm'])->name('payement');
 
 // Route recherche de trajet
-Route::get('/passager/recherche_trajet', [Controller::class, 'showRechercheTrajet'])->name('recherche_trajet');
 
-Route::get('/passager/details_result_recherche_trajet', [Controller::class, 'showDetailRechercheTrajet'])->name('details_result_recherche_trajet');
+//Page résultats de la recherche de trajets
+Route::get('/passager/recherche_trajet', [Controller::class, 'accueil'])->name('rechercheTrajetResultDeAccueil');
+Route::get('/passager/recherche_trajet', [PassagerController::class, 'rechercheTrajet'])->name('rechercheTrajetResultDeTrajet');
 
+//Page recherche trajets
+Route::get('/passager/recherche_trajet', [PassagerController::class, 'showFormRechercheTrajet'])->name('recherche_trajet');
+Route::post('/passager/recherche_trajet', [PassagerController::class, 'rechercheTrajet'])->name('recherche_trajet.post');
+
+//Route::get('/passager/recherche_trajet', [Controller::class, 'showRechercheTrajet'])->name('recherche_trajet');
+
+Route::get('/passager/details_result_recherche_trajet/{trajetId}', [PassagerController::class, 'detailsResultRechercheTrajet'])->where('trajetId', '[0-9]+')->name('detailsResultRechercheTrajet');
 
 /* ------------ Route pour les autres pages ------------ */
 
@@ -118,6 +144,7 @@ Route::get('/apropos', [Controller::class, 'showAPropos'])->name('apropos');
 
 // Route pour la page Inscription
 Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('inscription');
+<<<<<<< HEAD
 Route::post('/inscription', [NicolasController::class, 'inscriptionForm'])->name('store.inscription');
 
 // Route pour la page de connexion
@@ -126,6 +153,16 @@ Route::post('/connexion', [NicolasController::class, 'Connexion'])->name('store.
 
 //Route de deconnexion
 Route::post('/deconnexion', [NicolasController::class, 'logout'])->name('logout.post');
+=======
+Route::post('/inscription', [Controller::class, 'storeInscription'])->name('store.inscription');
+
+// Route pour la page de connexion
+Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
+Route::post('/connexion', [Controller::class, 'Connexion'])->name('store.connexion');
+
+//Route de deconnexion
+Route::post('/logout', [Controller::class, 'logout'])->name('logout.post');
+>>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
 
 // Route pour la page Reinitialisation mdp
 Route::get('/reinitialisation_mdp', [Controller::class, 'showReinitialisationMdp'])->name('reinitialisation_mdp');

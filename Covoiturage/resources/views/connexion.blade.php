@@ -11,10 +11,10 @@
 @section('navbarSequel')
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="/inscription">Inscription</a>
+            <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/connexion">Connexion</a>
+            <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
         </li>
     </ul>
 @endsection
@@ -27,7 +27,11 @@
         @csrf
         @if($errors->any())
             <div class="alert alert-warning">
+<<<<<<< HEAD
                 La connection n'a pas pu se réaliser &#9785; {{implode('', $errors->all('<div>:message</div>'))}}
+=======
+                La connection n'a pas pu se réaliser &#9785; {{implode('', $errors->all(':message'))}}
+>>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
             </div>
         @endif
 
@@ -70,4 +74,3 @@
     </form>
 
 @endsection
-

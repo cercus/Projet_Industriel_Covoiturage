@@ -767,6 +767,26 @@ body {
     transition: 0.3s ease;
 }
 
+.star {
+    visibility: hidden;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 30px;
+    margin-bottom: 30px;
+    margin-right: 10px;
+}
+
+.star:before {
+    content: '\2605';
+    visibility: visible;
+}
+
+.star:checked:before {
+    content: "\2605";
+    color: #ffe400;
+    text-shadow: 1px 1px 0 #8f8420;
+}
+
 
 /* -------------- Style pour la page qui-sommes-nous -------------- */
 

@@ -119,9 +119,9 @@ class Controller extends BaseController
     /* ----------------- Fonctions pour les pages se trouvant dans le dossier passager ----------------- */
 
 
-    public function showReservationEnCours() {
-        return view('passager.reservation_en_cours');
-    }
+    // public function showReservationEnCours() {
+    //     return view('passager.reservation_en_cours');
+    // }
 
 
     public function showAnnulerReservation() {

@@ -20,10 +20,10 @@
     <body>
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{Route('home')}}">
                 <img id="logo-img" src="/images/logo_min2.png" alt="logo">
             </a>
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{Route('home')}}">
                 <img id="name-logo" src="/images/CoLuminy.png" alt="CoLuminy">
             </a>
                 @if(session()->get('profil') == "Conducteur")

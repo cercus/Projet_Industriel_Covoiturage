@@ -92,7 +92,7 @@ Route::get('/conducteur/proposer_trajet', [COntroller::class, 'showProposerTraje
 
 /* ------------ Route pour les pages se trouvant dans le dossier passager ------------ */
 
-Route::get('/passager/reservation_en_cours', [Controller::class, 'showReservationEnCours'])->name('reservation_en_cours');
+Route::get('/passager/reservation_en_cours/{idPassager}', [IsmailController::class, 'showReservationEnCours'])->where('idPassager', '[0-9]+')->name('reservation_en_cours');
 
 // Route Annuler une reservation */
 Route::get('/passager/annuler_reservation', [Controller::class, 'showConfirmAnnulationReservation'])->name('annuler_reservation');

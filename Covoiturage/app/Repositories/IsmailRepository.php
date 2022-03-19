@@ -115,7 +115,6 @@ class IsmailRepository {
     //nombre de passagers acceptées pour un trajet
     function nbrPassagerAcceptes(int $idTrajet): int
     {
-        
         return DB::table('Trajets')
                         ->join('Reservations', 'Trajets.idTrajet', '=', 'Reservations.idTrajet')
                         ->where('Trajets.idTrajet',$idTrajet)
@@ -141,7 +140,34 @@ class IsmailRepository {
                                             'idDestinataire' => $idDestinataire]);
     }
 
-/*-----------------------------Méthodes pour la page annuler mon trajet--------------------------*/
+/*-----------------------------Méthodes pour la page mes reservation en cours--------------------------*/
 
+    // les reservation en cours de passager
+    function reservationsEnCours(int $idPassager): array
+    {    
+        return DB::table('Reservations')
+                ->join('Trajets', 'Trajets.idTrajet', '=', 'Reservations.idTrajet')
+                ->join('Lieux as lieuD', 'Trajets.idLieuDepart', '=', 'lieuD.idLieu')
+                ->join('Lieux as lieuA', 'Trajets.idLieuArrivee', '=', 'lieuA.idLieu')
+                ->where('Reservations.idPassager', $idPassager)
+                ->where('Trajets.dateHeureArrivee', '>', NOW())
+                ->orderBy('Trajets.dateHeureDepart')
+                ->get(['Trajets.*', 'Reservations.*','lieuD.numRue as numRueDep', 'lieuD.adresseRue as rueDep',
+                        'lieuD.ville as villeDep', 'lieuD.cP as cpDep', 'lieuA.numRue as numRueArr', 
+                        'lieuA.adresseRue as rueArr', 'lieuA.ville as villeArr', 'lieuA.cP as cpArr'])
+                ->toArray();
+    }
+    //conducteur d'une reservation
+    function quiConducteur(int $idTrajet): array
+    {
+        return DB::table('Trajets')
+                ->join('Voitures', 'Trajets.immatriculation', '=', 'Voitures.immatriculation')
+                ->join('Utilisateurs', 'Voitures.idUtilisateur', '=', 'Utilisateurs.idUtilisateur')
+                ->where('Trajets.idTrajet',$idTrajet)
+                ->get(['Trajets.idTrajet', 'Utilisateurs.nomUtilisateur as nomCond', 
+                        'Utilisateurs.prenomUtilisateur as prenomCond', 'Utilisateurs.photoProfil', 
+                        'Utilisateurs.idUtilisateur'])
+                ->toArray();
+    }
 
 }

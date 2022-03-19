@@ -9,15 +9,35 @@ Accueil
 @endsection
            
 @section('navbarSequel')
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
-        </li>
-    </ul>
+    @if(session()->has('user'))
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('logout.post')}}">Déconnexion</a>
+                <!--<form method="POST" action="{{route('logout.post')}}">@csrf<button type="submit">Déconnexion</button></form>-->
+            </li>
+        </ul>
+        <ul class="navbar-nav mr-auto"> 
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}} </a>
+            </li>
+        </ul>
+        <div class="pmd-user-info ">
+            <a href="javascript:void(0);" class="nav-user-img" >   
+                <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
+            </a>
+        </div>
+    @else
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
+            </li>
+        </ul>
+    @endif
 @endsection
+           
 
 @section('content')
 
@@ -34,11 +54,11 @@ Accueil
     <p>Alors Columiny est fait pour vous !</p>
 </div>
 <div style="position: sticky; top: 0; z-index: 1; position:-webkit-sticky; background-color: rgba(241, 241, 239, 0.6);">
-    <form method="POST" action="">
+    <form method="POST" >
         @csrf
         @if ($errors->any())
             <div class="alert alert-warning">
-                La recherche n'a pas pu etre effectuée &#9785;
+                La recherche n'a pas pu etre effectuée &#9785 {{implode('', $errors->all('<div>:message</div>'))}};
             </div>
         @endif
         <div>
@@ -56,10 +76,10 @@ Accueil
                             @enderror
                         </div>
                         <div class="col-left-input">
-                            <label for="rueDep">Nom de la voie</label>
-                            <input type="text" placeholder="Boulevard Baille"  class="input-form @error('rueDep') is-invalid @enderror" id="rueDep" name="rueDep" aria-describedby="rueDepError">
-                            @error('rueDep')
-                                <small id="rueDepError" class="form-text text-muted">{{$message}}</small>
+                            <label for="adresseRueDep">Nom de la voie</label>
+                            <input type="text" placeholder="Boulevard Baille"  class="input-form @error('adresseRueDep') is-invalid @enderror" id="adresseRueDep" name="adresseRueDep" aria-describedby="adresseRueDepError">
+                            @error('adresseRueDep')
+                                <small id="adresseRueDepError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
                     </div>
@@ -74,7 +94,7 @@ Accueil
                         <div class="col-left-input">
                             <label for="villeDep">Ville</label>
                             <input type="text" placeholder="Marseille"  class="input-form @error('villeDep') is-invalid @enderror" id="villeDep" name="villeDep" aria-describedby="villeDepError">
-                            @error('rueDep')
+                            @error('villeDep')
                                 <small id="villeDepError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
@@ -94,10 +114,10 @@ Accueil
                             @enderror
                         </div>
                         <div class="col-left-input">
-                            <label for="rueArr">Nom de la voie</label>
-                            <input type="text" placeholder="Avenue de Luminy"  class="input-form @error('rueArr') is-invalid @enderror" id="rueArr" name="rueArr" aria-describedby="rueArrError">
-                            @error('rueArr')
-                                <small id="rueArrError" class="form-text text-muted">{{$message}}</small>
+                            <label for="adresseRueArr">Nom de la voie</label>
+                            <input type="text" placeholder="Avenue de Luminy"  class="input-form @error('adresseRueArr') is-invalid @enderror" id="adresseRueArr" name="adresseRueArr" aria-describedby="adresseRueArrError">
+                            @error('adresseRueArr')
+                                <small id="adresseRueArrError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
                     </div>
@@ -127,17 +147,17 @@ Accueil
                 
                     <div class="col-md-10 mx-auto space-bottom-title">
                         <div class="col-right-input">
-                            <label for="date">Date de départ</label>
-                            <input type="datetime-local" class="input-form @error('date') is-invalid @enderror" id="date" name="date" aria-describedby="dateError">
-                            @error('date')
-                                <small id="dateError" class="form-text text-muted">{{$message}}</small>
+                            <label for="dateDep">Date de départ</label>
+                            <input type="datetime-local" class="input-form @error('dateDep') is-invalid @enderror" id="dateDep" name="dateDep" aria-describedby="dateDepError">
+                            @error('dateDep')
+                                <small id="dateDepError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
                         <div class="col-left-input">
-                            <label for="place">Nombre de place(s)</label>
-                            <input type="number" placeholder="1"  class="input-form @error('place') is-invalid @enderror" id="place" name="place" aria-describedby="placeError">
-                            @error('place')
-                                <small id="placeError" class="form-text text-muted">{{$message}}</small>
+                            <label for="nbPlace">Nombre de place(s)</label>
+                            <input type="number" placeholder="1"  class="input-form @error('nbPlace') is-invalid @enderror" id="nbPlace" name="nbPlace" aria-describedby="nbPlaceError">
+                            @error('nbPlace')
+                                <small id="nbPlaceError" class="form-text text-muted">{{$message}}</small>
                             @enderror
                         </div>
                     </div>

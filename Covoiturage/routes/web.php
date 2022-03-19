@@ -3,6 +3,7 @@
 use App\Http\Controllers\LocalizationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\IsmailController;
 use App\Http\Controllers\MailsController;
 use App\Http\Middleware\Localization;
 
@@ -17,9 +18,9 @@ use App\Http\Middleware\Localization;
 |
 */
 // Route pour la page d'accueil
-Route::get('/', function () {
-    return view('home');
-});
+// Route::get('/', function () {
+//     return view('home');
+// });
 
 Route::get('/', [Controller::class, 'showHome'])->name('home');
 // Route qui permet de connaître la langue active
@@ -43,20 +44,20 @@ Route::get('/commun/user', [Controller::class, 'showUserPage'])->name('user');
 Route::get('/commun/historique_trajets', [Controller::class, 'showHistoriqueTrajet'])->name('historique_trajets');
 
 // Route pour la page de modification du profil
-Route::get('/commun/modification_profil', [Controller::class, 'showModificationProfilForm'])->name('modification_profil');
-Route::post('/commun/modification_profil', [Controller::class, 'modifyProfil'])->name('modify.profil');
+Route::get('/commun/modification_profil/{idUtilisateur}', [IsmailController::class, 'showModificationProfilForm'])->where('idUtilisateur', '[0-9]+')->name('modification_profil');
+Route::post('/commun/modification_profil', [IsmailController::class, 'modifyProfil'])->name('modify.profil');
+
+// Route pour la page information personnels
+Route::get('/commun/informations_personnelles/{idUtilisateur}', [IsmailController::class, 'showInfosPerso'])->where('idUtilisateur', '[0-9]+')->name('informations_personnelles');
+Route::post('/commun/informations_personnelles', [IsmailController::class, 'storeInfosPerso'])->name('informations_personnelles_post');
 
 // Route pour la page Mes messages
 Route::get('/commun/mes_messages', [Controller::class, 'showMesMessages'])->name('messages.all');
 Route::post('/commun/mes_messages', [Controller::class, 'newMessage'])->name('message.new');
 
-// Route pour la page information personnels
-Route::get('/commun/informations_personnelles', [Controller::class, 'showInfosPerso'])->name('informations_personnelles');
-Route::post('/commun/informations_personnelles')->name('informations_personnelles_post');
-
 // Route pour la page de modification technique
-Route::get('/commun/modification_technique', [Controller::class, 'showModificationTechniqueForm'])->name('modification_technique');
-Route::post('/commun/modification_technique', [Controller::class, 'modifyTechnique'])->name('modify.technique');
+Route::get('/commun/modification_technique/{idUtilisateur}', [IsmailController::class, 'showModificationTechniqueForm'])->where('idUtilisateur', '[0-9]+')->name('modification_technique');
+Route::post('/commun/modification_technique', [IsmailController::class, 'modifyTechnique'])->name('modify.technique');
 
 // Route pour la page ecrire_message.php
 Route::get('/commun/nouveau_message', [Controller::class, 'showEcrireMessageForm'])->name('messages.new');
@@ -73,13 +74,17 @@ Route::get('/commun/caracteristiques', [Controller::class, 'showCaracteristique'
 /* ------------ Route pour les pages se trouvant dans le dossier conducteur ------------ */
 
 // Route pour la page trajet_en_cours.php
-Route::get('/conducteur/trajets_en_cours', [Controller::class, 'showTrajetEnCours'])->name('trajets_en_cours');
-
+Route::get('/conducteur/trajets_en_cours/{idConducteur}', [IsmailController::class, 'showTrajetEnCours'])->where('idConducteur', '[0-9]+')->name('trajets_en_cours');
+Route::post('/conducteur/validerPassager/{idReservation}', [IsmailController::class, 'validerPassager'])->name('validerPassager.store');
+Route::post('/conducteur/refuserPassager/{idReservation}', [IsmailController::class, 'refuserPassager'])->name('refuserPassager.store');
+// Route::post('/conducteur/annulerTrajet/{idTrajet}', [IsmailController::class, 'annulerTrajet'])->name('annulerTrajet.store');
 // Route Annuler un trajet */
-Route::get('/conducteur/annuler_trajet', [Controller::class, 'showAnnulerTrajet'])->name('annuler_trajet');
+Route::get('/conducteur/annuler_trajet/{idTrajet}', [IsmailController::class, 'showAnnulerTrajet'])->where('idTrajet', '[0-9]+')->name('annuler_trajet');
+Route::post('/conducteur/accAnnulerTrajet/{idTrajet}',[IsmailController::class, 'acceptAnnulerTrajet'])->where('idConducteur', '[0-9]+')->name('acceptAnnulerTrajet.store');
+// Route::post('/conducteur/refusAnnulerTrajet/{idConducteur}',[IsmailController::class, 'refusAnnulerTrajet'])->name('refusAnnulerTrajet.store');
 
 // Route confirmation annulation trajet
-Route::get('/conducteur/confirmation_annuler_trajets', [Controller::class, 'showConfirmAnnulationTrajet'])->name('confirmation_annuler_trajets');
+Route::get('/conducteur/confirmation_annuler_trajets', [IsmailController::class, 'showConfirmAnnulationTrajet'])->name('confirmation_annuler_trajets');
 
 // Route proposer un trajet
 Route::get('/conducteur/proposer_trajet', [COntroller::class, 'showProposerTrajetForm'])->name('proposer_trajet');
@@ -116,10 +121,14 @@ Route::get('/apropos', [Controller::class, 'showAPropos'])->name('apropos');
 
 // Route pour la page Inscription
 Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('inscription');
+Route::post('/inscription', [Controller::class, 'storeInscription'])->name('store.inscription');
 
 // Route pour la page de connexion
 Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
-Route::post('/connexion', [Controller::class, 'storeConnexion'])->name('store.connexion');
+Route::post('/connexion', [Controller::class, 'Connexion'])->name('store.connexion');
+
+//Route de deconnexion
+Route::post('/logout', [Controller::class, 'logout'])->name('logout.post');
 
 // Route pour la page Reinitialisation mdp
 Route::get('/reinitialisation_mdp', [Controller::class, 'showReinitialisationMdp'])->name('reinitialisation_mdp');

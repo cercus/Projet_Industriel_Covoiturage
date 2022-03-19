@@ -11,7 +11,7 @@
 @section('navbarSequel')
     <ul class="navbar-nav mr-auto"> 
             <li class="nav-item">
-                <a class="nav-link" href="{{route('user')}}">Ismail IDBOURHIM</a>
+                a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}} </a>
             </li>
         </ul>
         <div class="pmd-user-info ">
@@ -22,74 +22,73 @@
 @endsection
 
 @section('content')
-<h1 class="center-title">Conversation avec Nicolas Dufour sur l'objet : Covoiturage</h1>
+<h1 class="center-title">Conversation sur l'objet : {{ $unMessages[0]['objet'] }}</h1>
 
+<form method="POST" action="{{route('messages.reply_post')}}">
+@csrf
 <div class="row justify-content-center align-items-center space-bottom-title">
     <div class="field-message col-md-8">
+    @foreach($unMessages as $unMessage)
+        @if($unMessage['idEmetteur']!=$idProfil)
         <div>
             <div class="message-user-left">
-                <span>Bonjour, comment vas tu ?</span>
+                <span>{{ $unMessage['texteMessage'] }}</span>
             </div>
             <div>
-                <p class="small-text-chat-left">Ecrit par Dorian Bourdon le 24/01/2022 15:45:12</p>
+                <p class="small-text-chat-left">
+                    Ecrit par 
+                    {{ ucfirst(strtolower($unMessage['prenomEmetteur'])) }} {{ ucfirst(strtolower($unMessage['nomEmetteur'])) }}
+                     le {{ date('d/m/Y H:i',strtotime($unMessage['dateMessage'])) }}</p>
             </div>
         </div>
+        @endif
+        @if($unMessage['idEmetteur']==$idProfil)
         <div>
             <div class="message-user-right">
-                <span>Bonjour, comment vas tu ? Ceic est un test pour si ca marhe</span>
+                <span>{{ $unMessage['texteMessage'] }}</span>
             </div>
             <div>
-                <p class="small-text-chat-right">Ecrit par Nicolas Dufour le 24/01/2022 15:45:12</p>
+                <p class="small-text-chat-right">
+                    Ecrit par 
+                    {{ ucfirst(strtolower($unMessage['prenomEmetteur'])) }} {{ ucfirst(strtolower($unMessage['nomEmetteur'])) }}
+                     le {{ $unMessage['dateMessage'] }}</p>
             </div>
         </div>
-        <div>
-            <div class="message-user-left">
-                <span>Bonjour, comment vas tu ? Ceic est un test pour si ca marhe</span>
-            </div>
-            <div>
-                <p class="small-text-chat-left">Ecrit par Dorian Bourdon le 24/01/2022 15:45:12</p>
-            </div>
-        </div>
-
-        <div>
-            <div class="message-user-left">
-                <span>Bonjour, comment vas tu ? Ceic est un test pour si ca marhe</span>
-            </div>
-            <div>
-                <p class="small-text-chat-left">Ecrit par Dorian Bourdon le 24/01/2022 15:45:12</p>
-            </div>
-        </div>
-
-        <div>
-            <div class="message-user-right">
-                <span>Bonjour, comment vas tu ? Ceic est un test pour si ca marhe</span>
-            </div>
-            <div>
-                <p class="small-text-chat-right">Ecrit par Nicolas Dufour le 24/01/2022 15:45:12</p>
-            </div>
-        </div>
-
-        <div>
-            <div class="message-user-left">
-                <span>Bonjour, comment vas tu ? Ceic est un test pour si ca marhe</span>
-            </div>
-            <div>
-                <p class="small-text-chat-left">Ecrit par Dorian Bourdon le 24/01/2022 15:45:12</p>
-            </div>
-        </div>
-
-        <div>
-            <div class="message-user-right">
-                <span>Bonjour, comment vas tu ? Ceic est un test pour si ca marhe</span>
-            </div>
-            <div>
-                <p class="small-text-chat-right">Ecrit par Nicolas Dufour le 24/01/2022 15:45:12</p>
-            </div>
-        </div>
+        @endif
+    @endforeach
     </div>
     
 </div>
-<form>
+
+
+<div style="display: none;">
+    <input type="text" name="objet" id="objet" 
+    value="{{ $unMessages[0]['objet'] }}">
+</div>
+@if($unMessages[0]['idEmetteur']==$idProfil)
+<div style="display: none;">
+    <input type="number" name="idEmetteur" id="idEmetteur" 
+    value="{{ $unMessages[0]['idEmetteur'] }}">
+</div>
+<div style="display: none;">
+    <input type="number" name="idDestinataire" id="idDestinataire" 
+    value="{{ $unMessages[0]['idDestinataire'] }}">
+</div>
+@endif
+@if($unMessages[0]['idDestinataire']==$idProfil)
+<div style="display: none;">
+    <input type="number" name="idEmetteur" id="idEmetteur" 
+    value="{{ $unMessages[0]['idDestinataire'] }}">
+</div>
+<div style="display: none;">
+    <input type="number" name="idDestinataire" id="idDestinataire" 
+    value="{{ $unMessages[0]['idEmetteur'] }}">
+</div>
+@endif
+<div style="display: none;">
+    <input type="text" name="objet" id="objet" 
+    value="{{ $unMessages[0]['objet'] }}">
+</div>
     <div class="row justify-content-center align-items-center space-bottom-title">
         <div class="col-md-8" style="margin-top: 20px;">
             <div style="display: left; padding: 0;">
@@ -101,13 +100,7 @@
         </div>
     </div>
 
-    <div class="row justify-content-center align-items-center" style="padding-top: 20xp;">
-        <div class="col-md-8" style="margin-top: 20px;">
-            <div style="display: left; padding: 0;">
-                <button class="button-form-message">Envoyer</button>
-            </div>
-        </div>
-    </div>
-
+    <button type="submit" class="btn button-form mx-auto">Envoyer</button>
 </form>
+
 @endsection

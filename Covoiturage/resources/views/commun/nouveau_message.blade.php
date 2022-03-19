@@ -11,7 +11,7 @@
 @section('navbarSequel')
     <ul class="navbar-nav mr-auto"> 
             <li class="nav-item">
-                <a class="nav-link" href="{{route('user')}}">Ismail IDBOURHIM</a>
+                <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}} </a>
             </li>
         </ul>
         <div class="pmd-user-info ">
@@ -24,7 +24,7 @@
 @section('content')
 <h1 class="center-title">Ecrire un nouveau message</h1>
 
-<form style="padding-top: 60px;">
+<form method="POST" action="{{route('messages.new_post')}}" style="padding-top: 60px;">
     @csrf
     @if($errors->any())
         <div class="alert alert-warning">
@@ -40,9 +40,9 @@
         <label for="destinataire">Destinataire</label>
         <br />
         <select class="input-form input-select  @error('destinataire') is-invalid @enderror" id="destinataire" name="destinataire" required value="{{old('destinataire')}}">
-            <option value="Dorian_Bourdon">Dorian Bourdon</option>
-            <option value="Nicolas_Dufour">Nicolas Dufour</option>
-            <option value="Ismail_Idbourhim">Ismail Idbourhim</option>
+            @foreach($trajetsReservations as $trajetReservation)
+            <option value="{{$trajetReservation['idUtilisateur']}}">{{ ucfirst(strtolower($trajetReservation['prenom'])) }} {{ ucfirst(strtolower($trajetReservation['nom'])) }}</option>
+            @endforeach
         </select>
         @error('destinataire')
         <div id="objet_feedback" class="invalid-feedback">

@@ -103,6 +103,18 @@
                 </button>
             </a>
         </div>
+        <div class="col espace-bottom vignets">
+            <a href="{{route('reservation_en_cours')}}">
+                <button type="button" class="button-icon" autofocus>
+                    <div>
+                        <h3>Reservation en cours</h3>
+                    </div>
+                    <div class="icon-button">
+                        <img src="/images/icons/spinner-solid.svg" style="float:left" >
+                    </div>
+                </button>
+            </a>
+        </div>
         @if($conducteur)
             <div class="col espace-bottom vignets">
                 <a href="{{route('trajets_en_cours')}}">
@@ -132,18 +144,6 @@
                 </a>
             </div>
         @endif
-        <div class="col espace-bottom vignets">
-            <a href="{{route('reservation_en_cours')}}">
-                <button type="button" class="button-icon" autofocus>
-                    <div>
-                        <h3>Reservation en cours</h3>
-                    </div>
-                    <div class="icon-button">
-                        <img src="/images/icons/spinner-solid.svg" style="float:left" >
-                    </div>
-                </button>
-            </a>
-        </div>
     </div>
 </div>
 

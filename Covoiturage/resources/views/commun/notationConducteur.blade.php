@@ -12,7 +12,7 @@
     @if(session()->has('user'))
         <ul class="navbar-nav mr-auto"> 
             <li class="nav-item">
-                <a class="nav-link" href="{{route('user')}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}} </a>
+                <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}} </a>
             </li>
         </ul>
         <div class="pmd-user-info ">

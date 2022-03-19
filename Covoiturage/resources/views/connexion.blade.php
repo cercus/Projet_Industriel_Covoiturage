@@ -27,7 +27,7 @@
         @csrf
         @if($errors->any())
             <div class="alert alert-warning">
-                La connection n'a pas pu se réaliser &#9785; {{implode('', $errors->all(':message'))}}
+                La connexion n'a pas pu se réaliser &#9785; {{implode('', $errors->all(':message'))}}
             </div>
         @endif
 

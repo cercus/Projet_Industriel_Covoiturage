@@ -23,10 +23,10 @@ class ConducteurController extends BaseController
 
     public function showProposerTrajetForm(){
         if(session()->has('user'))
-            if($this->repository->userVoiture(session()->has('user')['id']))
-                return view('conducteur.proposer_trajet');
+            //if($this->repository->userVoiture(session()->has('user')['id']))
+            return view('conducteur.proposer_trajet');
         
-        return redirect()->route('accueil');
+        return redirect()->route('connexion');
     }
 
     /**

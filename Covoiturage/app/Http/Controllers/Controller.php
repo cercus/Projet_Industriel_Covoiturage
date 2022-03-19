@@ -28,7 +28,7 @@ class Controller extends BaseController
     // Page de profil (contenant tout les accès aux différents pages )
     public function showUserPage($idUtilisateur) {
         if(!session()->has('user'))
-            return redirect()->route('accueil');
+            return redirect()->route('connexion');
         if(session()->get('user')['id'] != $idUtilisateur)
             return redirect()->route('accueil');
 
@@ -41,15 +41,15 @@ class Controller extends BaseController
      */
     public function showHistoriqueTrajet($idUtilisateur) {
         if(session()->has('user')) {
-            if(session()->get('user')['id'] == $idUtilisateur) {
+            //if(session()->get('user')['id'] == $idUtilisateur) {
                 $trajetsConducteur = $this->repository->getAllTrajetsConducteur($idUtilisateur);
                 $trajetsPassager = $this->repository->getAllTrajetsPassager($idUtilisateur);
                 return view('commun.historique_trajets', ['trajetsConducteur' => $trajetsConducteur, 'trajetsPassager' => $trajetsPassager]);
-            } else {
-                return redirect()->route('accueil');
-            }
+            //} else {
+            //    return redirect()->route('accueil');
+            //}
         } else {
-            return redirect()->route('accueil');
+            return redirect()->route('connexion');
         }
     }
 
@@ -68,10 +68,165 @@ class Controller extends BaseController
         return view('commun.modification_profil');
     }
 
+    /* ====== Pages Concernant les messages ====== */
     // Page Mes messages
-    public function showMesMessages() {
-        return view('commun.mes_messages');
+    public function showFormMsg() {
+        if(!session()->has('user'))
+            return redirect()->route('connexion');
+        $idProfil = session()->get('user')['id']; // 101;
+        $messagesProfil = $this->repository->messagesProfil($idProfil);
+        return view('commun.mes_messages', ['messagesProfil' => $messagesProfil]);
     }
+
+    public function supprimerMsg(Request $request) {
+        $idProfil = session()->get('user')['id']; //101;
+        $messagesProfil = $this->repository->messagesProfil($idProfil);
+        //$messagesProfil= $this->repository->messagesProfil($idProfil);
+        $messages = [
+            'idMessage.required' => "Vous devez saisir un message."
+          ];
+        $rules = ['idMessage' => ['required']];
+        $validatedData = $request->validate($rules, $messages);
+        $msgId=$validatedData['idMessage'];
+        
+        try {
+            $this->repository->deleteMsg($msgId);
+            return view('commun.mes_messages', ['messagesProfil' => $messagesProfil]);
+        }catch (Exception $exception) {
+            return redirect()->route('messages.all')->withInput()->withErrors("Impossible de supprimer le message.");
+        }
+    }
+
+    public function showFormNvMsg(){
+        if(!session()->has('user'))
+            return redirect()->route('accueil');
+        /*Si on suppose que pour la page de connexion il existe
+        Un code qui permet de se souvenir de l'authentification de l'utilisateur
+        $value=$this->repository->getUserId($email, $password);
+        $key='idUser';
+        $request->session()->put($key, $value); 
+        $teams=$this->repository->teams();
+        if (!$request->session()->has('idUser')) {
+            return redirect(route('connexion'));
+        }
+        $idProfil = $request->session()->get('idUser');*/
+        $idProfil = session()->get('user')['id'];
+        $trajetsReservations= $this->repository->trajetsReservationsProfil($idProfil);
+        $messagesProfil= $this->repository->messagesProfil($idProfil);
+        if(empty($trajetsReservations))
+            return redirect()->route('messages.all', ['messagesProfil' => $messagesProfil]);
+        return view('commun.nouveau_message', ['trajetsReservations'=>$trajetsReservations]);
+    }
+
+    public function nvMsg(Request $request) 
+    {
+        if(!session()->has('user'))
+            return redirect()->route('accueil');
+        /*Si on suppose que pour la page de connexion il existe
+        Un code qui permet de se souvenir de l'authentification de l'utilisateur
+        $value=$this->repository->getUserId($email, $password);
+        $key='idUser';
+        $request->session()->put($key, $value); 
+        $teams=$this->repository->teams();
+        if (!$request->session()->has('idUser')) {
+            return redirect(route('connexion'));
+        }
+        $idProfil = $request->session()->get('idUser');*/
+        $idProfil = session()->get('user')['id'];
+        $messagesProfil= $this->repository->messagesProfil($idProfil);
+
+        $messages = [
+            'destinataire.required' => 'Vous devez choisir un.e destinataire.',
+            'destinataire.exists' => 'Vous devez choisir un.e destinataire qui existe.',
+            'objet.required' => 'Vous devez écrire un objet.',
+            'message.required' => 'Vous devez écrire un message.'
+        ];
+
+        $rules = [
+            'destinataire' => ['required'],
+            'objet' => ['required'],
+            'message' => ['required']
+        ];
+
+        $validatedData = $request->validate($rules, $messages);
+
+        $msg=[
+            'objet'=>$validatedData['objet'],
+            'texteMessage'=>$validatedData['message'],
+            'idEmetteur'=>$idProfil,
+            'idDestinataire'=>$validatedData['destinataire']
+        ];
+        $this->repository->insertMsg($msg);
+        try {
+            return redirect()->route('messages.all', ['messagesProfil' => $messagesProfil]);
+        }catch (Exception $exception) {
+            return 
+            redirect()->route('messages.new')->withInput()->withErrors("Impossible d'envoyer le message.");
+        }
+    }
+
+    public function showFormRepondreMsg(int $msgId)
+    {
+        if(!session()->has('user'))
+            return redirect()->route('accueil');
+        /*Si on suppose que pour la page de connexion il existe
+        Un code qui permet de se souvenir de l'authentification de l'utilisateur
+        $value=$this->repository->getUserId($email, $password);
+        $key='idUser';
+        $request->session()->put($key, $value); 
+        $teams=$this->repository->teams();
+        if (!$request->session()->has('idUser')) {
+            return redirect(route('connexion'));
+        }
+        $idProfil = $request->session()->get('idUser');*/
+        $idProfil = session()->get('user')['id'];
+        $unMessages= $this->repository->unMessages($msgId);
+        return view('commun.repondre_message', 
+        ['unMessages' => $unMessages], ['idProfil' => $idProfil]);
+    }
+
+    public function repondreMsg(Request $request)
+    {
+        if(!session()->has('user'))
+            return redirect()->route('accueil');
+        /*Si on suppose que pour la page de connexion il existe
+        Un code qui permet de se souvenir de l'authentification de l'utilisateur
+        $value=$this->repository->getUserId($email, $password);
+        $key='idUser';
+        $request->session()->put($key, $value); 
+        $teams=$this->repository->teams();
+        if (!$request->session()->has('idUser')) {
+            return redirect(route('connexion'));
+        }
+        $idProfil = $request->session()->get('idUser');*/
+        $idProfil = session()->get('user')['id'];
+        $messagesProfil= $this->repository->messagesProfil($idProfil);
+        $messages = [
+            'message.required' => "Vous devez saisir un message.",
+            'objet.required' => "Vous devez saisir un message.",
+            'idEmetteur.required' => "Vous devez saisir un message.",
+            'idDestinataire.required' => "Vous devez saisir un message."
+          ];
+        $rules = ['message' => ['required'], 'objet' => ['required'],
+        'idEmetteur' => ['required'], 'idDestinataire' => ['required']];
+        $validatedData = $request->validate($rules, $messages);
+        $msg=[
+            'objet'=>$validatedData['objet'],
+            'texteMessage'=>$validatedData['message'],
+            'idEmetteur'=>$validatedData['idEmetteur'],
+            'idDestinataire'=>$validatedData['idDestinataire']
+        ];
+        $msgId=$this->repository->insertMsg($msg);
+        try {
+            return redirect()->route('messages.reply', ['msgId' => $msgId]);
+            //return redirect()->route('messages.all', ['messagesProfil' => $messagesProfil]);
+        }catch (Exception $exception) {
+            return 
+            redirect()->route('messages.reply')->withInput()->withErrors("Impossible d'envoyer le message.");
+        }
+    }
+
+
 
     // Page Informations personnelles
     public function showInfosPerso(){
@@ -109,12 +264,12 @@ class Controller extends BaseController
     /* ====== Page Notation ====== */
     public function showTrajetForNotationConducteur($idUtilisateur, $idReservation) {
         if(session()->has('user')) {
-            if(session()->get('user')['id'] == $idUtilisateur) {
+            //if(session()->get('user')['id'] == $idUtilisateur) {
 
                 return view('commun.notationConducteur', ['trajet'=> $this->repository->getTrajetFromIdReservation($idReservation)]);
-            } else {
-                return redirect()->route('accueil');
-            }
+            //} else {
+            //    return redirect()->route('accueil');
+            //}
         } else {
             return redirect()->route('accueil');
         }
@@ -123,11 +278,11 @@ class Controller extends BaseController
     // Les passagers notent les conducteurs
     public function showTrajetForNotationPassager($idUtilisateur, $idReservation) {
         if(session()->has('user')) {
-            if(session()->get('user')['id'] == $idUtilisateur) {
+            //if(session()->get('user')['id'] == $idUtilisateur) {
                 return view('commun.notationPassager', ["trajet" => $this->repository->getTrajetFromIdReservation($idReservation)]);
-            } else {
-                return redirect()->route('accueil');
-            }
+            //} else {
+            //    return redirect()->route('accueil');
+            //}
         } else {
             return redirect()->route('accueil');
         }
@@ -271,7 +426,7 @@ class Controller extends BaseController
         $rules = [
             'nom' => ['required'],
             'prenom' => ['required'],
-            'email' => ['required' , 'email:rfc,dns'],//'unique:Utilisateurs,emailUtilisateur'],
+            'email' => ['required' , 'email:rfc,dns', 'unique:Utilisateurs,emailUtilisateur'],
             'telephone' => ['required'],//'unique:Utilisateurs,numTelUtilisateur', 'regex:/^([0-9\s\-\+\(\)]*)$/','min:10','max:20'],
             'mdp' => ['required',Password::min(8)->mixedCase()->letters()->numbers()->symbols()->uncompromised()],
             'repeterMdp' =>'required|min:8|same:mdp',
@@ -295,7 +450,8 @@ class Controller extends BaseController
             'prenom.required' => 'vous devez saisir votre prenom',
             'email.required' => 'Vous devez saisir un e-mail.',
             'email.email' => 'Vous devez saisir un e-mail valide.',
-            'email.exists' => "Ce mail existe déjà.",
+            //'email.exists' => "Ce mail existe déjà.",
+            'email.unique' => "Ce mail existe déjà",
             'telephone.required' => "Vous devez indiquer votre numero de téléphone.",
             'telephone.min' => "Le nombre de chiffre de votre numéro de téléphone n'est pas suffisant.",
             'telephone.max' => "Le nombre de chiffre de votre numéro de téléphone est trop important.",
@@ -531,5 +687,7 @@ class Controller extends BaseController
             redirect()->route('accueil')->withInput()->withErrors("Impossible d\'éffectuer la recherche.". $exception->getMessage()." / ". $exception->getLine());
         }
     }
+
+
 
 }

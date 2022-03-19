@@ -125,7 +125,7 @@ Inscription
         <!-- Numéro de téléphone -->
         <div class="col-left-input">
             <label for="telephone">Numéro de téléphone*</label>
-            <input type="tel" class="input-form @error('telephone') is-invalid @enderror" id="telephone" name="telephone" required placeholder="01 02 03 04 05" pattern="[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}" aria-describedby="telError">    
+            <input type="tel" class="input-form @error('telephone') is-invalid @enderror" id="telephone" name="telephone" required placeholder="01 02 03 04 05" pattern="(([0-9]{2}\s)|[0-9]{2})(([0-9]{2}\s)|[0-9]{2})(([0-9]{2}\s)|[0-9]{2})(([0-9]{2}\s)|[0-9]{2})(([0-9]{2}\s)|[0-9]{2})" aria-describedby="telError">    
             @error('telephone')
                 <span id="telError" class="form-text text-muted">{{$message}}</span>
              @enderror

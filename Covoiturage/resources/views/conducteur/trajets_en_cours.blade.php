@@ -11,7 +11,7 @@
 @section('navbarSequel')
     <ul class="navbar-nav mr-auto"> 
         <li class="nav-item">
-            <a class="nav-link" href="{{route('user')}}">Ismail IDBOURHIM</a>
+            <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}"></a>
         </li>
     </ul>
     <div class="pmd-user-info ">

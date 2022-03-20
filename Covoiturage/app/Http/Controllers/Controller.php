@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\DB;
 
 class Controller extends BaseController
 {
@@ -30,7 +31,7 @@ class Controller extends BaseController
         if(!session()->has('user'))
             return redirect()->route('connexion');
         if(session()->get('user')['id'] != $idUtilisateur)
-            return redirect()->route('accueil');
+            return redirect()->route('connexion');
 
         return view('commun.user', ['conducteur' => $this->repository->userVoiture($idUtilisateur)]);
     }
@@ -51,21 +52,6 @@ class Controller extends BaseController
         } else {
             return redirect()->route('connexion');
         }
-    }
-
-    // page modification de profil
-    public function showModificationProfilForm(Request $request) {
-        /*
-        if(!$request->session()->has('user'))
-            return redirect()->route('connexion');
-        */
-        return view('commun.modification_profil');
-    }
-
-    // Bouton modifier info personnelles
-    public function modifyProfil() {
-        /* TODO */
-        return view('commun.modification_profil');
     }
 
     /* ====== Pages Concernant les messages ====== */
@@ -226,22 +212,152 @@ class Controller extends BaseController
         }
     }
 
-
+    /* ====== Pages Informations personnels ====== */
 
     // Page Informations personnelles
-    public function showInfosPerso(){
-        return view('commun.informations_personnelles');
+    public function showInfosPerso($idUtilisateur){
+        if(!session()->has('user'))
+            return redirect()->route('connexion');
+        //if(session()->get('user')['id'] != $idUtilisateur)
+        //    return redirect()->route('connexion');
+        $infoPerso = $this->repository->infoPersonnelles($idUtilisateur);
+        $nbrTrajetPassager = $this->repository->nbrTrajetPassager($idUtilisateur);
+        $nbrTrajetConducteur = $this->repository->nbrTrajetConducteur($idUtilisateur);
+        $estConducteur = $this->repository->estConducteur($idUtilisateur);
+        if ($estConducteur == false) {
+            return view('commun.informations_personnelles', 
+                ['infoPerso' => $infoPerso[0], 
+                 'nbrTrajetPassager' => $nbrTrajetPassager,
+                 'nbrTrajetConducteur' => $nbrTrajetConducteur,
+                 'estConducteur' => $estConducteur]);
+
+        }
+        else {
+            $infoTechnique = $this->repository->infoTechniques($idUtilisateur);
+            return view('commun.informations_personnelles', 
+                ['infoPerso' => $infoPerso[0], 
+                 'nbrTrajetPassager' => $nbrTrajetPassager,
+                 'nbrTrajetConducteur' => $nbrTrajetConducteur,
+                 'infoTechnique' => $infoTechnique[0],
+                 'estConducteur' => $estConducteur]);
+        }
+
     }
 
-    // Bouton modifier info technique
-    public function modifyTechnique() {
-        /* TODO */
-        return view('commun.modification_technique');
+    public function showModificationProfilForm($idUtilisateur) 
+    {
+        if(!session()->has('user'))
+            return redirect()->route('home');
+        //if(session()->get('user')['id'] != $idUtilisateur)
+        //    return redirect()->route('home');
+        $infoPerso = $this->repository->infoPersonnelles($idUtilisateur);
+        return view('commun.modification_profil', ['infoPerso' => $infoPerso[0]]);
     }
+
+    // Bouton modifier info personnelles
+    public function modifyProfil(Request $request) 
+    {
+        if(!session()->has('user'))
+            return redirect()->route('home');
+        $idUtilisateur = $request->session()->get('user')['id'];
+        $messages = [
+            'nom.required' => 'vous devez saisir votre nom',
+            'prenom.required' => 'vous devez saisir votre prenom',
+            'email.required' => 'Vous devez saisir un e-mail.',
+            'email.email' => 'Vous devez saisir un e-mail valide.',
+            'email.exists' => "Ce mail existe déjà.",
+            'tel.required' => "Vous devez indiquer votre numero de téléphone.",
+            'tel.min' => "Le nombre de chiffre de votre numéro de téléphone n'est pas suffisant.",
+            'tel.max' => "Le nombre de chiffre de votre numéro de téléphone est trop important.",
+            'tel.regex' => "Ce numéro de téléphone n'est pas valide.",
+            'dateNaiss.before' => "Votre age ne permet pas de vous inscrire",
+            'dateNaiss.after_or_equal' => "Votre age ne permet pas de vous inscrire",
+            'dateNaiss.required' => "Vous devez saisir votre date de naissance",
+            'nni.required' => "Vous devez saisir votre numero d'identité.",
+            'numPermis.required' => 'Vous devez saisir votre numéro du permis.'
+        ];
+        $rules = [
+            'nom' => ['required'],
+            'prenom' => ['required'],
+            'email' => ['required' , 'email:rfc,dns','exists:Utilisateurs,emailUtilisateur'],
+            'tel' => ['required','regex:/^([0-9\s\-\+\(\)]*)$/','min:10','max:20'],
+            'dateNaiss'=> 'required|after_or_equal:'.now()->subYears(100),'before:'.now()->subYears(18),
+            'nni' => ['required'],
+            'numPermis' => ['required']
+        ];
+        $validatedData = $request->validate($rules, $messages);
+        try{
+            
+            DB::table('Utilisateurs')->where('idUtilisateur', $idUtilisateur)
+                                    ->update(['prenomUtilisateur' => $request->input('prenom'),
+                                            'nomUtilisateur' => $request->input('nom'),
+                                            'emailUtilisateur' => $request->input('email'),
+                                            'photoProfil' => $request->input('profil'),
+                                            'numTelUtilisateur' => $request->input('tel'),
+                                            'dateNaiss' => $request->input('dateNaiss'),
+                                            'descriptionUtilisateur' => $request->input('description'),
+                                            'numPermisConduire' => $request->input('numPermis'),
+                                            'numeroIdentite' => $request->input('nni')
+                                            ]);
+            return redirect()->route('informations_personnelles', ['idUtilisateur' => $idUtilisateur])
+                             ->withSuccess('Vos informations personnelles ont été modifiées avec succès.');
+        } catch (Exception $exception) {
+            return redirect()->route('modification_profil', ['idUtilisateur' => $idUtilisateur])
+                    ->withInput()
+                    ->withErrors("votre profil n'a pas été modifié.");
+        }
+    }
+
+
 
     // Page modification technique
-    public function showModificationTechniqueForm() {
-        return view('commun.modification_technique');
+    public function showModificationTechniqueForm($idUtilisateur) 
+    {
+        if(!session()->has('user'))
+            return redirect()->route('connexion');
+        //if(session()->get('user')['id'] != $idUtilisateur)
+        //    return redirect()->route('home');
+        $infoPerso = $this->repository->infoPersonnelles($idUtilisateur);
+        $infoTechno = $this->repository->infoTechniques($idUtilisateur);
+        return view('commun.modification_technique', ['infoTechno' => $infoTechno[0], 
+                                                      'infoPerso' => $infoPerso[0]]);
+    }    
+
+    // Bouton modifier info technique
+    public function modifyTechnique(Request $request) 
+    {
+        if(!session()->has('user'))
+            return redirect()->route('home');
+        $idUtilisateur = $request->session()->get('user')['id'];
+        $messages = ['marque.required' => "vous devez saisir la marque de votre voiture.",
+                     'couleur.required' => "Vous devez saisir la couleur de votre voiture.",
+                     'nbPlace.max'=> "Le nombre de place maximum est de 9.",
+                     'nbPlace.required' => "Vous devez saisir un nombre de places.",
+                     'immatriculation.required' => "Vous avez dépassé le nombre maximal (9)."
+        ];
+        $rules = ['marque' => ['required'],
+                  'couleur' => ['required'],
+                  'nbPlace'=> ['required', 'max:9'],
+                  'immatriculation' => ['required']
+        ];
+        $validatedData = $request->validate($rules, $messages);
+        try{
+            DB::table('Voitures')->where('idUtilisateur', $idUtilisateur)
+                                ->update(['immatriculation' => $request->input('immatriculation'),
+                                        'marqueModelVoiture' => $request->input('marque'),
+                                        'photoVoiture' => $request->input('photoVoiture'),
+                                        'nbPlaceMax' => $request->input('nbPlace'),
+                                        'couleurVoiture' => $request->input('couleur'),
+                                        'autoriserAnimal' => $request->input('animaux'),
+                                        'autoriserFumer' => $request->input('fumer')
+                                        ]);
+            return redirect()->route('informations_personnelles', ['idUtilisateur' => $idUtilisateur])
+                             ->withSuccess('Vos informations techniques ont été modifiées avec succès.');
+        }catch(Exception $exception){
+            return redirect()->route('modification_technique', ['idUtilisateur' => $idUtilisateur])
+                    ->withInput()
+                    ->withErrors("votre profil n'a pas été modifié.");
+        }   
     }
 
     // PAge ecrire un nouveau message

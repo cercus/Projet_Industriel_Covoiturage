@@ -47,10 +47,6 @@ Route::get('/commun/user/{idUtilisateur}', [Controller::class, 'showUserPage'])-
 // Route pour la page historique des trajets
 Route::get('/commun/historique_trajets/{idUtilisateur}', [Controller::class, 'showHistoriqueTrajet'])->where('idUtilisateur', '[0-9]+')->name('historique_trajets');
 
-// Route pour la page de modification du profil
-Route::get('/commun/modification_profil', [Controller::class, 'showModificationProfilForm'])->name('modification_profil');
-Route::post('/commun/modification_profil', [Controller::class, 'modifyProfil'])->name('modify.profil');
-
 // Route pour la page Mes messages
 Route::get('/commun/mes_messages', [Controller::class, 'showFormMsg'])->name('messages.all');
 Route::post('/commun/mes_messages', [Controller::class, 'supprimerMsg'])->name('messagessup.all');
@@ -64,11 +60,15 @@ Route::get('/commun/repondre_message/{msgId}', [Controller::class, 'showFormRepo
 Route::post('/commun/repondre_message/', [SawdaController::class, 'repondreMsg'])->name('messages.reply_post');
 
 // Route pour la page information personnels
-Route::get('/commun/informations_personnelles', [Controller::class, 'showInfosPerso'])->name('informations_personnelles');
-Route::post('/commun/informations_personnelles')->name('informations_personnelles_post');
+Route::get('/commun/informations_personnelles/{idUtilisateur}', [Controller::class, 'showInfosPerso'])->where('idUtilisateur', '[0-9]+')->name('informations_personnelles');
+//Route::post('/commun/informations_personnelles', [IsmailController::class, 'storeInfosPerso'])->name('informations_personnelles_post');
+
+// Route pour la page de modification du profil
+Route::get('/commun/modification_profil/{idUtilisateur}', [Controller::class, 'showModificationProfilForm'])->where('idUtilisateur', '[0-9]+')->name('modification_profil');
+Route::post('/commun/modification_profil', [Controller::class, 'modifyProfil'])->name('modify.profil');
 
 // Route pour la page de modification technique
-Route::get('/commun/modification_technique', [Controller::class, 'showModificationTechniqueForm'])->name('modification_technique');
+Route::get('/commun/modification_technique/{idUtilisateur}', [Controller::class, 'showModificationTechniqueForm'])->where('idUtilisateur', '[0-9]+')->name('modification_technique');
 Route::post('/commun/modification_technique', [Controller::class, 'modifyTechnique'])->name('modify.technique');
 
 
@@ -86,10 +86,14 @@ Route::get('/commun/caracteristiques', [Controller::class, 'showCaracteristique'
 /* ------------ Route pour les pages se trouvant dans le dossier conducteur ------------ */
 
 // Route pour la page trajet_en_cours.php
-Route::get('/conducteur/trajets_en_cours', [Controller::class, 'showTrajetEnCours'])->name('trajets_en_cours');
+Route::get('/conducteur/trajets_en_cours/{idConducteur}', [ConducteurController::class, 'showTrajetEnCours'])->where('idConducteur', '[0-9]+')->name('trajets_en_cours');
+Route::post('/conducteur/validerPassager/{idReservation}', [ConducteurController::class, 'validerPassager'])->name('validerPassager.store');
+Route::post('/conducteur/refuserPassager/{idReservation}', [ConducteurController::class, 'refuserPassager'])->name('refuserPassager.store');
 
 // Route Annuler un trajet */
-Route::get('/conducteur/annuler_trajet', [Controller::class, 'showAnnulerTrajet'])->name('annuler_trajet');
+Route::get('/conducteur/annuler_trajet/{idTrajet}', [ConducteurController::class, 'showAnnulerTrajet'])->where('idTrajet', '[0-9]+')->name('annuler_trajet');
+Route::post('/conducteur/accAnnulerTrajet/{idTrajet}',[ConducteurController::class, 'acceptAnnulerTrajet'])->where('idConducteur', '[0-9]+')->name('acceptAnnulerTrajet.store');
+
 
 // Route confirmation annulation trajet
 Route::get('/conducteur/confirmation_annuler_trajets', [Controller::class, 'showConfirmAnnulationTrajet'])->name('confirmation_annuler_trajets');
@@ -101,7 +105,7 @@ Route::post('/conducteur/submit_proposer_trajet', [ConducteurController::class, 
 
 /* ------------ Route pour les pages se trouvant dans le dossier passager ------------ */
 
-Route::get('/passager/reservation_en_cours', [Controller::class, 'showReservationEnCours'])->name('reservation_en_cours');
+Route::get('/passager/reservation_en_cours/{idPassager}', [PassagerController::class, 'showReservationEnCours'])->where('idPassager', '[0-9]+')->name('reservation_en_cours');
 
 // Route Annuler une reservation */
 Route::get('/passager/annuler_reservation', [Controller::class, 'showConfirmAnnulationReservation'])->name('annuler_reservation');

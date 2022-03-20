@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -131,5 +132,35 @@ class PassagerController extends BaseController
     {
         //Action à faire lorqu'on clique sur le bouton réserver
         return redirect()->route('accueil');
+    }
+
+    public function showReservationEnCours($idPassager) {
+        if(!session()->has('user'))
+            return redirect()->route('home');
+        //if(session()->get('user')['id'] != $idPassager)
+        //    return redirect()->route('home');
+        // les reservations en cours d'un passager
+        $reservationsEnCours = $this->repository->reservationsEnCours($idPassager);
+        $tableTime = [];
+        $tabDateFrenche =[];
+        $conducteurs =[];
+        for ($i=0; $i < count($reservationsEnCours) ; $i++) {
+            //pour calucler le temps d'un trajet
+            $date1 = new DateTime($reservationsEnCours[$i]->dateHeureDepart);
+            $date2 = new DateTime($reservationsEnCours[$i]->dateHeureArrivee);
+            $differenceHours = $date1->diff($date2)->h;
+            $differenceMinutes = $date1->diff($date2)->i;
+            $tableTime[$i] = $differenceMinutes + ($differenceHours*60);
+            //pour traduire la date en francais
+            setlocale(LC_TIME, 'french');
+            $dateFrench = strftime("%a %d/%m", strtotime($reservationsEnCours[$i]->dateHeureDepart));
+            $tabDateFrenche[$i] = $dateFrench;
+            //Récupération des conducteurs à partir des réservations de passagers
+            $conducteurs[$i] = $this->repository->quiConducteur($reservationsEnCours[$i]->idTrajet);
+        }
+        return view('passager.reservation_en_cours', ['reservationsEnCours' => $reservationsEnCours,
+                                                      'tableTime' => $tableTime,
+                                                      'tabDateFrenche' => $tabDateFrenche,
+                                                      'conducteurs' => $conducteurs]);
     }
 }

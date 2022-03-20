@@ -46,7 +46,7 @@
             </a> 
         </div>
         <div class="col espace-bottom vignets">
-            <a href="{{route('modification_profil')}}">
+            <a href="{{route('modification_profil', ['idUtilisateur' => session()->get('user')['id']])}}">
                 <button type="button" class="button-icon" autofocus>
                     <div>
                         <h3>Modification profil</h3>
@@ -70,7 +70,7 @@
             </a>
         </div>
         <div class="col espace-bottom vignets">
-            <a href="{{route('informations_personnelles')}}">
+            <a href="{{route('informations_personnelles', ['idUtilisateur' => session()->get('user')['id']])}}">
                 <button type="button" class="button-icon" autofocus>
                     <div>
                         <h3>Mes infos</h3>
@@ -92,7 +92,7 @@
             </button>
         </div>
         <div class="col espace-bottom vignets">
-            <a href="{{route('modification_technique')}}">
+            <a href="{{route('modification_technique', ['idUtilisateur' => session()->get('user')['id']])}}">
                 <button type="button" class="button-icon" autofocus>
                     <div>
                         <h3>Données techniques</h3>

@@ -27,6 +27,9 @@
             <a class="navbar-brand" href="#">
                 <img id="name-logo" src="/images/CoLuminy.png" alt="CoLuminy">
             </a>
+                @if(session()->has('user'))
+                    <button type="button" class="btn btn-info"><a href="{{route('modification_technique', ['idUtilisateur' => session()->get('user')['id']])}}"> Passer en mode conducteur</a></button>
+                @endif
                 @if(session()->get('profil') == "Conducteur")
                     <button type="submit" class="btn button-form">Passager</button>
                 @elseif(session()->get('profil') == "Passager")<!-- Ajoute fonction possedeVoiture() -->

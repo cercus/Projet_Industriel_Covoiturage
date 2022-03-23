@@ -30,7 +30,12 @@
             <div class="alert alert-warning">
                 le trajet n'a pas été annulé &#9785; {{implode('', $errors->all('<div>:message</div>'))}}
             </div>
-        @endif
+    @endif
+    @if ( session()->has('errors'))
+        <div class="alert alert-danger">
+            {{session()->get('errors')}}&#9785; 
+        </div>
+    @endif
     <form class="border border-dark" method="POST" action="{{route('acceptAnnulerTrajet.store', $idTrajet)}}" style="padding-top: 20px; padding-bottom: 20px;" >
         @csrf
         <div class="form-group col-md-8 mx-auto">

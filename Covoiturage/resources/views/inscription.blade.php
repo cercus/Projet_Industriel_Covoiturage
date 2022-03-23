@@ -39,7 +39,7 @@ Inscription
     @csrf
     @if($errors->any())
         <div class="alert alert-warning">
-           Impossible de s'inscrire &#9785; {{implode('', $errors->all(':message'))}}
+           Impossible de s'inscrire. &#9785;
         </div>
     @endif
     @if(session()->has('success'))

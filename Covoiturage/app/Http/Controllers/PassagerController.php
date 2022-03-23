@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use App\Repositories\Repository;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Exception;
 
 class PassagerController extends BaseController
@@ -19,6 +20,7 @@ class PassagerController extends BaseController
     public function __construct(Repository $Repository) 
     {
         $this->repository  = $Repository;
+        $this->nb = 1;
     }
 
     public function rechercheTrajet(Request $request)
@@ -74,6 +76,7 @@ class PassagerController extends BaseController
         $adresseRueDep = $validatedData['adresseRueDep'];
         $villeDep = $validatedData['villeDep'];
         $cpDep = $validatedData['cpDep'];
+        $this->nb = $validatedData['nbPlace'];
         $nbPlace = $validatedData['nbPlace'];
         $numRueArr = $validatedData['numRueArr'];
         $adresseRueArr = $validatedData['adresseRueArr'];
@@ -103,7 +106,7 @@ class PassagerController extends BaseController
         try {
             return  view('passager.recherche_trajet_result', ['trajet'=>$trajet, 'trajetsProposes'=>$trajetsProposes, 'bestTrajets'=>$bestTrajets]);
         } catch (Exception $exception) {
-            return redirect()->route('passager.recherche_trajet')->withInput()->withErrors("Impossible d\'éffectuer la recherche.");
+            return redirect()->route('passager.recherche_trajet')->withInput()->withErrors("Impossible d'éffectuer la recherche.");
         }
     }
 
@@ -162,5 +165,77 @@ class PassagerController extends BaseController
                                                       'tableTime' => $tableTime,
                                                       'tabDateFrenche' => $tabDateFrenche,
                                                       'conducteurs' => $conducteurs]);
+    }
+
+
+    public function showAnnulationReservation($idReservation) {
+        if(!session()->has('user'))
+            return redirect()->route('connexion');
+        $idPassager = session()->get('user')['id'];
+
+        //pour ne pas acceder à une réservation d'autre utilisateur 
+        $estMaReservation = $this->repository->existeReservation($idReservation, $idPassager);
+        if($estMaReservation == 0){
+            return redirect()->route('reservation_en_cours',['idPassager' => $idPassager])
+                             ->with('errors', "Ce n'est pas votre réservation.");
+        }
+        return view('/passager/annuler_reservation', ['idReservation' => $idReservation]);
+    }
+
+    public function acceptAnnulerReservation(Request $request, $idReservation)
+    {   
+        if(!session()->has('user'))
+            return redirect()->route('connexion');
+        $idPassager = Request()->session()->get('user')['id'];
+        $monConducteur = $this->repository->quiMonConducteur($idReservation)[0];
+        
+        $rules = ['motif-annulation' => ['required']];
+        $messages = ['motif-annulation.required' => "Vous devez saisir le motif d'annulation"];
+        $validatedData = $request->validate($rules, $messages);
+        $motif = $request->input('motif-annulation');
+        $message = $request->input('message-passager');
+        if($message == null)
+            $texteMessage = "Nous avons le regret de vous informer que votre passager a récemment annulé sa réservation sans vous laisser de message en raison de : \n$motif";
+        else
+            $texteMessage = "Motif : $motif \nMessage du passager : $message";
+        DB::table('Messages')->insertGetId(['objet' => 'Annulation de réservation',
+                                    'dateMessage' => NOW(),
+                                    'texteMessage' => $texteMessage,
+                                    'idEmetteur' => $idPassager,
+                                    'idDestinataire' => $monConducteur->idUtilisateur]);
+        
+        DB::table('Reservations')->where('idReservation', $idReservation)->delete();
+        return redirect()->route('confirmation_annuler_reservation');        
+    }
+
+    public function showConfirmAnnulationReservation() 
+    {
+        if(!session()->has('user'))
+            return redirect()->route('connexion');
+        $idPassager = Request()->session()->get('user')['id'];
+        return view('passager.confirmation_annuler_reservation', ['idPassager' => $idPassager]);
+    }
+
+
+    public function reserver(Request $request) {
+        if(!session()->has('user'))
+            return redirect()->route('connexion');
+        $idProfil = session()->get('user')['id'];
+        $reservation=[
+            'dateHeureRDV' =>$request->input('dateHeureRDV'),
+            'prixResa' =>$request->input('prixResa'),
+            'idLieuRencontre' =>$request->input('idLieuRencontre'),
+            'idLieuDepot' =>$request->input('idLieuDepot'),
+            'idPassager' =>$idProfil,
+            'idTrajet' =>$request->input('idTrajet'),
+            'nbPlace' =>$this->nb
+        ];
+        //dd($reservation);
+        $reservation=$this->repository->insertReservation($reservation);
+        try {
+            return redirect()->route('reservation_en_cours', ['idPassager' => $idProfil]);
+        }catch (Exception $exception) {
+            return redirect()->route('reservation')->withInput()->withErrors("Impossible de faire la réservation.");
+        }
     }
 }

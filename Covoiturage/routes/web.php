@@ -81,14 +81,14 @@ Route::get('/commun/notation_passager/{idUtilisateur}/{idReservation}', [Control
 Route::post('/commun/notation_passager/{idUtilisateur}/{idReservation}', [Controller::class, 'storeNotationConducteur'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation.conducteur');
 
 // Route pour la page caractéristique d'un user
-Route::get('/commun/caracteristiques', [Controller::class, 'showCaracteristique'])->name('caracteristiques');
+Route::get('/commun/caracteristiques/{idUtilisateurNotation}', [Controller::class, 'showCaracteristique'])->where('idUtilisateurNotation', '[0-9]+')->name('caracteristiques');
 
 /* ------------ Route pour les pages se trouvant dans le dossier conducteur ------------ */
 
 // Route pour la page trajet_en_cours.php
 Route::get('/conducteur/trajets_en_cours/{idConducteur}', [ConducteurController::class, 'showTrajetEnCours'])->where('idConducteur', '[0-9]+')->name('trajets_en_cours');
-Route::post('/conducteur/validerPassager/{idReservation}', [ConducteurController::class, 'validerPassager'])->name('validerPassager.store');
-Route::post('/conducteur/refuserPassager/{idReservation}', [ConducteurController::class, 'refuserPassager'])->name('refuserPassager.store');
+Route::post('/conducteur/validerPassager/{idReservation}', [ConducteurController::class, 'validerPassager'])->where('idReservation', '[0-9+]')->name('validerPassager.store');
+Route::post('/conducteur/refuserPassager/{idReservation}', [ConducteurController::class, 'refuserPassager'])->where('idReservation', '[0-9+]')->name('refuserPassager.store');
 
 // Route Annuler un trajet */
 Route::get('/conducteur/annuler_trajet/{idTrajet}', [ConducteurController::class, 'showAnnulerTrajet'])->where('idTrajet', '[0-9]+')->name('annuler_trajet');
@@ -106,12 +106,15 @@ Route::post('/conducteur/submit_proposer_trajet', [ConducteurController::class, 
 /* ------------ Route pour les pages se trouvant dans le dossier passager ------------ */
 
 Route::get('/passager/reservation_en_cours/{idPassager}', [PassagerController::class, 'showReservationEnCours'])->where('idPassager', '[0-9]+')->name('reservation_en_cours');
+// ROute pour le bouton de reservation
+Route::post('/passager/reservation_en_cours', [PassagerController::class, 'reserver'])->name('reservation');
 
 // Route Annuler une reservation */
-Route::get('/passager/annuler_reservation', [Controller::class, 'showConfirmAnnulationReservation'])->name('annuler_reservation');
+Route::get('/passager/annuler_reservation/{idReservation}', [PassagerController::class, 'showAnnulationReservation'])->where('idReservation', '[0-9]+')->name('annuler_reservation');
+Route::post('/conducteur/accAnnulerReservation/{idReservation}',[PassagerController::class, 'acceptAnnulerReservation'])->where('idReservation', '[0-9]+')->name('acceptAnnulerReservation.store');
 
 // Route confirmation annulation reservation
-Route::get('/passager/confirmation_annuler_reservation', [Controller::class, 'showConfirmAnnulationReservation'])->name('confirmation_annuler_reservation');
+Route::get('/passager/confirmation_annuler_reservation', [PassagerController::class, 'showConfirmAnnulationReservation'])->name('confirmation_annuler_reservation');
 
 // ROute payement trajet
 Route::get('/passager/payement', [Controller::class, 'showPayementForm'])->name('payement');
@@ -156,3 +159,7 @@ Route::get('/reinitialisation_mdp', [Controller::class, 'showReinitialisationMdp
 
 // Route pour la page Qui-sommes-nous
 Route::get('qui_sommes_nous', [Controller::class, 'showQuiSommesNous'])->name('qui_sommes_nous');
+
+Route::any('{query}',
+    function() { return redirect('/'); })
+    ->where('query', '.*');

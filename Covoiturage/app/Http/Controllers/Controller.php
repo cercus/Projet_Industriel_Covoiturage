@@ -42,13 +42,13 @@ class Controller extends BaseController
      */
     public function showHistoriqueTrajet($idUtilisateur) {
         if(session()->has('user')) {
-            //if(session()->get('user')['id'] == $idUtilisateur) {
+            if(session()->get('user')['id'] == $idUtilisateur) {
                 $trajetsConducteur = $this->repository->getAllTrajetsConducteur($idUtilisateur);
                 $trajetsPassager = $this->repository->getAllTrajetsPassager($idUtilisateur);
                 return view('commun.historique_trajets', ['trajetsConducteur' => $trajetsConducteur, 'trajetsPassager' => $trajetsPassager]);
-            //} else {
-            //    return redirect()->route('accueil');
-            //}
+            } else {
+                return redirect()->route('accueil');
+            }
         } else {
             return redirect()->route('connexion');
         }
@@ -218,8 +218,8 @@ class Controller extends BaseController
     public function showInfosPerso($idUtilisateur){
         if(!session()->has('user'))
             return redirect()->route('connexion');
-        //if(session()->get('user')['id'] != $idUtilisateur)
-        //    return redirect()->route('connexion');
+        if(session()->get('user')['id'] != $idUtilisateur)
+            return redirect()->route('accueil');
         $infoPerso = $this->repository->infoPersonnelles($idUtilisateur);
         $nbrTrajetPassager = $this->repository->nbrTrajetPassager($idUtilisateur);
         $nbrTrajetConducteur = $this->repository->nbrTrajetConducteur($idUtilisateur);
@@ -248,8 +248,8 @@ class Controller extends BaseController
     {
         if(!session()->has('user'))
             return redirect()->route('home');
-        //if(session()->get('user')['id'] != $idUtilisateur)
-        //    return redirect()->route('home');
+        if(session()->get('user')['id'] != $idUtilisateur)
+            return redirect()->route('home');
         $infoPerso = $this->repository->infoPersonnelles($idUtilisateur);
         return view('commun.modification_profil', ['infoPerso' => $infoPerso[0]]);
     }
@@ -315,12 +315,18 @@ class Controller extends BaseController
     {
         if(!session()->has('user'))
             return redirect()->route('connexion');
-        //if(session()->get('user')['id'] != $idUtilisateur)
-        //    return redirect()->route('home');
+        if(session()->get('user')['id'] != $idUtilisateur)
+            return redirect()->route('home');
+        
         $infoPerso = $this->repository->infoPersonnelles($idUtilisateur);
         $infoTechno = $this->repository->infoTechniques($idUtilisateur);
+        //dd($infoTechno);
+        if(empty($infoTechno))
+            return view('commun.modification_technique', ['infoTechno' => $infoTechno, 
+        'infoPerso' => $infoPerso[0]]);
         return view('commun.modification_technique', ['infoTechno' => $infoTechno[0], 
-                                                      'infoPerso' => $infoPerso[0]]);
+                                                        'infoPerso' => $infoPerso[0]]);
+        
     }    
 
     // Bouton modifier info technique
@@ -380,12 +386,12 @@ class Controller extends BaseController
     /* ====== Page Notation ====== */
     public function showTrajetForNotationConducteur($idUtilisateur, $idReservation) {
         if(session()->has('user')) {
-            //if(session()->get('user')['id'] == $idUtilisateur) {
+            if(session()->get('user')['id'] == $idUtilisateur) {
 
                 return view('commun.notationConducteur', ['trajet'=> $this->repository->getTrajetFromIdReservation($idReservation)]);
-            //} else {
-            //    return redirect()->route('accueil');
-            //}
+            } else {
+                return redirect()->route('accueil');
+            }
         } else {
             return redirect()->route('accueil');
         }
@@ -394,11 +400,11 @@ class Controller extends BaseController
     // Les passagers notent les conducteurs
     public function showTrajetForNotationPassager($idUtilisateur, $idReservation) {
         if(session()->has('user')) {
-            //if(session()->get('user')['id'] == $idUtilisateur) {
+            if(session()->get('user')['id'] == $idUtilisateur) {
                 return view('commun.notationPassager', ["trajet" => $this->repository->getTrajetFromIdReservation($idReservation)]);
-            //} else {
-            //    return redirect()->route('accueil');
-            //}
+            } else {
+                return redirect()->route('accueil');
+            }
         } else {
             return redirect()->route('accueil');
         }
@@ -431,7 +437,7 @@ class Controller extends BaseController
         else if(isset($validatedData['star1']))
             $note = $validatedData['star1'];
         $this->repository->insertNotation($note, $validatedData['message'], $idReservation, $idUtilisateur);
-        return redirect()->route('historique_trajets', ['idUtilisateur' => 101]);
+        return redirect()->route('historique_trajets', ['idUtilisateur' => session()->get('user')['id']]);
         
     }
 
@@ -464,12 +470,23 @@ class Controller extends BaseController
         else if(isset($validatedData['star1']))
             $note = $validatedData['star1'];
         $this->repository->insertNotation($note, $validatedData['message'], $idReservation, $idUtilisateur);
-        return redirect()->route('historique_trajets', ['idUtilisateur' => 101]);
+        return redirect()->route('historique_trajets', ['idUtilisateur' => session()->get('user')['id']]);
         
     }
 
-    public function showCaracteristique() {
-        return view('commun.caracteristiques');
+    // fonction recupération des resultats des notations d'un utilisateurs
+    public function showCaracteristique($idUtiliateurNotation) {
+        if(session()->has('user')) {
+            
+            //dd (['noteUtilsateur' => $this->repository->getNotationGlobalUtilisateur($idUtiliateurNotation)]);
+                return view('commun.caracteristiques', ['notations' => $this->repository->getCharacteristicsUsers($idUtiliateurNotation), 
+                                                        'voitureConducteur' => $this->repository->getVoitureConducteurFromIdUtilisateur($idUtiliateurNotation)
+                                                        ,'noteUtilisateur' => $this->repository->getNotationGlobalUtilisateur($idUtiliateurNotation)
+                                                        ,'sumNoteUtilisateur'=> $this->repository->getSumNotationGlobalUtilisateur($idUtiliateurNotation)
+                                                        ,'countNoteUtilisateur'=> $this->repository->getCountNotationGlobalUtilisateur($idUtiliateurNotation)]);
+        } 
+        else 
+            return redirect()->route('accueil');
     }
 
 
@@ -566,7 +583,6 @@ class Controller extends BaseController
             'prenom.required' => 'vous devez saisir votre prenom',
             'email.required' => 'Vous devez saisir un e-mail.',
             'email.email' => 'Vous devez saisir un e-mail valide.',
-            //'email.exists' => "Ce mail existe déjà.",
             'email.unique' => "Ce mail existe déjà",
             'telephone.required' => "Vous devez indiquer votre numero de téléphone.",
             'telephone.min' => "Le nombre de chiffre de votre numéro de téléphone n'est pas suffisant.",
@@ -574,11 +590,11 @@ class Controller extends BaseController
             'telephone.regex' => "Ce numéro de téléphone n'est pas valide.",
             'telephone.unique' => "Ce numéro de téléphone existe déjà",
             'mdp.required' => "Vous devez saisir un mot de passe.",
-            'mdp.min' => "vous devez mettre au moins 8 caractères",
-            'mdp.letters' => "vous devez mettre au moins deux lettres, une majuscule et une minuscule",
-            'mdp.mixedCase' => "vous devez mettre au moins deux lettres, une majuscule et une minuscule",
-            'mdp.numbers' => "vous devez mettre au moins un chiffre",
-            'mdp.symbols' => "vous devez mettre dau moins un caractères spéciale.",
+            'mdp.min' => "Vous devez mettre au moins 8 caractères",
+            'mdp.letters' => "Vous devez mettre au moins deux lettres, une majuscule et une minuscule",
+            'mdp.mixedCase' => "Vous devez mettre au moins deux lettres, une majuscule et une minuscule",
+            'mdp.numbers' => "Vous devez mettre au moins un chiffre",
+            'mdp.symbols' => "Vous devez mettre dau moins un caractères spéciale.",
             'mdp.uncompromised' => "votre mot de passe est consideré comme corrompu, merci de le modifier.",
             'dateNaiss.before' => "Votre age ne permet pas de vous inscrire",
             'dateNaiss.after_or_equal' => "Votre age ne permet pas de vous inscrire",

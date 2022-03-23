@@ -83,9 +83,9 @@ class ConducteurController extends BaseController
     public function showTrajetEnCours($idConducteur)
     {
         if(!session()->has('user'))
-            return redirect()->route('home');
-        //if(session()->get('user')['id'] != $idConducteur)
-        //    return redirect()->route('home');
+            return redirect()->route('accueil');
+        if(session()->get('user')['id'] != $idConducteur)
+            return redirect()->route('accueil');
         $trajetsEnCours = $this->repository->trajetEnCours($idConducteur);
         $tailleTableau = count($trajetsEnCours);
         $tableTime = [];
@@ -147,6 +147,12 @@ class ConducteurController extends BaseController
         if(!session()->has('user'))
             return redirect()->route('home');
         $idConducteur = Request()->session()->get('user')['id'];
+        $estMonTrajets = $this->repository->estMonTrajet($idConducteur, $idTrajet);
+        
+        if($estMonTrajets == 0){
+            return redirect()->route('trajets_en_cours',['idConducteur' => $idConducteur])
+                             ->with('errors', "Ce n'est pas votre trajet.");
+        }
         return view('/conducteur/annuler_trajet', ['idConducteur' => $idConducteur, 'idTrajet' => $idTrajet]);
     }
     
@@ -172,7 +178,11 @@ class ConducteurController extends BaseController
                                         'idEmetteur' => $idConducteur,
                                         'idDestinataire' => $passager->idPassager]);
         }
+        DB::table('Reservations')->where('idTrajet', $idTrajet)->delete();
         DB::table('Trajets')->where('idTrajet', $idTrajet)->delete();
         return redirect()->route('confirmation_annuler_trajets');        
     }
+
+    
+
 }

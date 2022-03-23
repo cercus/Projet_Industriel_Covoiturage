@@ -9,26 +9,36 @@
 @endsection
            
 @section('navbarSequel')
-    <ul class="navbar-nav mr-auto"> 
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a>
-        </li>
-    </ul>
-    <div class="pmd-user-info ">
-        <a href="javascript:void(0);" class="nav-user-img" >
-            {{-- @if ({{session()->get('user')['photoProfil']}} == null) --}}
-                <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
-            {{-- @else
-                <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
-            @endif   --}}
-        </a>
-    </div>
+    @if(session()->has('user'))
+        <div class="pmd-user-info "> 
+                <div class="dropdown">
+                    <button data-toggle="dropdown" class="dropdown-toggle" type="button" style="background-color: rgb(51, 63, 80); border: 1px solid rgb(51, 63, 80);"><img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar"></button>
+                        <div class="dropdown-menu">
+                            <li class="sous-menu"><a tabindex="-1">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a></li>
+                            <hr>
+                            <li><a tabindex="-1" class="dropdown-item sous-menu" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">Mon Profil</a></li>
+                            <form method="POST" action="{{route('logout.post')}}">@csrf<button class="dropdown-item nav-link" type="submit">Déconnexion</button></form>
+                            
+                        </div> 
+                </div>
+        </div>
+    @endif
 @endsection
 
 @section('content')
     <h1 class="center-title">
         <Strong>Mes réservations en cours</Strong>
     </h1><br>
+    @if ( session()->has('errors'))
+        <div class="alert alert-danger">
+            {{session()->get('errors')}}&#9785; 
+        </div>
+    @endif
+    @if(session()->has('success'))
+        <div class="alert alert-success">
+                {{session()->get('success')}}&#9786;
+        </div>
+    @endif
     <!-- div global -->
     @if (count($reservationsEnCours) == 0)
         <div class="border border-dark">
@@ -119,7 +129,9 @@
                     @endif
                 </div>
                 <div class="col-md-4 mb-3 btn-annuler">
-                    <button type="submit" class="btn btn-danger shadow rounded-lg">Annuler la réservation</button>
+                    <a href="{{route('annuler_reservation', $reservationsEnCours[$pos]->idReservation)}}"> 
+                        <button type="submit" class="btn btn-danger shadow rounded-lg">Annuler la réservation</button>
+                    </a>
                 </div>
             </div>
         </div>

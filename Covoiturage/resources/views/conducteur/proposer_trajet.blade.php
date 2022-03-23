@@ -10,31 +10,18 @@ Proposer un trajet
 
 @section('navbarSequel')
     @if(session()->has('user'))
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('logout.post')}}">Déconnexion</a>
-                <!--<form method="POST" action="{{route('logout.post')}}">@csrf<button type="submit">Déconnexion</button></form>-->
-            </li>
-        </ul>
-        <ul class="navbar-nav mr-auto"> 
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}} </a>
-            </li>
-        </ul>
-        <div class="pmd-user-info ">
-            <a href="javascript:void(0);" class="nav-user-img" >   
-                <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
-            </a>
+        <div class="pmd-user-info "> 
+                <div class="dropdown">
+                    <button data-toggle="dropdown" class="dropdown-toggle" type="button" style="background-color: rgb(51, 63, 80); border: 1px solid rgb(51, 63, 80);"><img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar"></button>
+                        <div class="dropdown-menu">
+                            <li class="sous-menu"><a tabindex="-1">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a></li>
+                            <hr>
+                            <li><a tabindex="-1" class="dropdown-item sous-menu" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">Mon Profil</a></li>
+                            <form method="POST" action="{{route('logout.post')}}">@csrf<button class="dropdown-item nav-link" type="submit">Déconnexion</button></form>
+                            
+                        </div> 
+                </div>
         </div>
-    @else
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
-            </li>
-        </ul>
     @endif
 @endsection
 
@@ -46,7 +33,7 @@ Proposer un trajet
         @csrf
         @if($errors->any())
         <div class="alert alert-warning">
-            Le trajet n'a pas pu être ajouté &#9785; {{implode('', $errors->all(':message'))}}
+            Le trajet n'a pas pu être ajouté &#9785;
         </div>
         @endif
         @if(session()->has('success'))
@@ -225,7 +212,7 @@ Proposer un trajet
       success:function(response){ // En cas de succès
         $('#successMsg').show();
         console.log(response);
-        window.location = "{{ route('trajets_en_cours')}}";
+        
       },
       error: function(response) { // En cas d'echec
         $('#numRueDepError').text(response.responseJSON.errors.numRueDep);

@@ -11,7 +11,7 @@
 @section('navbarSequel')
     <ul class="navbar-nav mr-auto"> 
         <li class="nav-item">
-            <a class="nav-link" href="{{route('user')}}">Ismail IDBOURHIM</a>
+            <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a>
         </li>
     </ul>
     <div class="pmd-user-info ">
@@ -34,8 +34,8 @@
             </div>
         </div>
         <div class="col-md-6 mt-3 btn-profil">
-            <a href="{{route('user')}}">
-                <button type="submit" class="btn button-form mb-4">Mon profil</button>
+            <a href="{{route('trajets_en_cours', $idConducteur)}}">
+                <button type="submit" class="btn button-form mb-4">Mes trajets en cours</button>
             </a>
         </div>
     </div>

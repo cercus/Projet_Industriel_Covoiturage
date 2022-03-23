@@ -68,7 +68,7 @@ class IsmailRepository {
     }
 
 
-/*-----------------------Méthodes pour la page mes trajets en cours-------------------*/
+/*-----------------------Méthodes pour la page mes trajets en cours et annuler mon trajet-------------------*/
     // les trajets en cours du conducteur
     function trajetEnCours(int $idConducteur): array
     {    
@@ -140,6 +140,18 @@ class IsmailRepository {
                                             'idDestinataire' => $idDestinataire]);
     }
 
+    function estMonTrajet(int $idConducteur, int $idTrajet): bool
+    {
+        $mesTrajets =  DB::table('Trajets')
+                    ->join('Voitures', 'Trajets.immatriculation', '=', 'Voitures.immatriculation')
+                    ->join('Utilisateurs', 'Voitures.idUtilisateur', '=', 'Utilisateurs.idUtilisateur')
+                    ->where('Trajets.idTrajet', $idTrajet)
+                    ->where('Utilisateurs.idUtilisateur', $idConducteur)
+                    ->get()
+                    ->toArray();
+        return count($mesTrajets) != 0;
+    }
+
 /*-----------------------------Méthodes pour la page mes reservation en cours--------------------------*/
 
     // les reservation en cours de passager
@@ -170,4 +182,27 @@ class IsmailRepository {
                 ->toArray();
     }
 
+    /*-----------------------------Méthodes pour la page anuller ma reservation--------------------------*/
+    
+    function existeReservation(int $idReservation, int $idPassager): bool
+    {
+        $reservation = DB::table('Reservations')->where('idReservation', $idReservation)
+                                                ->where('idPassager', $idPassager)
+                                                ->get()
+                                                ->toArray();
+        return count($reservation) != 0;
+    }
+
+    function quiMonConducteur(int $idReservation): array
+    {
+        return DB::table('Reservations')
+                ->join('Trajets', 'Reservations.idTrajet', '=', 'Trajets.idTrajet')
+                ->join('Voitures', 'Trajets.immatriculation', '=', 'Voitures.immatriculation')
+                ->join('Utilisateurs', 'Voitures.idUtilisateur', '=', 'Utilisateurs.idUtilisateur')
+                ->where('Reservations.idReservation',$idReservation)
+                ->get(['Utilisateurs.idUtilisateur'])
+                ->toArray();
+    }
 }
+
+                        

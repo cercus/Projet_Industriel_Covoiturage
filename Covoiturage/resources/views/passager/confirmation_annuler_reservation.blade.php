@@ -1,7 +1,7 @@
 @extends('base')
 
 @section('title')
-    Confirmation d'annuler mon trajet
+    Confirmation d'annuler ma réservation
 @endsection
 
 @section('style')
@@ -34,8 +34,8 @@
             </div>
         </div>
         <div class="col-md-6 mt-3 btn-profil">
-            <a href="{{route('user')}}">
-                <button type="submit" class="btn button-form mb-4">Mon profil</button>
+            <a href="{{route('reservation_en_cours', $idPassager)}}">
+                <button type="submit" class="btn button-form mb-4">Mes réservations en cours</button>
             </a>
         </div>
     </div>

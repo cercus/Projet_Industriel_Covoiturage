@@ -75,8 +75,8 @@ Route::get('/commun/caracteristiques', [Controller::class, 'showCaracteristique'
 
 // Route pour la page trajet_en_cours.php
 Route::get('/conducteur/trajets_en_cours/{idConducteur}', [IsmailController::class, 'showTrajetEnCours'])->where('idConducteur', '[0-9]+')->name('trajets_en_cours');
-Route::post('/conducteur/validerPassager/{idReservation}', [IsmailController::class, 'validerPassager'])->name('validerPassager.store');
-Route::post('/conducteur/refuserPassager/{idReservation}', [IsmailController::class, 'refuserPassager'])->name('refuserPassager.store');
+Route::post('/conducteur/validerPassager/{idReservation}', [IsmailController::class, 'validerPassager'])->where('idReservation', '[0-9]+')->name('validerPassager.store');
+Route::post('/conducteur/refuserPassager/{idReservation}', [IsmailController::class, 'refuserPassager'])->where('idReservation', '[0-9]+')->name('refuserPassager.store');
 // Route::post('/conducteur/annulerTrajet/{idTrajet}', [IsmailController::class, 'annulerTrajet'])->name('annulerTrajet.store');
 // Route Annuler un trajet */
 Route::get('/conducteur/annuler_trajet/{idTrajet}', [IsmailController::class, 'showAnnulerTrajet'])->where('idTrajet', '[0-9]+')->name('annuler_trajet');
@@ -95,10 +95,11 @@ Route::get('/conducteur/proposer_trajet', [COntroller::class, 'showProposerTraje
 Route::get('/passager/reservation_en_cours/{idPassager}', [IsmailController::class, 'showReservationEnCours'])->where('idPassager', '[0-9]+')->name('reservation_en_cours');
 
 // Route Annuler une reservation */
-Route::get('/passager/annuler_reservation', [Controller::class, 'showConfirmAnnulationReservation'])->name('annuler_reservation');
+Route::get('/passager/annuler_reservation/{idReservation}', [IsmailController::class, 'showAnnulationReservation'])->where('idReservation', '[0-9]+')->name('annuler_reservation');
+Route::post('/conducteur/accAnnulerReservation/{idReservation}',[IsmailController::class, 'acceptAnnulerReservation'])->where('idReservation', '[0-9]+')->name('acceptAnnulerReservation.store');
 
 // Route confirmation annulation reservation
-Route::get('/passager/confirmation_annuler_reservation', [Controller::class, 'showConfirmAnnulationReservation'])->name('confirmation_annuler_reservation');
+Route::get('/passager/confirmation_annuler_reservation', [IsmailController::class, 'showConfirmAnnulationReservation'])->name('confirmation_annuler_reservation');
 
 // ROute payement trajet
 Route::get('/passager/payement', [Controller::class, 'showPayementForm'])->name('payement');

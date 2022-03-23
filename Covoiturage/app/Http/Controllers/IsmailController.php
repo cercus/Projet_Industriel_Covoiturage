@@ -242,6 +242,12 @@ class IsmailController extends BaseController
         if(!session()->has('user'))
             return redirect()->route('home');
         $idConducteur = Request()->session()->get('user')['id'];
+        $estMonTrajets = $this->repository->estMonTrajet($idConducteur, $idTrajet);
+        
+        if($estMonTrajets == 0){
+            return redirect()->route('trajets_en_cours',['idConducteur' => $idConducteur])
+                             ->with('errors', "Ce n'est pas votre trajet.");
+        }
         return view('/conducteur/annuler_trajet', ['idConducteur' => $idConducteur, 'idTrajet' => $idTrajet]);
     }
     
@@ -263,10 +269,12 @@ class IsmailController extends BaseController
         foreach ($passagers as $passager) {
             DB::table('Messages')->insertGetId(['objet' => 'Annulation du trajet',
                                         'dateMessage' => NOW(),
-                                        'texteMessage' => $text,
+                                        'texteMessage' => $texteMessage,
                                         'idEmetteur' => $idConducteur,
                                         'idDestinataire' => $passager->idPassager]);
         }
+        
+        DB::table('Reservations')->where('idTrajet', $idTrajet)->delete();
         DB::table('Trajets')->where('idTrajet', $idTrajet)->delete();
         return redirect()->route('confirmation_annuler_trajets');        
     }
@@ -312,4 +320,58 @@ class IsmailController extends BaseController
                                                       'tabDateFrenche' => $tabDateFrenche,
                                                       'conducteurs' => $conducteurs]);
     }
+
+/*-----------------------------Méthodes pour la page anuller ma reservation--------------------------*/
+
+    public function showAnnulationReservation($idReservation)
+    {
+        if(!session()->has('user'))
+            return redirect()->route('home');
+        $idPassager = session()->get('user')['id'];
+
+        //pour ne pas acceder à une réservation d'autre utilisateur 
+        $estMaReservation = $this->repository->existeReservation($idReservation, $idPassager);
+        if($estMaReservation == 0){
+            return redirect()->route('reservation_en_cours',['idPassager' => $idPassager])
+                             ->with('errors', "Ce n'est pas votre réservation.");
+        }
+        return view('/passager/annuler_reservation', ['idReservation' => $idReservation]);
+    }
+
+    public function acceptAnnulerReservation(Request $request, $idReservation)
+    {   
+        if(!session()->has('user'))
+            return redirect()->route('home');
+        $idPassager = Request()->session()->get('user')['id'];
+        $monConducteur = $this->repository->quiMonConducteur($idReservation)[0];
+        
+        $rules = ['motif-annulation' => ['required']];
+        $messages = ['motif-annulation.required' => "Vous devez saisir le motif d'annulation"];
+        $validatedData = $request->validate($rules, $messages);
+        $motif = $request->input('motif-annulation');
+        $message = $request->input('message-passager');
+        if($message == null)
+            $texteMessage = "Nous avons le regret de vous informer que votre passager a récemment annulé sa réservation sans vous laisser de message en raison de : \n$motif";
+        else
+            $texteMessage = "Motif : $motif \nMessage du passager : $message";
+        DB::table('Messages')->insertGetId(['objet' => 'Annulation de réservation',
+                                    'dateMessage' => NOW(),
+                                    'texteMessage' => $texteMessage,
+                                    'idEmetteur' => $idPassager,
+                                    'idDestinataire' => $monConducteur->idUtilisateur]);
+        
+        DB::table('Reservations')->where('idReservation', $idReservation)->delete();
+        return redirect()->route('confirmation_annuler_reservation');        
+    }
+
+    /*-----------------------Méthodes pour la page confirmation d'annulation ma réservation-------------------*/
+
+    public function showConfirmAnnulationReservation() 
+    {
+        if(!session()->has('user'))
+            return redirect()->route('home');
+        $idPassager = Request()->session()->get('user')['id'];
+        return view('passager.confirmation_annuler_reservation', ['idPassager' => $idPassager]);
+    }
+
 }

@@ -16,11 +16,11 @@
     </ul>
     <div class="pmd-user-info ">
         <a href="javascript:void(0);" class="nav-user-img" >
-            {{-- @if ({{session()->get('user')['photoProfil']}} == null) --}}
+            {{-- @if ({{session()->get('user')['photoProfil']}} != null)
+                <img class="avatar-img rounded-circle" src="{{session()->get('user')['photoProfil']}}" width="73" height="73" alt="avatar">
+            @else --}}
                 <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
-            {{-- @else
-                <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
-            @endif   --}}
+            {{-- @endif   --}}
         </a>
     </div>
 @endsection
@@ -29,6 +29,16 @@
     <h1 class="center-title">
         <Strong>Mes réservations en cours</Strong>
     </h1><br>
+    @if ( session()->has('errors'))
+        <div class="alert alert-danger">
+            {{session()->get('errors')}}&#9785; 
+        </div>
+    @endif
+    @if(session()->has('success'))
+        <div class="alert alert-success">
+                {{session()->get('success')}}&#9786;
+        </div>
+    @endif
     <!-- div global -->
     @if (count($reservationsEnCours) == 0)
         <div class="border border-dark">
@@ -119,7 +129,9 @@
                     @endif
                 </div>
                 <div class="col-md-4 mb-3 btn-annuler">
-                    <button type="submit" class="btn btn-danger shadow rounded-lg">Annuler la réservation</button>
+                    <a href="{{route('annuler_reservation', $reservationsEnCours[$pos]->idReservation)}}"> 
+                        <button type="submit" class="btn btn-danger shadow rounded-lg">Annuler la réservation</button>
+                    </a>
                 </div>
             </div>
         </div>

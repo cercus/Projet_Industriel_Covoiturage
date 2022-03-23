@@ -18,6 +18,7 @@ class SawdaController extends BaseController
     public function __construct(SawdaRepository $repository)
     {
         $this->repository = $repository;
+        $this->nb=1;
     }
 
     /******************** Page accueil ********************/
@@ -177,6 +178,7 @@ class SawdaController extends BaseController
         $adresseRueDep = $validatedData['adresseRueDep'];
         $villeDep = $validatedData['villeDep'];
         $cpDep = $validatedData['cpDep'];
+        $this->nb=$validatedData['nbPlace'];
         $nbPlace = $validatedData['nbPlace'];
         $numRueArr = $validatedData['numRueArr'];
         $adresseRueArr = $validatedData['adresseRueArr'];
@@ -228,12 +230,6 @@ class SawdaController extends BaseController
         $passagers = $this->repository->passagers($trajetId);
         return view('passager.details_result_recherche_trajet', ['unTrajet' => $unTrajet, 
         'unProfil' => $unProfil, 'uneNote' => $uneNote, 'passagers' => $passagers]);
-    }
-
-    public function reservation()
-    {
-        //Action à faire lorqu'on clique sur le bouton réserver
-        return redirect()->route('accueil');
     }
 
     public function showFormNvMsg(Request $request, SawdaRepository $repository)
@@ -398,6 +394,37 @@ class SawdaController extends BaseController
         }catch (Exception $exception) {
             return 
             redirect()->route('messages.all')->withInput()->withErrors("Impossible de supprimer le message.");
+        }
+    }
+
+    public function reserver(Request $request,SawdaRepository $repository)
+    {
+        /*Si on suppose que pour la page de connexion il existe
+        Un code qui permet de se souvenir de l'authentification de l'utilisateur
+        $value=$this->repository->getUserId($email, $password);
+        $key='idUser';
+        $request->session()->put($key, $value); 
+        $teams=$this->repository->teams();
+        if (!$request->session()->has('idUser')) {
+            return redirect(route('connexion'));
+        }
+        $idProfil = $request->session()->get('idUser');*/
+        $idProfil =101;
+        $reservation=[
+            'dateHeureRDV' =>$request->input('dateHeureRDV'),
+            'prixResa' =>$request->input('prixResa'),
+            'idLieuRencontre' =>$request->input('idLieuRencontre'),
+            'idLieuDepot' =>$request->input('idLieuDepot'),
+            'idPassager' =>$idProfil,
+            'idTrajet' =>$request->input('idTrajet'),
+            'nbPlace' =>$this->nb
+        ];
+        $reservation=$this->repository->insertReservation($reservation);
+        try {
+        return redirect()->route('reservation_en_cours'/*, ['idProfil' => $idProfil]*/);
+        }catch (Exception $exception) {
+            return 
+            redirect()->route('reservation')->withInput()->withErrors("Impossible de faire la réservation.");
         }
     }
 }

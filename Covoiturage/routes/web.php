@@ -86,6 +86,8 @@ Route::get('/conducteur/proposer_trajet', [COntroller::class, 'showProposerTraje
 /* ------------ Route pour les pages se trouvant dans le dossier passager ------------ */
 
 Route::get('/passager/reservation_en_cours', [Controller::class, 'showReservationEnCours'])->name('reservation_en_cours');
+//Route pour le bouton réservation
+Route::post('/passager/reservation_en_cours', [SawdaController::class, 'reserver'])->name('reservation');
 
 // Route Annuler une reservation */
 Route::get('/passager/annuler_reservation', [Controller::class, 'showConfirmAnnulationReservation'])->name('annuler_reservation');
@@ -110,7 +112,6 @@ Route::post('/passager/recherche_trajet', [SawdaController::class, 'rechercheTra
 
 //Page détails résultat recherche trajet
 Route::get('/passager/details_result_recherche_trajet/{trajetId}', [SawdaController::class, 'detailsResultRechercheTrajet'])->where('trajetId', '[0-9]+')->name('detailsResultRechercheTrajet');
-
 
 /* ------------ Route pour les autres pages ------------ */
 

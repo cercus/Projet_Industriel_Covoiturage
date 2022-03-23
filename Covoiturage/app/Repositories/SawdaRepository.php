@@ -77,7 +77,8 @@ class SawdaRepository
             ->join('Lieux as lDepart', 'lDepart.idLieu', '=', 't.idLieuDepart')
             ->join('Lieux as lArrivee', 'lArrivee.idLieu', '=', 't.idLieuArrivee')
             ->where('t.idTrajet', $unTrajet)
-            ->get(['t.*', 'lDepart.numRue as numRueDep', 'lDepart.adresseRue as adresseRueDep',
+            ->get(['t.*', 'lDepart.idLieu as idLieuDepart', 'lArrivee.idLieu as idLieuArrivee',
+            'lDepart.numRue as numRueDep', 'lDepart.adresseRue as adresseRueDep',
             'lDepart.ville as villeDep', 'lDepart.cP as cpDep',
             'lArrivee.numRue as numRueArr', 'lArrivee.adresseRue as adresseRueArr',
             'lArrivee.ville as villeArr', 'lArrivee.cP as cpArr'])
@@ -294,5 +295,50 @@ class SawdaRepository
         DB::table('Messages')
         ->where('idMessage', '=', $msg['idMessage'])
         ->delete();
+    }
+
+    /*
+     idReservation auto
+dateHeureRDV
+estPaye 0
+estAccepte 0
+idAnnule NULL
+prixResa
+idLieuRencontre
+idLieuDepot
+idPassager
+idTrajet
+nbPlace
+     */
+
+    function insertReservation(array $reservation): int
+    {   
+        return array_key_exists("idReservation", $reservation) ? 
+        DB::table('Reservations')
+            ->insertGetId([ 'idReservation' =>$reservation['idReservation'],
+                            'dateHeureRDV' =>date('Y-m-d H:i:s',strtotime($reservation['dateHeureRDV'])),
+                            'prixResa' =>$reservation['prixResa'],
+                            'idLieuRencontre' =>$reservation['idLieuRencontre'],
+                            'idLieuDepot' =>$reservation['idLieuDepot'],
+                            'idPassager' =>$reservation['idPassager'],
+                            'idTrajet' =>$reservation['idTrajet'],
+                            'nbPlace' =>$reservation['nbPlace'],
+                            'estPaye' =>'0',
+                            'estAccepte' =>'0',
+                            'idAnnule' =>'0',
+                        ])
+        : DB::table('Reservations')
+        ->insertGetId([ 'dateHeureRDV' =>date('Y-m-d H:i:s',strtotime($reservation['dateHeureRDV'])),
+                        'prixResa' =>$reservation['prixResa'],
+                        'idLieuRencontre' =>$reservation['idLieuRencontre'],
+                        'idLieuDepot' =>$reservation['idLieuDepot'],
+                        'idPassager' =>$reservation['idPassager'],
+                        'idTrajet' =>$reservation['idTrajet'],
+                        'nbPlace' =>$reservation['nbPlace'],
+                        'estPaye' =>'0',
+                        'estAccepte' =>'0',
+                        'idAnnule' =>'0',
+                    ])
+        ;
     }
 }

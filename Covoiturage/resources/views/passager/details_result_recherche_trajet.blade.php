@@ -5,7 +5,7 @@ Détails trajet
 @endsection
 
 @section('style')
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/app.css">
 @endsection
            
 @section('navbarSequel')
@@ -20,6 +20,7 @@ Détails trajet
 @endsection
 
 @section('content')
+{{ $unTrajet['idLieuDepart'] }}
 <h1 class="center-title">Détails du trajet</h1>
 
 <div class="border border-dark margin-bottom-accueil">
@@ -124,7 +125,24 @@ Détails trajet
         @endif
     </div>
     <div class="col-md-4 mt-2">
-    <a href="{{ route('accueil') }}"><button class="btn button-form ml-5">Reserver</button></a>
+        <form method="POST" action="{{route('reservation')}}">
+            @csrf
+            <div style="display: none;">
+                <input type="datetime-local" name="dateHeureRDV" id="dateHeureRDV" 
+                value="{{ $unTrajet['dateHeureDepart'] }}">
+                <input type="number" name="prixResa" id="prixResa" 
+                value="{{ $unTrajet['prixTrajet'] }}">
+                <input type="number" name="idLieuRencontre" id="idLieuRencontre" 
+                value="{{ $unTrajet['idLieuDepart'] }}">
+                <input type="number" name="idLieuDepot" id="idLieuDepot" 
+                value="{{ $unTrajet['idLieuArrivee'] }}">
+                <input type="number" name="idTrajet" id="idTrajet" 
+                value="{{ $unTrajet['idTrajet'] }}">
+            </div>
+            <button type="submit" class="btn button-form ml-5">
+                Reserver
+            </button>
+        </form>
     </div>
 </div>
 @endsection

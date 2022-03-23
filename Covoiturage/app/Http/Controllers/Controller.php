@@ -18,24 +18,15 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-<<<<<<< HEAD
-    public function __construct(NicolasRepository $repository) {
-        $this->NicolasRepository=$repository;
-=======
     public function __construct(Repository $Repository) 
     {
         $this->repository  = $Repository;
->>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
     }
 
 
     /* ----------------- Fonctions pour les pages se trouvant dans le dossier commun ----------------- */
 
     // Page de profil (contenant tout les accès aux différents pages )
-<<<<<<< HEAD
-    public function showUserPage(int $idUtilisateur) {
-       return view('commun.user',['Utilisateur' => $this->NicolasRepository->getUserSvtId($idUtilisateur)]);
-=======
     public function showUserPage($idUtilisateur) {
         if(!session()->has('user'))
             return redirect()->route('accueil');
@@ -43,7 +34,6 @@ class Controller extends BaseController
             return redirect()->route('accueil');
 
         return view('commun.user', ['conducteur' => $this->repository->userVoiture($idUtilisateur)]);
->>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
     }
 
     /* ====== Page Historique des trajets ====== */
@@ -171,7 +161,7 @@ class Controller extends BaseController
         else if(isset($validatedData['star1']))
             $note = $validatedData['star1'];
         $this->repository->insertNotation($note, $validatedData['message'], $idReservation, $idUtilisateur);
-        return redirect()->route('historique_trajets', ['idUtilisateur' => 101]);
+        return redirect()->route('historique_trajets', ['idUtilisateur' => session()->get('user')['id']]);
         
     }
 
@@ -204,12 +194,21 @@ class Controller extends BaseController
         else if(isset($validatedData['star1']))
             $note = $validatedData['star1'];
         $this->repository->insertNotation($note, $validatedData['message'], $idReservation, $idUtilisateur);
-        return redirect()->route('historique_trajets', ['idUtilisateur' => 101]);
+        return redirect()->route('historique_trajets', ['idUtilisateur' => session()->get('user')['id']]);
         
     }
-
-    public function showCaracteristique() {
-        return view('commun.caracteristiques');
+    // fonction recupération des resultats des notations d'un utilisateurs
+    public function showCaracteristique($idUtiliateurNotation) {
+        if(session()->has('user')) {
+            //dd (['noteUtilsateur' => $this->repository->getNotationGlobalUtilisateur($idUtiliateurNotation)]);
+                return view('commun.caracteristiques', ['notations' => $this->repository->getCharacteristicsUsers($idUtiliateurNotation), 
+                                                        'voitureConducteur' => $this->repository->getVoitureConducteurFromIdUtilisateur($idUtiliateurNotation)
+                                                        ,'noteUtilisateur' => $this->repository->getNotationGlobalUtilisateur($idUtiliateurNotation)
+                                                        ,'sumNoteUtilisateur'=> $this->repository->getSumNotationGlobalUtilisateur($idUtiliateurNotation)
+                                                        ,'countNoteUtilisateur'=> $this->repository->getCountNotationGlobalUtilisateur($idUtiliateurNotation)]);
+        } 
+        else 
+            return redirect()->route('accueil');
     }
 
 
@@ -276,9 +275,6 @@ class Controller extends BaseController
         return view('inscription');
     }
 
-<<<<<<< HEAD
-    // Fonction pour afficher la page de connexion
-=======
     public function storeInscription(Request $request)
     {
         //var_dump('dateNaiss');
@@ -398,7 +394,6 @@ class Controller extends BaseController
 
     /* ====== Page de connexion ====== */
     // FOnction pour afficher la page de connexion
->>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
     public function showConnexionForm() {
         if(session()->has('user'))
             return redirect()->route('accueil');
@@ -546,5 +541,7 @@ class Controller extends BaseController
             redirect()->route('accueil')->withInput()->withErrors("Impossible d\'éffectuer la recherche.". $exception->getMessage()." / ". $exception->getLine());
         }
     }
+
+    
 
 }

@@ -24,13 +24,13 @@ class Repository {
             $idDepart = DB::table('Lieux')->insertGetId($lieuxDepart);
         else
             $idDepart = $idLieuDepart;
-        
+
         $lieuxArrive = [
             "numRue" => $trajet['numRueArr'],
             "adresseRue" => $trajet["rueArr"],
             "ville" => $trajet["villeArr"],
             "cP" => $trajet["cpArr"],
-            "pointGPS" =>  DB::raw('POINT('.$trajet['finLon'].','.$trajet['finLat'].')') 
+            "pointGPS" =>  DB::raw('POINT('.$trajet['finLon'].','.$trajet['finLat'].')')
         ];
 
         $idLieuArrivee = $this->lieuDejaEntree($trajet['numRueArr'], $trajet["rueArr"], $trajet["cpArr"], $trajet["villeArr"]);
@@ -105,8 +105,8 @@ class Repository {
                         ->get(["T.dateHeureDepart", "Ld.numRue as numRueDepart", "Ld.adresseRue as rueDepart", "Ld.cP as cpDepart",
                                 "Ld.ville as villeDepart", "T.dateHeureArrivee", "La.numRue as numRueArrivee", "La.adresseRue as rueArrivee",
                                 "La.cP as cpArrivee", "La.ville as villeArrivee", "R.nbPlace", "R.prixResa",
-                                "U.prenomUtilisateur as prenomConducteur", "U.nomUtilisateur as nomConducteur", 
-                                "U1.prenomUtilisateur as prenomPassager", "U1.nomUtilisateur as nomPassager", "U1.idUtilisateur as idPassager", 
+                                "U.prenomUtilisateur as prenomConducteur", "U.nomUtilisateur as nomConducteur",
+                                "U1.prenomUtilisateur as prenomPassager", "U1.nomUtilisateur as nomPassager", "U1.idUtilisateur as idPassager",
                                 "U.idUtilisateur as idConducteur", "R.idReservation"])->toArray();
         if(count($res) == 0) {
             return [];
@@ -128,7 +128,7 @@ class Repository {
                         "idPassager" => $res[$i]->idPassager,
                         "idReservation" => $res[$i]->idReservation,
                         "note" => -4
-                    ]; 
+                    ];
                 } else {
                     $tmpTrajet = [
                         "dateHeureDepart" => $res[$i]->dateHeureDepart,
@@ -145,14 +145,14 @@ class Repository {
                         "note" => $res2[0]->note
                     ];
                 }
-                
+
                 array_push($tConducteur, $tmpTrajet);
             }
             return $tConducteur;
 
         }
-        
-        
+
+
     }
 
     /* FOnction pour obtenir toutes les reservations d'un utilisateur */
@@ -167,10 +167,10 @@ class Repository {
                         ->join("Lieux as Ld", "Ld.idLieu", "=", "R.idLieuRencontre")
                         ->join("Lieux as La", "La.idLieu", "=", "R.idLieuDepot")
                         ->where("R.idPassager", $idUtilisateur)
-                        ->get(["R.dateHeureRDV", "Ld.numRue as numRueDepart", "Ld.adresseRue as rueDepart", "Ld.cP as cpDepart", 
-                        "Ld.ville as villeDepart", "T.dateHeureArrivee", "La.numRue as numRueArrivee", "La.adresseRue as rueArrivee", 
-                        "La.cP as cpArrivee", "La.ville as villeArrivee", "R.nbPlace", "R.prixResa", "U.prenomUtilisateur as prenomPassager", 
-                        "U.nomUtilisateur as nomPassager", "U1.prenomUtilisateur as prenomConducteur", "U1.nomUtilisateur as nomConducteur", 
+                        ->get(["R.dateHeureRDV", "Ld.numRue as numRueDepart", "Ld.adresseRue as rueDepart", "Ld.cP as cpDepart",
+                        "Ld.ville as villeDepart", "T.dateHeureArrivee", "La.numRue as numRueArrivee", "La.adresseRue as rueArrivee",
+                        "La.cP as cpArrivee", "La.ville as villeArrivee", "R.nbPlace", "R.prixResa", "U.prenomUtilisateur as prenomPassager",
+                        "U.nomUtilisateur as nomPassager", "U1.prenomUtilisateur as prenomConducteur", "U1.nomUtilisateur as nomConducteur",
                         "U1.idUtilisateur as idConducteur", "U.idUtilisateur as idPassager", "R.idReservation"])->toArray();
         if(count($res) == 0) {
             return [];
@@ -192,7 +192,7 @@ class Repository {
                         "idPassager" => $res[$i]->idPassager,
                         "idReservation" => $res[$i]->idReservation,
                         "note" => -4
-                    ]; 
+                    ];
                 } else {
                     $tmpTrajet = [
                         "dateHeureRDV" => $res[$i]->dateHeureRDV,
@@ -209,7 +209,7 @@ class Repository {
                         "note" => $res2[0]->note
                     ];
                 }
-                
+
                 array_push($tPassager, $tmpTrajet);
             }
             return $tPassager;
@@ -228,18 +228,18 @@ class Repository {
                     ->join("Voitures as V", "V.immatriculation", "=", "T.immatriculation")
                     ->Join("Utilisateurs as U1", "U1.idUtilisateur", "=", "V.idUtilisateur")
                     ->where("R.idReservation", $idReservation)
-                    ->get(["R.dateHeureRDV", "Ld.numRue as numRueDepart", "Ld.adresseRue as rueDepart", "Ld.cP as cpDepart", 
-                            "Ld.ville as villeDepart", "T.dateHeureArrivee", "La.numRue as numRueArrivee", "La.adresseRue as rueArrivee", 
-                            "La.cP as cpArrivee", "La.ville as villeArrivee", "R.nbPlace", "R.prixResa", "U.prenomUtilisateur as prenomPassager", 
-                            "U.nomUtilisateur as nomPassager", "U1.prenomUtilisateur as prenomConducteur", "U1.nomUtilisateur as nomConducteur", 
+                    ->get(["R.dateHeureRDV", "Ld.numRue as numRueDepart", "Ld.adresseRue as rueDepart", "Ld.cP as cpDepart",
+                            "Ld.ville as villeDepart", "T.dateHeureArrivee", "La.numRue as numRueArrivee", "La.adresseRue as rueArrivee",
+                            "La.cP as cpArrivee", "La.ville as villeArrivee", "R.nbPlace", "R.prixResa", "U.prenomUtilisateur as prenomPassager",
+                            "U.nomUtilisateur as nomPassager", "U1.prenomUtilisateur as prenomConducteur", "U1.nomUtilisateur as nomConducteur",
                             "U1.idUtilisateur as idConducteur", "U.idUtilisateur as idPassager", "R.idReservation"])
                     ->toArray();
-        
+
         if(count($res) == 0) {
             return [];
         } else {
             $trajet = [
-                
+
 
             ];
             return $this->stdToArray($res)[0];
@@ -259,7 +259,7 @@ class Repository {
     }
 
     //Requete permettant d'extraire les trajets les moins chers du jour
-    function bestTrajets(): array 
+    function bestTrajets(): array
     {
         //$dateToday = "2022-02-21 07:00:00";
         $dateToday = date('Y-m-d H:i:s', time());
@@ -276,13 +276,13 @@ class Repository {
             'lDepart.ville as villeDep', 'lDepart.cP as cpDep',
             'lArrivee.numRue as numRueArr', 'lArrivee.adresseRue as adresseRueArr',
             'lArrivee.ville as villeArr', 'lArrivee.cP as cpArr',
-            'u.prenomUtilisateur as prenom', 'u.nomUtilisateur as nom'])
+            'u.prenomUtilisateur as prenom', 'u.nomUtilisateur as nom','u.idUtilisateur as idUtilisateur'])
             ->toArray()
         ), true);
     }
 
     //Requete permettant d'extraire des passagers d'un trajet à travers son id
-    function passagers(int $unTrajet): array 
+    function passagers(int $unTrajet): array
     {
         return json_decode(json_encode(
             DB::table('Reservations as r')
@@ -294,7 +294,7 @@ class Repository {
     }
 
     //Requete permettant d'extraire la note recu par un utilisateur
-    function uneNote(int $idUtilisateur): array 
+    function uneNote(int $idUtilisateur): array
     {
         $uneNote=json_decode(json_encode(
             DB::table('Utilisateurs as u')
@@ -308,7 +308,7 @@ class Repository {
     }
 
     //Requete permettant d'extraire un conducteur d'un trajet à travers son id
-    function unProfil(int $unTrajet): array 
+    function unProfil(int $unTrajet): array
     {
         $unProfil=json_decode(json_encode(
             DB::table('Trajets')
@@ -321,15 +321,15 @@ class Repository {
         ), true);
 
         if(empty($unProfil)){
-        throw new Exception("Profil inconnu"); 
+        throw new Exception("Profil inconnu");
         }
 
         return $unProfil[0];
-        
+
     }
 
     //Requete permettant d'extraire un trajet à travers son id
-    function unTrajet(int $unTrajet): array 
+    function unTrajet(int $unTrajet): array
     {
         $unTrajet=json_decode(json_encode(
             DB::table('Trajets as t')
@@ -343,14 +343,14 @@ class Repository {
             ->toArray()
         ), true);
 
-        //$unTrajet=json_decode(json_encode($data), true); 
+        //$unTrajet=json_decode(json_encode($data), true);
         if(empty($unTrajet)){
-            throw new Exception("Trajet inconnu"); 
+            throw new Exception("Trajet inconnu");
         }
 
         //var_dump($unTrajet[0]);
         return $unTrajet[0];
-        
+
     }
 
     //Requete permettant de returner les résultats de la recherche de l'utilisateur
@@ -378,7 +378,7 @@ class Repository {
         ), true);
     }
 
-    function createDataRechercheTrajetForm(string $dateDep, string $numRueDep, string $adresseRueDep, string $villeDep, int $cpDep, int $nbPlace, string $numRueArr, string $adresseRueArr, string $villeArr, int $cpArr): array 
+    function createDataRechercheTrajetForm(string $dateDep, string $numRueDep, string $adresseRueDep, string $villeDep, int $cpDep, int $nbPlace, string $numRueArr, string $adresseRueArr, string $villeArr, int $cpArr): array
     {
         return [
             'dateDep' => date('Y-m-d H:i:s',strtotime($dateDep)),
@@ -403,13 +403,13 @@ class Repository {
         $user = DB::table('Utilisateurs')->where('emailUtilisateur', $email)->get()->toArray();
 
         if (empty($user))  // si l'utilisateur n'existe pas
-            throw new Exception("Cet utilisateur n'existe pas."); 
+            throw new Exception("Cet utilisateur n'existe pas.");
 
         $user=$user[0];
 
         if (! Hash::check($password, $user->password)) // si le password n'est pas hashé ou que le paswoord n'est pa bon
             throw new Exception("Ce compte n'existe pas. Vérifier votre mail et votre mot de passe.");
-  
+
         return ['email'=> $user->emailUtilisateur, 'id'=> $user->idUtilisateur, 'prenom'=>$user->prenomUtilisateur, 'nom'=>$user->nomUtilisateur];
     }
 
@@ -431,5 +431,181 @@ class Repository {
     function userVoiture($idUtilisateur) : bool {
         $res = DB::table('Voitures')->where('Voitures.idUtilisateur', $idUtilisateur)->get()->toArray();
         return count($res) != 0;
+    }
+    function getVoitureConducteurFromIdUtilisateur(int $idUtilisateur): array
+    {
+        //dd(json_decode(json_encode($idUtilisateur), true));
+        $user = DB::table('Utilisateurs AS U')
+                ->join("Voitures as V", "U.idUtilisateur","=","V.idUtilisateur")
+                ->where('V.idUtilisateur', $idUtilisateur)
+                ->get(['immatriculation','marqueModelVoiture','nbPlaceMax','couleurVoiture', 'autoriserAnimal', 'autoriserFumer'])
+                ->toArray();
+        if (empty($user))  // si l'utilisateur n'existe pas
+            throw new Exception("Cet utilisateur n'existe pas ou n'a pas de véhicule.");
+
+       $user=$user[0];
+       $user = json_decode(json_encode($user), true);
+       //dd(json_decode(json_encode($user), true));
+        return $user;
+    }
+
+    function getSumNotationGlobalUtilisateur(int $idUtilisateur): array
+    {
+        //dd(json_decode(json_encode($idUtilisateur), true));
+        $sumNoteGlobal = "SELECT
+	            Sum(note) AS sumNote
+            FROM Utilisateurs AS U2 INNER JOIN (
+	            Voitures AS V INNER JOIN (
+	            Utilisateurs AS U3 INNER JOIN (
+	            Trajets AS T INNER JOIN (
+	            (
+                Reservations AS R INNER JOIN
+                Notations AS N
+                ON R.idReservation = N.idReservation)
+                INNER JOIN Utilisateurs AS U1
+                ON N.IdUtilisateur = U1.idUtilisateur)
+                ON T.idTrajet = R.idTrajet)
+                ON U3.idUtilisateur = R.idPassager)
+                ON V.immatriculation = T.immatriculation)
+                ON U2.idUtilisateur = V.idUtilisateur
+            WHERE If(U1.idUtilisateur=U2.idUtilisateur,U3.idUtilisateur,U2.idUtilisateur)= :idFiltre;";
+       //dd($query);
+
+        $data = ['idFiltre'=>$idUtilisateur];
+        $res = DB::select($sumNoteGlobal, $data);
+        $res=$res[0];
+        //dd($res);
+        return json_decode(json_encode($res), true);
+
+    }
+
+     function getNotationGlobalUtilisateur(int $idUtilisateur): int
+    {
+        $sumNotation=$this->getSumNotationGlobalUtilisateur($idUtilisateur);
+        $countNotation=$this->getCountNotationGlobalUtilisateur($idUtilisateur);
+        $notationUtilisateur = $sumNotation['sumNote']/$countNotation['countNote'];
+        return json_decode(json_encode($notationUtilisateur), true);
+    }
+
+    function getCountNotationGlobalUtilisateur(int $idUtilisateur): array
+    {
+        //dd(json_decode(json_encode($idUtilisateur), true));
+        $countNoteGlobal = "SELECT
+	            Count(note) AS countNote
+            FROM Utilisateurs AS U2 INNER JOIN (
+	            Voitures AS V INNER JOIN (
+	            Utilisateurs AS U3 INNER JOIN (
+	            Trajets AS T INNER JOIN (
+	            (
+                Reservations AS R INNER JOIN
+                Notations AS N
+                ON R.idReservation = N.idReservation)
+                INNER JOIN Utilisateurs AS U1
+                ON N.IdUtilisateur = U1.idUtilisateur)
+                ON T.idTrajet = R.idTrajet)
+                ON U3.idUtilisateur = R.idPassager)
+                ON V.immatriculation = T.immatriculation)
+                ON U2.idUtilisateur = V.idUtilisateur
+            WHERE If(U1.idUtilisateur=U2.idUtilisateur,U3.idUtilisateur,U2.idUtilisateur)= :idFiltre;";
+       //dd($query);
+
+        $data = ['idFiltre'=>$idUtilisateur];
+        $res = DB::select($countNoteGlobal, $data);
+        $res=$res[0];
+
+        return json_decode(json_encode($res), true);
+
+    }
+    /* Fonction pour obtenir les caractéristiques d'un user */
+    function getCharacteristicsUsers($idUtilisateur) : array {
+
+    //    $tableauUser = $this->getUserById($idUtilisateur);
+    //    dd($tableauUser);
+        // $res = DB::table("Utilisateurs as U1")
+        //         ->join("Notations as N", "U1.idUtilisateur","=","N.idUtilisateur")
+        //         ->join("Reservations as R","N.idReservation", "=", "R.idReservation")
+        //         ->join("Trajets as T","R.idTrajet", "=", "T.idTrajet")
+        //         ->join("Utilisateurs as U3","R.idPassager", "=", "U3.idUtilisateur")
+        //         ->join("Voitures as V","T.immatriculation", "=", "V.immatriculation")
+        //         ->join("Utilisateurs as U2","V.idUtilisateur", "=", "U2.idUtilisateur")
+        //         // ->join($idUtilisateur, "idUtilisateur","idUtilisateur")
+        //         ->orwhere("U3.idUtilisateur","=",$idUtilisateur)
+        //         ->where("U1.idUtilisateur","!=",$idUtilisateur)
+        //         ->orwhere("U2.idUtilisateur","=",$idUtilisateur)
+        //         ->where("U1.idUtilisateur","!=",$idUtilisateur)
+        //         // ->when($idUtilisateur, function($query, $idUtilisateur){
+        //         //     if($idUtilisateur == 'U3.idUtilisateur')
+        //         //           return $query->where('U2.idUtilisateur');
+        //         //     else
+        //         //         return $query->where('U2.idUtilisateur');})
+
+        //         // ->when($idUtilisateur, function($query, $idUtilisateur){
+        //         //     $query->where($idUtilisateur, "=", 'U2.idUtilisateur');})
+        //         // ->when($idUtilisateur, function($query, $idUtilisateur){
+        //         //     $query->where($idUtilisateur, "=", 'U3.idUtilisateur');})
+
+        //         ->get(["U1.idUtilisateur as idNoteur","U1.prenomUtilisateur as prenomNoteur",
+        //             "U1.nomUtilisateur as nomNoteur", "U2.idUtilisateur as idConducteur",
+        //             "U2.prenomUtilisateur as prenomConducteur","U2.nomUtilisateur as nomConducteur",
+        //             "U3.idUtilisateur as idPassager","U3.prenomUtilisateur as prenomPassager",
+        //             "U3.nomUtilisateur as nomPassager", "N.note as note", "N.texteMessage as texteMessage",
+        //             "N.dateNotation as dateNotation", "IF(U1.idUtilisateur=U2.idUtilisateur,U2.idUtilisateur,U3.idUtilisateur) as idNoter"])
+        //         ->toArray();
+
+        $query= "SELECT U2.idUtilisateur AS idConducteur,
+                        U2.prenomUtilisateur AS prenomConducteur,
+                        U2.nomUtilisateur AS nomConducteur,
+                        U3.idUtilisateur AS idPassager,
+                        U3.prenomUtilisateur AS prenomPassager,
+                        U3.nomUtilisateur AS nomPassager,
+                        U1.idUtilisateur AS idNoteur,
+                        U1.prenomUtilisateur AS prenomNoteur,
+                        U1.nomUtilisateur AS nomNoteur,
+                        R.DateHeureRDV AS DateHeureRDV,
+                        R.prixResa AS prixResa,
+                        If(U1.idUtilisateur=U2.idUtilisateur,U3.idUtilisateur,U2.idUtilisateur) AS idNote,
+                        If(U1.idUtilisateur=U2.idUtilisateur,U3.prenomUtilisateur,U2.prenomUtilisateur) AS prenomNote,
+                        If(U1.idUtilisateur=U2.idUtilisateur,U3. nomUtilisateur, U2.nomUtilisateur) AS nomNote,
+                        N.note AS note,
+                        N.texteMessage AS texteMessage,
+                        N.dateNotation AS dateNotation,
+                        L1.numRue AS numRueRencontre,
+                        L1.adresseRue AS adresseRueRencontre,
+                        L1.cP AS cPRencontre,
+                        L1.ville AS villeRencontre,
+                        L2.numRue AS numRueDepot,
+                        L2.adresseRue AS adresseRueDepot,
+                        L2.cP AS cPDepot,
+                        L2.ville AS villeDepot,
+                        V.nbPlaceMax AS nbPlaceMax,
+                        V.photoVoiture AS photoVoiture,
+                        V.immatriculation AS immatriculation,
+                        V.marqueModelVoiture AS marqueModelVoiture
+
+                FROM Lieux AS L1 INNER JOIN(
+                        Lieux AS L2 INNER JOIN(
+                        Utilisateurs AS U2 INNER JOIN (
+                        Voitures AS V INNER JOIN (
+                        Utilisateurs AS U3 INNER JOIN (
+                        Trajets AS T INNER JOIN (
+                        (
+                            Reservations  as R INNER JOIN
+                            Notations  as N ON R.idReservation = N.idReservation
+                        ) INNER JOIN
+                        Utilisateurs AS U1
+                        ON N.IdUtilisateur = U1.idUtilisateur)
+                        ON T.idTrajet = R.idTrajet)
+                        ON U3.idUtilisateur = R.idPassager)
+                        ON V.immatriculation = T.immatriculation)
+                        ON U2.idUtilisateur = V.idUtilisateur)
+                        ON L2.idLieu = R.idLieuRencontre)
+                        ON L1.idLieu = R.idLieuDepot
+                WHERE If(U1.idUtilisateur=U2.idUtilisateur,U3.idUtilisateur,U2.idUtilisateur)= :idFiltre;";
+        //dd($query);
+        $data = ['idFiltre'=>$idUtilisateur];
+        $res = DB::select($query, $data);
+
+        //dd(json_decode(json_encode($res), true));
+        return json_decode(json_encode($res), true);
     }
 }

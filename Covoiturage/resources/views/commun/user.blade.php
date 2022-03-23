@@ -16,30 +16,6 @@
         </li>
     </ul>
     <ul class="navbar-nav mr-auto"> 
-<<<<<<< HEAD
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('user',['idUtilisateur'=>$Utilisateur['idUtilisateur']])}}"> {{ $Utilisateur['prenom'] }} {{ $Utilisateur['nom'] }}</a>
-        </li>
-    </ul>
-    <div class="pmd-user-info ">
-        <a href="javascript:void(0);" class="nav-user-img" > 
-            @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-            @endif
-
-            <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
-        </a>
-    </div>
-    <div class="nav-item">
-        <form method="POST" href="{{route('logout.post')}}">
-            @csrf
-            <button type="submit" >
-                <img  width="30" src="/images/quit.png" height="30" style="float:left" >
-            </button>
-        </form>
-=======
             <li class="nav-item">
                 <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a>
             </li>
@@ -48,17 +24,12 @@
             <a href="javascript:void(0);" class="nav-user-img" >   
                 <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
             </a>
->>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
     </div>
 @endsection
 
 @section('content')
 
-<<<<<<< HEAD
-<h1 class="center-title">Bienvenue {{ $Utilisateur['prenom'] }} {{ $Utilisateur['nom'] }} sur votre profil</h1> 
-=======
 <h1 class="center-title">Bienvenue {{session()->get('user')['prenom']}} {{session()->get('user')['nom']}} sur votre profil</h1>
->>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
 
 <div style="text-align:center" class="space-bottom-title">
     <div class="row">

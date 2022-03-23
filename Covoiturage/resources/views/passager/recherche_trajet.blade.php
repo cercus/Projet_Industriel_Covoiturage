@@ -203,7 +203,11 @@ Rechercher un trajet
                     <img class="avatar-img rounded-circle mr-3" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
                 </a>
                 <!-- nom du conducteur -->
-                <span class="text-h6"> {{ ucfirst(strtolower($bestTrajet['prenom'])) }} {{ ucfirst(strtolower($bestTrajet['nom'])) }} </span>
+               
+                <a href="{{route('caracteristiques',['idUtilisateurNotation'=>$bestTrajet['idUtilisateur']])}}">
+                    <span class="text-h6"> {{ ucfirst(strtolower($bestTrajet['prenom'])) }} {{ ucfirst(strtolower($bestTrajet['nom'])) }} </span>
+                   
+                </a>
             </div>
             <!-- button plus détails -->
             <div class="col-md-4 mt-2">

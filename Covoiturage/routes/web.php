@@ -3,12 +3,8 @@
 use App\Http\Controllers\LocalizationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
-<<<<<<< HEAD
-use App\Http\Controllers\NicolasController;
-=======
 use App\Http\Controllers\ConducteurController;
 use App\Http\Controllers\PassagerController;
->>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
 use App\Http\Controllers\MailsController;
 use App\Http\Middleware\Localization;
 
@@ -46,12 +42,8 @@ Route::get('/testLang',function () {
 /* ------------ Route pour les pages se trouvant dans le dossier commun ------------ */
 
 //Route pour la page de profil 
-<<<<<<< HEAD
 Route::get('/commun/user/{idUtilisateur}', [Controller::class, 'showUserPage'])->where('idUtilisateur','[0-9]+')->name('user');
 
-=======
-Route::get('/commun/user/{idUtilisateur}', [Controller::class, 'showUserPage'])->where('idUtilisateur', '[0-9]+')->name('user');
->>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
 
 // Route pour la page historique des trajets
 Route::get('/commun/historique_trajets/{idUtilisateur}', [Controller::class, 'showHistoriqueTrajet'])->where('idUtilisateur', '[0-9]+')->name('historique_trajets');
@@ -87,7 +79,7 @@ Route::get('/commun/notation_passager/{idUtilisateur}/{idReservation}', [Control
 Route::post('/commun/notation_passager/{idUtilisateur}/{idReservation}', [Controller::class, 'storeNotationConducteur'])->where('idUtilisateur', '[0-9]+')->where('idReservation', '[0-9]+')->name('store.notation.conducteur');
 
 // Route pour la page caractéristique d'un user
-Route::get('/commun/caracteristiques', [Controller::class, 'showCaracteristique'])->name('caracteristiques');
+Route::get('/commun/caracteristiques/{idUtilisateurNotation}', [Controller::class, 'showCaracteristique'])->where('idUtilisateurNotation', '[0-9]+')->name('caracteristiques');
 
 /* ------------ Route pour les pages se trouvant dans le dossier conducteur ------------ */
 
@@ -144,16 +136,6 @@ Route::get('/apropos', [Controller::class, 'showAPropos'])->name('apropos');
 
 // Route pour la page Inscription
 Route::get('/inscription', [Controller::class, 'showInscriptionForm'])->name('inscription');
-<<<<<<< HEAD
-Route::post('/inscription', [NicolasController::class, 'inscriptionForm'])->name('store.inscription');
-
-// Route pour la page de connexion
-Route::get('/connexion', [Controller::class, 'showConnexionForm'])->name('connexion');
-Route::post('/connexion', [NicolasController::class, 'Connexion'])->name('store.connexion');
-
-//Route de deconnexion
-Route::post('/deconnexion', [NicolasController::class, 'logout'])->name('logout.post');
-=======
 Route::post('/inscription', [Controller::class, 'storeInscription'])->name('store.inscription');
 
 // Route pour la page de connexion
@@ -162,7 +144,6 @@ Route::post('/connexion', [Controller::class, 'Connexion'])->name('store.connexi
 
 //Route de deconnexion
 Route::post('/logout', [Controller::class, 'logout'])->name('logout.post');
->>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
 
 // Route pour la page Reinitialisation mdp
 Route::get('/reinitialisation_mdp', [Controller::class, 'showReinitialisationMdp'])->name('reinitialisation_mdp');

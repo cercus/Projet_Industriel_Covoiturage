@@ -9,29 +9,6 @@ Accueil
 @endsection
            
 @section('navbarSequel')
-<<<<<<< HEAD
-@if (session()->has('user'))
-    <ul class="navbar-nav mr-auto"> 
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('user')}}">ismail IDBOURHIM</a>
-        </li>
-    </ul>
-    <div class="pmd-user-info ">
-        <a href="{{route('user')}}" class="nav-user-img" > 
-              <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
-        </a>
-    </div>
-@else
-<ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
-        </li>
-    </ul>
-@endif
-=======
     @if(session()->has('user'))
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
@@ -59,7 +36,6 @@ Accueil
             </li>
         </ul>
     @endif
->>>>>>> 58a4eba1fe94a1867affb6d9176e1470ef6d390d
 @endsection
            
 

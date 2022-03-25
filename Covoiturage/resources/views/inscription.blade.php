@@ -9,24 +9,27 @@ Inscription
 @endsection
 
 @section('navbarSequel')
-    @if (session()->has('user'))
-        <ul class="navbar-nav mr-auto"> 
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('user')}}">Ismail IDBOURHIM</a>
-            </li>
-        </ul>
-        <div class="pmd-user-info ">
-            <a href="javascript:void(0);" class="nav-user-img" >   
-                <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
-            </a>
+    @if(session()->has('user'))
+
+        <div class="pmd-user-info "> 
+                <div class="dropdown">
+                    <button data-toggle="dropdown" class="dropdown-toggle" type="button" style="background-color: rgb(51, 63, 80); border: 1px solid rgb(51, 63, 80);"><img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar"></button>
+                        <div class="dropdown-menu">
+                            <li class="sous-menu"><a tabindex="-1">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a></li>
+                            <hr>
+                            <li><a tabindex="-1" class="dropdown-item sous-menu" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">Mon Profil</a></li>
+                            <form method="POST" action="{{route('logout.post')}}">@csrf<button class="dropdown-item nav-link" type="submit">Déconnexion</button></form>
+                            
+                        </div> 
+                </div>
         </div>
     @else
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/inscription">Inscription</a>
+                <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/connexion">Connexion</a>
+                <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
             </li>
         </ul>
     @endif
@@ -39,7 +42,7 @@ Inscription
     @csrf
     @if($errors->any())
         <div class="alert alert-warning">
-           Impossible de s'inscrire &#9785; {{implode('', $errors->all(':message'))}}
+           Impossible de s'inscrire. &#9785;
         </div>
     @endif
     @if(session()->has('success'))
@@ -125,7 +128,7 @@ Inscription
         <!-- Numéro de téléphone -->
         <div class="col-left-input">
             <label for="telephone">Numéro de téléphone*</label>
-            <input type="tel" class="input-form @error('telephone') is-invalid @enderror" id="telephone" name="telephone" required placeholder="01 02 03 04 05" pattern="[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}" aria-describedby="telError">    
+            <input type="tel" class="input-form @error('telephone') is-invalid @enderror" id="telephone" name="telephone" required placeholder="01 02 03 04 05" pattern="(([0-9]{2}\s)|[0-9]{2})(([0-9]{2}\s)|[0-9]{2})(([0-9]{2}\s)|[0-9]{2})(([0-9]{2}\s)|[0-9]{2})(([0-9]{2}\s)|[0-9]{2})" aria-describedby="telError">    
             @error('telephone')
                 <span id="telError" class="form-text text-muted">{{$message}}</span>
              @enderror

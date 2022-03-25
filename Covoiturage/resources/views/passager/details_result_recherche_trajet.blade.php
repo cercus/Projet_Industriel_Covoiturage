@@ -9,14 +9,20 @@ Détails trajet
 @endsection
            
 @section('navbarSequel')
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
-        </li>
-    </ul>
+    @if(session()->has('user'))
+        <div class="pmd-user-info "> 
+                <div class="dropdown">
+                    <button data-toggle="dropdown" class="dropdown-toggle" type="button" style="background-color: rgb(51, 63, 80); border: 1px solid rgb(51, 63, 80);"><img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar"></button>
+                        <div class="dropdown-menu">
+                            <li class="sous-menu"><a tabindex="-1">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a></li>
+                            <hr>
+                            <li><a tabindex="-1" class="dropdown-item sous-menu" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">Mon Profil</a></li>
+                            <form method="POST" action="{{route('logout.post')}}">@csrf<button class="dropdown-item nav-link" type="submit">Déconnexion</button></form>
+                            
+                        </div> 
+                </div>
+        </div>
+    @endif
 @endsection
 
 @section('content')
@@ -76,7 +82,7 @@ Détails trajet
             <div class="col-md-7">
                 <label class="col-md-4 ml-5">{{ ucfirst(strtolower($unProfil['prenom'])) }} {{ ucfirst(strtolower($unProfil['nom'])) }} </label>
                 @if(!empty($uneNote))
-                <span class="col-md-4 text-h6 ml-5"><img src="{{URL::asset('images/starNotation.GIF')}}" class="starTrajetImg"> {{ round(floatval($uneNote['notation']), 1) }}</span>
+                <span class="col-md-4 text-h6 ml-5"><i class="fa fa-star" style="color: #ffe400"></i><!--<img src="{{URL::asset('images/starNotation.GIF')}}" class="starTrajetImg">--> {{ round(floatval($uneNote['notation']), 1) }}</span>
                 @endif
             </div>
         </div>
@@ -100,7 +106,7 @@ Détails trajet
             </div>
             <div class="col-md-4 ml-5 photo-conducteur">
                 <a href="#" class="nav-user-img ml-5">
-                    <img class="avatar-img rounded-circle" src="/images/photoVoiture.GIF" width="73" height="73" alt="avatar">
+                    <img class="avatar-img rounded-circle" src="/images/photoVoiture.jpg" width="73" height="73" alt="avatar">
                 </a>
             </div>
         </div>
@@ -124,7 +130,23 @@ Détails trajet
         @endif
     </div>
     <div class="col-md-4 mt-2">
-    <a href="{{ route('accueil') }}"><button class="btn button-form ml-5">Reserver</button></a>
+        <form method="POST" action="{{route('reservation')}}">
+            @csrf
+            <div style="display: none;">
+                <input type="datetime-local" name="dateHeureRDV" id="dateHeureRDV" value='{{date("Y-m-d\TH:i:s", strtotime($unTrajet["dateHeureDepart"]))}}'>
+                <input type="number" name="prixResa" id="prixResa" 
+                value="{{ $unTrajet['prixTrajet'] }}">
+                <input type="number" name="idLieuRencontre" id="idLieuRencontre" 
+                value="{{ $unTrajet['idLieuDepart'] }}">
+                <input type="number" name="idLieuDepot" id="idLieuDepot" 
+                value="{{ $unTrajet['idLieuArrivee'] }}">
+                <input type="number" name="idTrajet" id="idTrajet" 
+                value="{{ $unTrajet['idTrajet'] }}">
+            </div>
+            <button type="submit" class="btn button-form ml-5">
+                Reserver
+            </button>
+        </form>
     </div>
 </div>
 @endsection

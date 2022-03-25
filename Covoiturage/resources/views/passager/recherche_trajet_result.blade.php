@@ -9,14 +9,20 @@ Rechercher un trajet
 @endsection
            
 @section('navbarSequel')
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('inscription')}}">Inscription</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('connexion')}}">Connexion</a>
-        </li>
-    </ul>
+    @if(session()->has('user'))
+        <div class="pmd-user-info "> 
+                <div class="dropdown">
+                    <button data-toggle="dropdown" class="dropdown-toggle" type="button" style="background-color: rgb(51, 63, 80); border: 1px solid rgb(51, 63, 80);"><img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar"></button>
+                        <div class="dropdown-menu">
+                            <li class="sous-menu"><a tabindex="-1">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a></li>
+                            <hr>
+                            <li><a tabindex="-1" class="dropdown-item sous-menu" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">Mon Profil</a></li>
+                            <form method="POST" action="{{route('logout.post')}}">@csrf<button class="dropdown-item nav-link" type="submit">Déconnexion</button></form>
+                            
+                        </div> 
+                </div>
+        </div>
+    @endif
 @endsection
            
 
@@ -172,7 +178,7 @@ Rechercher un trajet
             <div class="col-md-7 detail-trajet">
                 <div class="row">
                     <div class="col-md-5 text-center lieu-depart">
-                        <span>{{ ucfirst(strtolower($bestTrajet['villeDep'])) }}</span>
+                        <span>{{$bestTrajet['numRueDep']}} {{$bestTrajet['adresseRueDep']}} {{ ucfirst(strtolower($bestTrajet['villeDep'])) }}</span>
                     </div> 
                     <div class="col-md-2 pl-2 temps-image">
                         <!-- photo de destination -->
@@ -182,7 +188,7 @@ Rechercher un trajet
                         </div>
                     </div> 
                     <div class="col-md-5 text-center lieu-arrive">
-                        <span>{{ ucfirst(strtolower($bestTrajet['villeArr'])) }}</span>
+                        <span>{{$bestTrajet['numRueArr']}} {{$bestTrajet['adresseRueArr']}} {{ ucfirst(strtolower($bestTrajet['villeArr'])) }}</span>
                     </div>
                 </div>
             </div>

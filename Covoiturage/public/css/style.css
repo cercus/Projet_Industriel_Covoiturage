@@ -837,3 +837,7 @@ div.desc {
 .vignets.load {
     opacity: 1;
 }
+
+.sous-menu:hover {
+    background-color: rgb(51, 63, 80) !important;
+}

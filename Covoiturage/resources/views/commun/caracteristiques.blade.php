@@ -1,3 +1,4 @@
+
 @extends('base')
 
 @section('title')
@@ -9,16 +10,20 @@ Caractéristiques
 @endsection
 
 @section('navbarSequel')
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}} </a>
-        </li>
-    </ul>
-    <div class="pmd-user-info ">
-        <a href="javascript:void(0);" class="nav-user-img" >
-            <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
-        </a>
-    </div>
+    @if(session()->has('user'))
+        <div class="pmd-user-info "> 
+                <div class="dropdown">
+                    <button data-toggle="dropdown" class="dropdown-toggle" type="button" style="background-color: rgb(51, 63, 80); border: 1px solid rgb(51, 63, 80);"><img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar"></button>
+                        <div class="dropdown-menu">
+                            <li class="sous-menu"><a tabindex="-1">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a></li>
+                            <hr>
+                            <li><a tabindex="-1" class="dropdown-item sous-menu" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">Mon Profil</a></li>
+                            <form method="POST" action="{{route('logout.post')}}">@csrf<button class="dropdown-item nav-link" type="submit">Déconnexion</button></form>
+                            
+                        </div> 
+                </div>
+        </div>
+    @endif
 @endsection
 
 @section('content')
@@ -63,22 +68,36 @@ Caractéristiques
                 </div>
 
                 <div class="col ">
-                    <img class="avatar-img rounded-circle" src="/images/voiture.jpg" width="100" height="73" alt="avatar">
+                    <img class="avatar-img rounded-circle" src="/images/photoVoiture.jpg" width="100" height="73" alt="avatar">
                 </div>
         @endif
 
         <!-- notation d'un utilisateur -->
 
+            @if($countNoteUtilisateur['countNote'] != 0)
+                <div class="mr-5 h3">
+                    @for ($i = 0; $i < $noteUtilisateur; $i++)
+                        <label class="fa fa-star" style="color: #ffe400; text-shadow: 0 0 3px #000"></label>
+                    @endfor
+                    @for($i = 5; $i > $noteUtilisateur; $i--)
+                        <label class="fa fa-star"></label>
+                    @endfor
+                    <br>
+                    @if($countNoteUtilisateur['countNote'] != 0)
+                        {{ round(($sumNoteUtilisateur['sumNote']/$countNoteUtilisateur['countNote'])*10)/10 }}  /  5
+                    @else
+                        0 / 5
+                    @endif
+                </div>
+            @else
             <div class="mr-5 h3">
-                @for ($i = 0; $i < $noteUtilisateur; $i++)
-                    <label class="fa fa-star" style="color: #ffe400; text-shadow: 0 0 3px #000"></label>
-                @endfor
-                @for($i = 5; $i > $noteUtilisateur; $i--)
-                    <label class="fa fa-star"></label>
-                @endfor
-                <br>
-                {{ round(($sumNoteUtilisateur['sumNote']/$countNoteUtilisateur['countNote'])*10)/10 }}  /  5
+                    @for($i = 0; $i > 5; $i--)
+                        <label class="fa fa-star"></label>
+                    @endfor
+                    <br>
+                    0 / 5
             </div>
+            @endif
 
 
     </div>
@@ -146,10 +165,11 @@ Caractéristiques
                 @for($i = 5; $i > $notation['note']; $i--)
                     <label class="fa fa-star"></label>
                 @endfor
+                <span style="padding-left: 10px;">{{ $notation['texteMessage']}}</span>
             </div>
-            <div class=" ml-5 mr-3 h3">
+            <!-- <div class=" ml-5 mr-3 h5">
                 {{ $notation['texteMessage']}}
-            </div>
+            </div> -->
 
         </div>
     </div>

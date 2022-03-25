@@ -80,14 +80,16 @@
             </a>
         </div>
         <div class="col espace-bottom vignets" >
-            <button type="button" class="button-icon" autofocus>
-                <div>
-                    <h3>Trajets disponibles</h3>
-                </div>
-                <div class="icon-button">
-                    <img src="/images/icons/itineraire.svg" style="float:left" >
-                </div>
-            </button>
+            <a href="{{route('recherche_trajet')}}">
+                <button type="button" class="button-icon" autofocus>
+                    <div>
+                        <h3>Trajets disponibles</h3>
+                    </div>
+                    <div class="icon-button">
+                        <img src="/images/icons/itineraire.svg" style="float:left" >
+                    </div>
+                </button>
+            </a>
         </div>
         <div class="col espace-bottom vignets">
             <a href="{{route('modification_technique', ['idUtilisateur' => session()->get('user')['id']])}}">
@@ -115,7 +117,7 @@
         </div>
         @if($conducteur)
             <div class="col espace-bottom vignets">
-                <a href="{{route('trajets_en_cours')}}">
+                <a href="{{route('trajets_en_cours', ['idConducteur'=>session()->get('user')['id']])}}">
                     <button type="button" class="button-icon" autofocus>
                         <div>
                             <h3>Mes trajets en cours</h3>

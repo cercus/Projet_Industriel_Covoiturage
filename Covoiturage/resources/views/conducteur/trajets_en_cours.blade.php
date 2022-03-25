@@ -55,7 +55,7 @@
             <div class="col-md-7 ml-4 detail-trajet">
                 <div class="row">
                     <div class="col-md-5 text-center lieu-depart">
-                        <span>{{$trajetsEnCours[$pos]->numRueDep}} {{$trajetsEnCours[$pos]->rueDep}} {{$trajetsEnCours[$pos]->numRueDep}}, {{$trajetsEnCours[$pos]->cpDep}} {{$trajetsEnCours[$pos]->villeDep}}</span>
+                        <span>{{$trajetsEnCours[$pos]->numRueDep}} {{$trajetsEnCours[$pos]->rueDep}} {{$trajetsEnCours[$pos]->cpDep}} {{$trajetsEnCours[$pos]->villeDep}}</span>
                     </div> 
                     <div class="col-md-2 pl-2 temps-image">
                         <!-- photo de destination -->
@@ -65,7 +65,7 @@
                         </div>
                     </div> 
                     <div class="col-md-5 text-center lieu-arrive">
-                        <span>{{$trajetsEnCours[$pos]->numRueArr}} {{$trajetsEnCours[$pos]->rueArr}} {{$trajetsEnCours[$pos]->numRueArr}}, {{$trajetsEnCours[$pos]->cpArr}} {{$trajetsEnCours[$pos]->villeArr}}</span>
+                        <span>{{$trajetsEnCours[$pos]->numRueArr}} {{$trajetsEnCours[$pos]->rueArr}} {{$trajetsEnCours[$pos]->cpArr}} {{$trajetsEnCours[$pos]->villeArr}}</span>
                     </div>
                 </div>
             </div>

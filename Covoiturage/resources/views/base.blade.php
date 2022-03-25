@@ -21,10 +21,10 @@
     <body>
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{route('accueil')}}">
                 <img id="logo-img" src="/images/logo_min2.png" alt="logo">
             </a>
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{route('accueil')}}">
                 <img id="name-logo" src="/images/CoLuminy.png" alt="CoLuminy">
             </a>
                 @if(session()->has('user'))

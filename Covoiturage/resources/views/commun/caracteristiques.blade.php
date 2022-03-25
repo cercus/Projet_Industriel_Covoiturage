@@ -68,26 +68,36 @@ Caractéristiques
                 </div>
 
                 <div class="col ">
-                    <img class="avatar-img rounded-circle" src="/images/voiture.jpg" width="100" height="73" alt="avatar">
+                    <img class="avatar-img rounded-circle" src="/images/photoVoiture.jpg" width="100" height="73" alt="avatar">
                 </div>
         @endif
 
         <!-- notation d'un utilisateur -->
 
+            @if($countNoteUtilisateur['countNote'] != 0)
+                <div class="mr-5 h3">
+                    @for ($i = 0; $i < $noteUtilisateur; $i++)
+                        <label class="fa fa-star" style="color: #ffe400; text-shadow: 0 0 3px #000"></label>
+                    @endfor
+                    @for($i = 5; $i > $noteUtilisateur; $i--)
+                        <label class="fa fa-star"></label>
+                    @endfor
+                    <br>
+                    @if($countNoteUtilisateur['countNote'] != 0)
+                        {{ round(($sumNoteUtilisateur['sumNote']/$countNoteUtilisateur['countNote'])*10)/10 }}  /  5
+                    @else
+                        0 / 5
+                    @endif
+                </div>
+            @else
             <div class="mr-5 h3">
-                @for ($i = 0; $i < $noteUtilisateur; $i++)
-                    <label class="fa fa-star" style="color: #ffe400; text-shadow: 0 0 3px #000"></label>
-                @endfor
-                @for($i = 5; $i > $noteUtilisateur; $i--)
-                    <label class="fa fa-star"></label>
-                @endfor
-                <br>
-                <!-- @if($countNoteUtilisateur['countNote'] != 0)
-                    {{ round(($sumNoteUtilisateur['sumNote']/$countNoteUtilisateur['countNote'])*10)/10 }}  /  5
-                @else
+                    @for($i = 0; $i > 5; $i--)
+                        <label class="fa fa-star"></label>
+                    @endfor
+                    <br>
                     0 / 5
-                @endif -->
             </div>
+            @endif
 
 
     </div>

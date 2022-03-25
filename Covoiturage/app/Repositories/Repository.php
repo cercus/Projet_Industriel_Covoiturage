@@ -635,6 +635,7 @@ class Repository {
                                     'lieuA.cP as cpArr', 'Utilisateurs.prenomUtilisateur', 'Utilisateurs.nomUtilisateur',
                                     'Utilisateurs.photoProfil', 'Utilisateurs.idUtilisateur'])
                             ->toArray();
+        //dd($trajetsEnCours);
                             
         if (count($trajetsEnCours) == 0){
             throw new Exception("Vous n'êtes pas conducteur");

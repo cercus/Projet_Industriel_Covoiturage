@@ -76,7 +76,7 @@ class ConducteurController extends BaseController
         if($validator->failed()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
-        $this->repository->insertTrajet($validator->validated(), 1);
+        $this->repository->insertTrajet($validator->validated(), session()->get('user')['id']);
         return $request->json()->all();
     }
 

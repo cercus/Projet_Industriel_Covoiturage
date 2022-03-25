@@ -99,9 +99,10 @@ class Controller extends BaseController
         $idProfil = session()->get('user')['id'];
         $trajetsReservations= $this->repository->trajetsReservationsProfil($idProfil);
         $messagesProfil= $this->repository->messagesProfil($idProfil);
+        dd($trajetsReservations);
         if(empty($trajetsReservations))
             return redirect()->route('messages.all', ['messagesProfil' => $messagesProfil]);
-        return view('commun.nouveau_message', ['trajetsReservations'=>$trajetsReservations]);
+        return redirect()->route('commun.nouveau_message', ['trajetsReservations'=>$trajetsReservations]);
     }
 
     public function nvMsg(Request $request) 
@@ -348,17 +349,32 @@ class Controller extends BaseController
         ];
         $validatedData = $request->validate($rules, $messages);
         try{
-            DB::table('Voitures')->where('idUtilisateur', $idUtilisateur)
-                                ->update(['immatriculation' => $request->input('immatriculation'),
+            if(empty(DB::table('Voitures')->where('idUtilisateur', $idUtilisateur)->get()->toArray())) {
+                DB::table('Voitures')
+                                ->insert(['immatriculation' => $request->input('immatriculation'),
                                         'marqueModelVoiture' => $request->input('marque'),
                                         'photoVoiture' => $request->input('photoVoiture'),
                                         'nbPlaceMax' => $request->input('nbPlace'),
                                         'couleurVoiture' => $request->input('couleur'),
                                         'autoriserAnimal' => $request->input('animaux'),
-                                        'autoriserFumer' => $request->input('fumer')
+                                        'autoriserFumer' => $request->input('fumer'),
+                                        'idUtilisateur' => $idUtilisateur
                                         ]);
             return redirect()->route('informations_personnelles', ['idUtilisateur' => $idUtilisateur])
                              ->withSuccess('Vos informations techniques ont été modifiées avec succès.');
+            } else {
+                DB::table('Voitures')->where('idUtilisateur', $idUtilisateur)
+                                    ->update(['immatriculation' => $request->input('immatriculation'),
+                                            'marqueModelVoiture' => $request->input('marque'),
+                                            'photoVoiture' => $request->input('photoVoiture'),
+                                            'nbPlaceMax' => $request->input('nbPlace'),
+                                            'couleurVoiture' => $request->input('couleur'),
+                                            'autoriserAnimal' => $request->input('animaux'),
+                                            'autoriserFumer' => $request->input('fumer')
+                                            ]);
+                return redirect()->route('informations_personnelles', ['idUtilisateur' => $idUtilisateur])
+                                ->withSuccess('Vos informations techniques ont été modifiées avec succès.');
+            }
         }catch(Exception $exception){
             return redirect()->route('modification_technique', ['idUtilisateur' => $idUtilisateur])
                     ->withInput()
@@ -699,8 +715,8 @@ class Controller extends BaseController
             $user = $this->repository->getUser($email, $password);
             Request()->session()->put('user',$user);
 
-            return redirect()->route('accueil');
-            //return redirect()->Route('user', ['idUtilisateur'=>$user['id']]);
+            //return redirect()->route('accueil');
+            return redirect()->Route('user', ['idUtilisateur'=>$user['id']]);
         } catch (Exception $e) {
             return redirect()->back()->withInput()->withErrors("Impossible de vous authentifier.".$e->getMessage());
         }

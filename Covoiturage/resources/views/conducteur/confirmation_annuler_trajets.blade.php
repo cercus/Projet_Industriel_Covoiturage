@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="col-md-6 mt-3 btn-profil">
-            <a href="{{route('trajets_en_cours', $idConducteur)}}">
+            <a href="{{route('trajets_en_cours', ['idConducteur' => session()->get('user')['id']])}}">
                 <button type="submit" class="btn button-form mb-4">Mes trajets en cours</button>
             </a>
         </div>

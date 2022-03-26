@@ -160,6 +160,6 @@ Route::get('/reinitialisation_mdp', [Controller::class, 'showReinitialisationMdp
 // Route pour la page Qui-sommes-nous
 Route::get('qui_sommes_nous', [Controller::class, 'showQuiSommesNous'])->name('qui_sommes_nous');
 
-// Route::any('{query}',
-//     function() { return redirect('/'); })
-//     ->where('query', '.*');
+Route::any('{query}',
+    function() { return redirect('/'); })
+    ->where('query', '.*');

@@ -115,7 +115,7 @@
                     @endif
                     <!-- les buttons -->
                     @if ($passagers[$pos][$i]->estAccepte == 0)
-                        <form method="POST" action="{{route('validerPassager.store', $passagers[$pos][$i]->idReservation)}}">
+                        <form method="POST" action="{{route('validerPassager.store', ['idReservation'=>$passagers[$pos][$i]->idReservation])}}">
                             @csrf   
                             <input type="hidden" name="idPassager" value="{{$passagers[$pos][$i]->idPassager}}">
                             <input type="hidden" name="idTrajet" value="{{$trajetsEnCours[$pos]->idTrajet}}">
@@ -126,7 +126,7 @@
                                 </button>
                             </div>
                         </form>
-                        <form method="POST" action="{{route('refuserPassager.store', $passagers[$pos][$i]->idReservation)}}">
+                        <form method="POST" action="{{route('refuserPassager.store', ['idReservation'=>$passagers[$pos][$i]->idReservation])}}">
                             @csrf
                             <input type="hidden" name="idPassager" value="{{$passagers[$pos][$i]->idPassager}}">
                             <div class="col-md-1 mt-1 btn-refuse">

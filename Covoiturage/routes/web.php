@@ -57,7 +57,7 @@ Route::post('/commun/nouveau_message', [Controller::class, 'nvMsg'])->name('mess
 
 // Route pour la page repondre_message.php
 Route::get('/commun/repondre_message/{msgId}', [Controller::class, 'showFormRepondreMsg'])->where('msgId', '[0-9]+')->name('messages.reply');
-Route::post('/commun/repondre_message/', [SawdaController::class, 'repondreMsg'])->name('messages.reply_post');
+Route::post('/commun/repondre_message/', [Controller::class, 'repondreMsg'])->name('messages.reply_post');
 
 // Route pour la page information personnels
 Route::get('/commun/informations_personnelles/{idUtilisateur}', [Controller::class, 'showInfosPerso'])->where('idUtilisateur', '[0-9]+')->name('informations_personnelles');
@@ -87,8 +87,8 @@ Route::get('/commun/caracteristiques/{idUtilisateurNotation}', [Controller::clas
 
 // Route pour la page trajet_en_cours.php
 Route::get('/conducteur/trajets_en_cours/{idConducteur}', [ConducteurController::class, 'showTrajetEnCours'])->where('idConducteur', '[0-9]+')->name('trajets_en_cours');
-Route::post('/conducteur/validerPassager/{idReservation}', [ConducteurController::class, 'validerPassager'])->where('idReservation', '[0-9+]')->name('validerPassager.store');
-Route::post('/conducteur/refuserPassager/{idReservation}', [ConducteurController::class, 'refuserPassager'])->where('idReservation', '[0-9+]')->name('refuserPassager.store');
+Route::post('/conducteur/validerPassager/{idReservation}', [ConducteurController::class, 'validerPassager'])->where('idReservation', '[0-9]+')->name('validerPassager.store');
+Route::post('/conducteur/refuserPassager/{idReservation}', [ConducteurController::class, 'refuserPassager'])->where('idReservation', '[0-9]+')->name('refuserPassager.store');
 
 // Route Annuler un trajet */
 Route::get('/conducteur/annuler_trajet/{idTrajet}', [ConducteurController::class, 'showAnnulerTrajet'])->where('idTrajet', '[0-9]+')->name('annuler_trajet');

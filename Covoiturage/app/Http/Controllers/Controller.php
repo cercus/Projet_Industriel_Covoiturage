@@ -402,12 +402,12 @@ class Controller extends BaseController
     /* ====== Page Notation ====== */
     public function showTrajetForNotationConducteur($idUtilisateur, $idReservation) {
         if(session()->has('user')) {
-            if(session()->get('user')['id'] == $idUtilisateur) {
+            //if(session()->get('user')['id'] == $idUtilisateur) {
 
                 return view('commun.notationConducteur', ['trajet'=> $this->repository->getTrajetFromIdReservation($idReservation)]);
-            } else {
-                return redirect()->route('accueil');
-            }
+            //} else {
+            //    return redirect()->route('accueil');
+            //}
         } else {
             return redirect()->route('accueil');
         }
@@ -416,11 +416,11 @@ class Controller extends BaseController
     // Les passagers notent les conducteurs
     public function showTrajetForNotationPassager($idUtilisateur, $idReservation) {
         if(session()->has('user')) {
-            if(session()->get('user')['id'] == $idUtilisateur) {
+            //if(session()->get('user')['id'] == $idUtilisateur) {
                 return view('commun.notationPassager', ["trajet" => $this->repository->getTrajetFromIdReservation($idReservation)]);
-            } else {
-                return redirect()->route('accueil');
-            }
+            //} else {
+            //    return redirect()->route('accueil');
+            //}
         } else {
             return redirect()->route('accueil');
         }

@@ -115,11 +115,12 @@ class ConducteurController extends BaseController
     }
 
     //function pour valider un passager par un conducteur
-    public function validerPassager(Request $request, $idReservation)
+    public function validerPassager(Request $request, int $idReservation)
     {
         if(!session()->has('user'))
-            return redirect()->route('home');
+            return redirect()->route('accueil');
         $idConducteur = $request->session()->get('user')['id'];
+        
         $nbrPlacesMax = $this->repository->nbrPlacesMax($request->idTrajet);
         $nbrPassagerAcceptes = $this->repository->nbrPassagerAcceptes($request->idTrajet);
         //pour ne pas dépassé nombre de places max autorisées
@@ -135,7 +136,7 @@ class ConducteurController extends BaseController
     public function refuserPassager(Request $request, $idReservation)
     {
         if(!session()->has('user'))
-            return redirect()->route('home');
+            return redirect()->route('accueil');
         $idConducteur = $request->session()->get('user')['id'];
         $this->repository->AvertirRejetPassager($idConducteur, $request->idPassager);
         DB::table('Reservations')->where('idReservation', $idReservation)->delete();

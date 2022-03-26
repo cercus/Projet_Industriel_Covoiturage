@@ -99,10 +99,10 @@ class Controller extends BaseController
         $idProfil = session()->get('user')['id'];
         $trajetsReservations= $this->repository->trajetsReservationsProfil($idProfil);
         $messagesProfil= $this->repository->messagesProfil($idProfil);
-        dd($trajetsReservations);
+        //dd($trajetsReservations);
         if(empty($trajetsReservations))
             return redirect()->route('messages.all', ['messagesProfil' => $messagesProfil]);
-        return redirect()->route('commun.nouveau_message', ['trajetsReservations'=>$trajetsReservations]);
+        return view('commun.nouveau_message', ['trajetsReservations'=>$trajetsReservations]);
     }
 
     public function nvMsg(Request $request) 

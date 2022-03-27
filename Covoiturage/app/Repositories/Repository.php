@@ -563,7 +563,7 @@ class Repository {
             ->join('Utilisateurs as e', 'm.idEmetteur', '=', 'e.idUtilisateur')
             ->join('Utilisateurs as d', 'm.idDestinataire', '=', 'd.idUtilisateur')
             ->whereIn('m.idEmetteur', [$idEmetteur,$idDestinataire])
-            ->whereIn('m.idEmetteur', [$idEmetteur,$idDestinataire])
+            ->whereIn('m.idDestinataire', [$idEmetteur,$idDestinataire])
             ->where('m.objet',$objet)
             ->orderBy('m.dateMessage')
             ->get(['m.*', 'e.prenomUtilisateur as prenomEmetteur', 'e.nomUtilisateur as nomEmetteur',

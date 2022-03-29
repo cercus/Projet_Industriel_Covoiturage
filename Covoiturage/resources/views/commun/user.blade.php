@@ -120,7 +120,7 @@
                 <a href="{{route('trajets_en_cours', ['idConducteur'=>session()->get('user')['id']])}}">
                     <button type="button" class="button-icon" autofocus>
                         <div>
-                            <h3>Mes trajets en cours</h3>
+                            <h3>Mes trajets à venir</h3>
                         </div> 
                         <div class="icon-button">
                             <img src="/images/icons/car-side-solid.svg" style="float:left" >

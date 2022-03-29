@@ -44,7 +44,7 @@ Proposer un trajet
         <div>
             <div class="col-right-input-trajet">
                 <div class="border border-dark">
-                    <h2 class="center-title">Départ</h2>
+                    <h2 id="depart" class="center-title">Départ</h2>
                     <div class="col-md-10 mx-auto space-bottom-title">
                         <div class="col-right-input">
                             <label for="numRueDep">Numero de rue</label>
@@ -72,23 +72,23 @@ Proposer un trajet
                 </div>
 
                 <div class="border border-dark" style="margin-top: 20px;">
-                    <h2 class="center-title">Destination</h2>
+                    <h2 id="destination" class="center-title">Destination</h2>
                     <div class="col-md-10 mx-auto space-bottom-title">
                         <div class="col-right-input">
                             <label for="numRueArr">Numero de rue</label>
-                            <input type="text" placeholder="3" class="input-form @error('numRueArr') is-invalid @enderror" id="numRueArr" name="numRueArr" aria-describedby="numRueArrError">
+                            <input type="text" placeholder="170" class="input-form @error('numRueArr') is-invalid @enderror" id="numRueArr" name="numRueArr" aria-describedby="numRueArrError">
                             <span class="text-danger" id="numRueArrError"></span>
                         </div>
                         <div class="col-left-input">
                             <label for="rueArr">Nom de la voie</label>
-                            <input type="text" placeholder="Boulevard Baille" class="input-form @error('rueArr') is-invalid @enderror" id="rueArr" name="rueArr" aria-describedby="rueArrError" required>
+                            <input type="text" placeholder="Avenue de Luminy" class="input-form @error('rueArr') is-invalid @enderror" id="rueArr" name="rueArr" aria-describedby="rueArrError" required>
                             <span class="text-danger" id="rueArrError"></span>
                         </div>
                     </div>
                     <div class="col-md-10 mx-auto space-bottom-title" style="padding-bottom: 20px;">
                         <div class="col-right-input">
                             <label for="cpArr">Code postal</label>
-                            <input type="number" placeholder="13010" class="input-form @error('cpArr') is-invalid @enderror" id="cpArr" name="cpArr" aria-describedby="cpArrError" required>
+                            <input type="number" placeholder="13009" class="input-form @error('cpArr') is-invalid @enderror" id="cpArr" name="cpArr" aria-describedby="cpArrError" required>
                             <span class="text-danger" id="cpArrError"></span>
                         </div>
                         <div class="col-left-input">

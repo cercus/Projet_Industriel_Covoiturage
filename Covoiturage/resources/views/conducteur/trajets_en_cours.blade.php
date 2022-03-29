@@ -1,7 +1,7 @@
 @extends('base')
 
 @section('title')
-    Mes trajets en cours
+    Mes trajets à venir
 @endsection
 
 @section('style')
@@ -27,7 +27,7 @@
 
 @section('content')
     <h1 class="center-title">
-        <Strong>Mes trajets en cours</Strong>
+        <Strong>Mes trajets à venir</Strong>
     </h1><br>
     @if ( session()->has('errors'))
         <div class="alert alert-danger">

@@ -139,7 +139,7 @@ class PassagerController extends BaseController
 
     public function showReservationEnCours($idPassager) {
         if(!session()->has('user'))
-            return redirect()->route('home');
+            return redirect()->route('accueil');
         //if(session()->get('user')['id'] != $idPassager)
         //    return redirect()->route('home');
         // les reservations en cours d'un passager

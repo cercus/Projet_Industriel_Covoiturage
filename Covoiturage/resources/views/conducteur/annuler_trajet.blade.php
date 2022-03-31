@@ -11,10 +11,10 @@
 @section('navbarSequel')
     <ul class="navbar-nav mr-auto"> 
         <li class="nav-item">
-            <a class="nav-link" href="{{route('user')}}">Ismail IDBOURHIM</a>
+            <a class="nav-link" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a>
         </li>
     </ul>
-    <div class="pmd-user-info ">
+    <div class="pmd-user-info">
         <a href="javascript:void(0);" class="nav-user-img" >   
             <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
         </a>
@@ -22,7 +22,6 @@
 @endsection
 
 @section('content')
-{{-- {{dd($idConducteur, $idTrajet)}} --}}
     <h1 class="center-title" style="padding-bottom: 27px;">
         <Strong>Annuler mon trajet</Strong>
     </h1>
@@ -30,7 +29,7 @@
             <div class="alert alert-warning">
                 le trajet n'a pas été annulé &#9785; {{implode('', $errors->all('<div>:message</div>'))}}
             </div>
-        @endif
+    @endif
     @if ( session()->has('errors'))
         <div class="alert alert-danger">
             {{session()->get('errors')}}&#9785; 

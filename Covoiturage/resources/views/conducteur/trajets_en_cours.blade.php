@@ -1,7 +1,7 @@
 @extends('base')
 
 @section('title')
-    Mes trajets en cours
+    Mes trajets à venir
 @endsection
 
 @section('style')
@@ -9,27 +9,27 @@
 @endsection
            
 @section('navbarSequel')
-    <ul class="navbar-nav mr-auto"> 
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('user')}}">{{$trajetsEnCours[0]->prenomUtilisateur}} {{$trajetsEnCours[0]->nomUtilisateur}}</a>
-        </li>
-    </ul>
-    <div class="pmd-user-info ">
-        <a href="{{route('user')}}" class="nav-user-img" > 
-            @if ($trajetsEnCours[0]->photoProfil != null)
-                <img class="avatar-img rounded-circle" src="{{$trajetsEnCours[0]->photoProfil}}" width="73" height="73" alt="avatar"> 
-            @else
-                <img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar">
-            @endif   
-        </a>
-    </div>
+    @if(session()->has('user'))
+        <div class="pmd-user-info "> 
+                <div class="dropdown">
+                    <button data-toggle="dropdown" class="dropdown-toggle" type="button" style="background-color: rgb(51, 63, 80); border: 1px solid rgb(51, 63, 80);"><img class="avatar-img rounded-circle" src="/images/avatar_photo.jpg" width="73" height="73" alt="avatar"></button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <li class="sous-menu"><a tabindex="-1">{{session()->get('user')['prenom']}} {{session()->get('user')['nom']}}</a></li>
+                            <hr>
+                            <li><a tabindex="-1" class="dropdown-item sous-menu" href="{{route('user', ['idUtilisateur' => session()->get('user')['id']])}}">Mon Profil</a></li>
+                            <form method="POST" action="{{route('logout.post')}}">@csrf<button class="dropdown-item nav-link" type="submit">Déconnexion</button></form>
+                            
+                        </div> 
+                </div>
+        </div>
+    @endif
 @endsection
 
 @section('content')
     <h1 class="center-title">
-        <Strong>Mes trajets en cours</Strong>
+        <Strong>Mes trajets à venir</Strong>
     </h1><br>
-    @if ( session()->has('errors'))
+    @if (session()->has('errors'))
         <div class="alert alert-danger">
             {{session()->get('errors')}}&#9785; 
         </div>
@@ -38,6 +38,11 @@
         <div class="alert alert-success">
                 {{session()->get('success')}}&#9786;
         </div>
+    @endif
+    @if(count($trajetsEnCours) == 0)
+    <div class="border border-dark col-md-8 mx-auto">
+        <h5 class= "text-center mb-4 font-weight-bold text-danger mt-3">Vous n'avez pas aucun trajet</h5> 
+    </div>
     @endif
     <!-- div global -->
     @for ($pos = 0; $pos < count($trajetsEnCours) ; $pos++)
@@ -55,7 +60,7 @@
             <div class="col-md-7 ml-4 detail-trajet">
                 <div class="row">
                     <div class="col-md-5 text-center lieu-depart">
-                        <span>{{$trajetsEnCours[$pos]->numRueDep}} {{$trajetsEnCours[$pos]->rueDep}} {{$trajetsEnCours[$pos]->numRueDep}}, {{$trajetsEnCours[$pos]->cpDep}} {{$trajetsEnCours[$pos]->villeDep}}</span>
+                        <span>{{$trajetsEnCours[$pos]->numRueDep}} {{$trajetsEnCours[$pos]->rueDep}} {{$trajetsEnCours[$pos]->cpDep}} {{$trajetsEnCours[$pos]->villeDep}}</span>
                     </div> 
                     <div class="col-md-2 pl-2 temps-image">
                         <!-- photo de destination -->
@@ -65,7 +70,7 @@
                         </div>
                     </div> 
                     <div class="col-md-5 text-center lieu-arrive">
-                        <span>{{$trajetsEnCours[$pos]->numRueArr}} {{$trajetsEnCours[$pos]->rueArr}} {{$trajetsEnCours[$pos]->numRueArr}}, {{$trajetsEnCours[$pos]->cpArr}} {{$trajetsEnCours[$pos]->villeArr}}</span>
+                        <span>{{$trajetsEnCours[$pos]->numRueArr}} {{$trajetsEnCours[$pos]->rueArr}} {{$trajetsEnCours[$pos]->cpArr}} {{$trajetsEnCours[$pos]->villeArr}}</span>
                     </div>
                 </div>
             </div>
@@ -122,7 +127,7 @@
                             <input type="hidden" name="nbrplaces" value="{{$passagers[$pos][$i]->nbPlace}}">
                             <div class="col-md-1 ml-5 mt-1 btn-accept" >
                                 <button type="submit" class="btn-md border-0 bg-transparent">
-                                    <img src="/images/check_button.png" width="52" height="48" alt=""/>
+                                    <img src="/images/check_button.png" width="52" height="48" alt="accepter"/>
                                 </button>
                             </div>
                         </form>
@@ -131,7 +136,7 @@
                             <input type="hidden" name="idPassager" value="{{$passagers[$pos][$i]->idPassager}}">
                             <div class="col-md-1 mt-1 btn-refuse">
                                 <button type="submit" class="btn-md border-0 bg-transparent">
-                                    <img src="/images/cancel_button.png" width="52" height="48" alt=""/>
+                                    <img src="/images/cancel_button.png" width="52" height="48" alt="refuser"/>
                                 </button>
                             </div>
                         </form>

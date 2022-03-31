@@ -24,6 +24,9 @@ class ConducteurController extends BaseController
 
     /* ====== Page Proposer un trajet ====== */
 
+    /**
+     * Fonction pour afficher le formulaire de proposition d'un trajet
+     */
     public function showProposerTrajetForm(){
         if(session()->has('user'))
             //if($this->repository->userVoiture(session()->has('user')['id']))
@@ -80,6 +83,11 @@ class ConducteurController extends BaseController
         return $request->json()->all();
     }
 
+
+    /**
+     * Fonction pour afficher le formulaire des trajets à venir
+     * @param $idConducteur : Identifiant d'un conducteur
+     */
     public function showTrajetEnCours($idConducteur)
     {
         if(!session()->has('user'))
@@ -114,7 +122,10 @@ class ConducteurController extends BaseController
                                                      ]);
     }
 
-    //function pour valider un passager par un conducteur
+    /**
+     * Fonction pour valider un passager par un conducteur
+     * @param $idReservation : Identifiant de réservation
+     */
     public function validerPassager(Request $request, int $idReservation)
     {
         if(!session()->has('user'))
@@ -132,7 +143,10 @@ class ConducteurController extends BaseController
         return redirect()->back()->with('errors', 'Vous avez dépassé le nombre maximum de places autorisées.');          
     }
 
-    //function pour refuser un passager par un conducteur
+    /**
+     * Fonction pour refuser un passager par un conducteur
+     * @param $idReservation
+     */
     public function refuserPassager(Request $request, $idReservation)
     {
         if(!session()->has('user'))
@@ -143,6 +157,10 @@ class ConducteurController extends BaseController
         return redirect()->back();
     }
 
+    /**
+     * Fonction pour afficher le formulaire d'annulation d'un trajet
+     * @param $idTrajet : Identifiant d'un trajet
+     */
     public function showAnnulerTrajet($idTrajet) 
     {   
         if(!session()->has('user'))
@@ -157,6 +175,10 @@ class ConducteurController extends BaseController
         return view('/conducteur/annuler_trajet', ['idConducteur' => $idConducteur, 'idTrajet' => $idTrajet]);
     }
     
+    /**
+     * Fonction pour valider l'annulation d'un trajet
+     * @param $idTrajet : Identifiant d'un trajet
+     */
     public function acceptAnnulerTrajet(Request $request, $idTrajet)
     {   
         if(!session()->has('user'))

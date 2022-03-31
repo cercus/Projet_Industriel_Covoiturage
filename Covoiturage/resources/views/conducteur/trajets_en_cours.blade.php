@@ -39,6 +39,11 @@
                 {{session()->get('success')}}&#9786;
         </div>
     @endif
+    @if(count($trajetsEnCours) == 0)
+    <div class="border border-dark col-md-8 mx-auto">
+        <h5 class= "text-center mb-4 font-weight-bold text-danger mt-3">Vous n'avez pas aucun trajet</h5> 
+    </div>
+    @endif
     <!-- div global -->
     @for ($pos = 0; $pos < count($trajetsEnCours) ; $pos++)
     <div class="border border-dark">

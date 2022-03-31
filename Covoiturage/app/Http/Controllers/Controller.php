@@ -27,6 +27,10 @@ class Controller extends BaseController
     /* ----------------- Fonctions pour les pages se trouvant dans le dossier commun ----------------- */
 
     // Page de profil (contenant tout les accès aux différents pages )
+    /**
+     * Fonction pour afficher la page de profil contenant tout les boutons
+     * @param $idUtilisateur : Identifiant d'un utilisateur
+     */
     public function showUserPage($idUtilisateur) {
         if(!session()->has('user'))
             return redirect()->route('connexion');
@@ -39,6 +43,7 @@ class Controller extends BaseController
     /* ====== Page Historique des trajets ====== */
     /**
      * Fonction pour afficher la vue historique trajet
+     * @param $idUtilisateur : Identifiant d'un utilisateur
      */
     public function showHistoriqueTrajet($idUtilisateur) {
         if(session()->has('user')) {
@@ -55,7 +60,9 @@ class Controller extends BaseController
     }
 
     /* ====== Pages Concernant les messages ====== */
-    // Page Mes messages
+    /**
+     * Fonction pour afficher la page des messages d'un utilisateur
+     */
     public function showFormMsg() {
         if(!session()->has('user'))
             return redirect()->route('connexion');
@@ -64,6 +71,9 @@ class Controller extends BaseController
         return view('commun.mes_messages', ['messagesProfil' => $messagesProfil]);
     }
 
+    /**
+     * Fonction pour supprimer un message
+     */
     public function supprimerMsg(Request $request) {
         $idProfil = session()->get('user')['id']; //101;
         $messagesProfil = $this->repository->messagesProfil($idProfil);
@@ -83,42 +93,28 @@ class Controller extends BaseController
         }
     }
 
+    /**
+     * Fonction pour aficher le formulaire pouru n nouveau message
+     */
     public function showFormNvMsg(){
         if(!session()->has('user'))
             return redirect()->route('accueil');
-        /*Si on suppose que pour la page de connexion il existe
-        Un code qui permet de se souvenir de l'authentification de l'utilisateur
-        $value=$this->repository->getUserId($email, $password);
-        $key='idUser';
-        $request->session()->put($key, $value); 
-        $teams=$this->repository->teams();
-        if (!$request->session()->has('idUser')) {
-            return redirect(route('connexion'));
-        }
-        $idProfil = $request->session()->get('idUser');*/
         $idProfil = session()->get('user')['id'];
         $trajetsReservations= $this->repository->trajetsReservationsProfil($idProfil);
         $messagesProfil= $this->repository->messagesProfil($idProfil);
-        //dd($trajetsReservations);
         if(empty($trajetsReservations))
             return redirect()->route('messages.all', ['messagesProfil' => $messagesProfil]);
         return view('commun.nouveau_message', ['trajetsReservations'=>$trajetsReservations]);
     }
 
+    /**
+     * Fonction pour insérer un nouveau message
+     */
     public function nvMsg(Request $request) 
     {
         if(!session()->has('user'))
             return redirect()->route('accueil');
-        /*Si on suppose que pour la page de connexion il existe
-        Un code qui permet de se souvenir de l'authentification de l'utilisateur
-        $value=$this->repository->getUserId($email, $password);
-        $key='idUser';
-        $request->session()->put($key, $value); 
-        $teams=$this->repository->teams();
-        if (!$request->session()->has('idUser')) {
-            return redirect(route('connexion'));
-        }
-        $idProfil = $request->session()->get('idUser');*/
+        
         $idProfil = session()->get('user')['id'];
         $messagesProfil= $this->repository->messagesProfil($idProfil);
 
@@ -152,40 +148,29 @@ class Controller extends BaseController
         }
     }
 
+    /**
+     * Fonction pour afficher la page permettant de répondre à un message
+     * @param $msgId : Identifiant d'un message
+     */
     public function showFormRepondreMsg(int $msgId)
     {
         if(!session()->has('user'))
             return redirect()->route('accueil');
-        /*Si on suppose que pour la page de connexion il existe
-        Un code qui permet de se souvenir de l'authentification de l'utilisateur
-        $value=$this->repository->getUserId($email, $password);
-        $key='idUser';
-        $request->session()->put($key, $value); 
-        $teams=$this->repository->teams();
-        if (!$request->session()->has('idUser')) {
-            return redirect(route('connexion'));
-        }
-        $idProfil = $request->session()->get('idUser');*/
+        
         $idProfil = session()->get('user')['id'];
         $unMessages= $this->repository->unMessages($msgId);
         return view('commun.repondre_message', 
         ['unMessages' => $unMessages], ['idProfil' => $idProfil]);
     }
 
+    /**
+     * Fonction qui valide le formulaire permettant dd répondre à un message
+     */
     public function repondreMsg(Request $request)
     {
         if(!session()->has('user'))
             return redirect()->route('accueil');
-        /*Si on suppose que pour la page de connexion il existe
-        Un code qui permet de se souvenir de l'authentification de l'utilisateur
-        $value=$this->repository->getUserId($email, $password);
-        $key='idUser';
-        $request->session()->put($key, $value); 
-        $teams=$this->repository->teams();
-        if (!$request->session()->has('idUser')) {
-            return redirect(route('connexion'));
-        }
-        $idProfil = $request->session()->get('idUser');*/
+        
         $idProfil = session()->get('user')['id'];
         $messagesProfil= $this->repository->messagesProfil($idProfil);
         $messages = [
@@ -206,7 +191,6 @@ class Controller extends BaseController
         $msgId=$this->repository->insertMsg($msg);
         try {
             return redirect()->route('messages.reply', ['msgId' => $msgId]);
-            //return redirect()->route('messages.all', ['messagesProfil' => $messagesProfil]);
         }catch (Exception $exception) {
             return 
             redirect()->route('messages.reply')->withInput()->withErrors("Impossible d'envoyer le message.");
@@ -215,7 +199,10 @@ class Controller extends BaseController
 
     /* ====== Pages Informations personnels ====== */
 
-    // Page Informations personnelles
+    /**
+     * Fonction pour afficher la page des informations personnelles d'un utilisateur
+     * @param $idUtilisateur : Identifiant d'un utilisateur
+     */
     public function showInfosPerso($idUtilisateur){
         if(!session()->has('user'))
             return redirect()->route('connexion');
@@ -245,6 +232,10 @@ class Controller extends BaseController
 
     }
 
+    /**
+     * Fonction pour afficher le formulaire de modification des informations personnelles
+     * @param $idUtilisateur : Identifiant d'un utilsiateur
+     */
     public function showModificationProfilForm($idUtilisateur) 
     {
         if(!session()->has('user'))
@@ -255,7 +246,9 @@ class Controller extends BaseController
         return view('commun.modification_profil', ['infoPerso' => $infoPerso[0]]);
     }
 
-    // Bouton modifier info personnelles
+    /**
+     * Fonction pour valdier le formulaire de modification d'un profil
+     */
     public function modifyProfil(Request $request) 
     {
         if(!session()->has('user'))
@@ -311,7 +304,10 @@ class Controller extends BaseController
 
 
 
-    // Page modification technique
+    /**
+     * Fonction pour afficher le formulaire de modification des informations techniques
+     * @param $idUtilisateur : Identifiant d'un utilisateur
+     */
     public function showModificationTechniqueForm($idUtilisateur) 
     {
         if(!session()->has('user'))
@@ -321,7 +317,6 @@ class Controller extends BaseController
         
         $infoPerso = $this->repository->infoPersonnelles($idUtilisateur);
         $infoTechno = $this->repository->infoTechniques($idUtilisateur);
-        //dd($infoTechno);
         if(empty($infoTechno))
             return view('commun.modification_technique', ['infoTechno' => $infoTechno, 
         'infoPerso' => $infoPerso[0]]);
@@ -330,7 +325,9 @@ class Controller extends BaseController
         
     }    
 
-    // Bouton modifier info technique
+    /**
+     * Fonction pour valdier le formulaire de modification technique
+     */
     public function modifyTechnique(Request $request) 
     {
         if(!session()->has('user'))
@@ -382,24 +379,13 @@ class Controller extends BaseController
         }   
     }
 
-    // PAge ecrire un nouveau message
-    public function showEcrireMessageForm(){
-        return view('commun.nouveau_message');
-    }
-
-    // Bouton traitement nouv message
-    public function newMessage() {
-        /* TODO */
-        return view('commun.nouveau_message');
-    }
-
-
-    //Page Repondre a un message
-    public function showMessagesReply() {
-        return view('commun.repondre_message');
-    }
 
     /* ====== Page Notation ====== */
+    /**
+     * Fonction pour afficher la notation d'un trajet quand l'utilisateur qui note est conducteur
+     * @param $idUtilisateur : Identifiant d'un utilisateur
+     * @param $idReservaion : Identifiant d'une réservation
+     */
     public function showTrajetForNotationConducteur($idUtilisateur, $idReservation) {
         if(session()->has('user')) {
             //if(session()->get('user')['id'] == $idUtilisateur) {
@@ -414,6 +400,9 @@ class Controller extends BaseController
     }
 
     // Les passagers notent les conducteurs
+    /**
+     * Fonction pour afficher la notation d'un trajet quand l'utilisateur qui note est passager
+     */
     public function showTrajetForNotationPassager($idUtilisateur, $idReservation) {
         if(session()->has('user')) {
             //if(session()->get('user')['id'] == $idUtilisateur) {
@@ -427,6 +416,11 @@ class Controller extends BaseController
     }
 
     /* Fonction pour noter un conducteur après un trajet (storeNotationConducteur) */ 
+    /**
+     * Fonction pour valdier le formulaire de notation quand l'utilisateur qui note est conducteur
+     * @param $idUtilisateur : Identifiant d'un utilisateur
+     * @param $idReservation : Identifiant d'une reservation
+     */
     public function storeNotationConducteur(Request $request, $idUtilisateur, $idReservation) {
         
         $rules = [
@@ -458,7 +452,9 @@ class Controller extends BaseController
     }
 
     /**
-     * FOnction pour stocker une notation
+     * Fonction pour valdier le formulaire de notation quand l'utilisateur qui note est passager
+     * @param $idUtilisateur : Identifiant d'un utilisateur
+     * @param $idReservation : Identifiant d'une reservation
      */
     public function storeNotationPassager(Request $request, $idUtilisateur, $idReservation) {
         
@@ -491,15 +487,19 @@ class Controller extends BaseController
     }
 
     // fonction recupération des resultats des notations d'un utilisateurs
-    public function showCaracteristique($idUtiliateurNotation) {
+    /**
+     * Fonction pour afficher toutes les notations d'un utilisateur
+     * @param $idUtilisateurNotation : Identifiant d'un utilisateur
+     */
+    public function showCaracteristique($idUtilisateurNotation) {
         if(session()->has('user')) {
             
             //dd (['noteUtilsateur' => $this->repository->getNotationGlobalUtilisateur($idUtiliateurNotation)]);
-                return view('commun.caracteristiques', ['notations' => $this->repository->getCharacteristicsUsers($idUtiliateurNotation), 
-                                                        'voitureConducteur' => $this->repository->getVoitureConducteurFromIdUtilisateur($idUtiliateurNotation)
-                                                        ,'noteUtilisateur' => $this->repository->getNotationGlobalUtilisateur($idUtiliateurNotation)
-                                                        ,'sumNoteUtilisateur'=> $this->repository->getSumNotationGlobalUtilisateur($idUtiliateurNotation)
-                                                        ,'countNoteUtilisateur'=> $this->repository->getCountNotationGlobalUtilisateur($idUtiliateurNotation)]);
+                return view('commun.caracteristiques', ['notations' => $this->repository->getCharacteristicsUsers($idUtilisateurNotation), 
+                                                        'voitureConducteur' => $this->repository->getVoitureConducteurFromIdUtilisateur($idUtilisateurNotation)
+                                                        ,'noteUtilisateur' => $this->repository->getNotationGlobalUtilisateur($idUtilisateurNotation)
+                                                        ,'sumNoteUtilisateur'=> $this->repository->getSumNotationGlobalUtilisateur($idUtilisateurNotation)
+                                                        ,'countNoteUtilisateur'=> $this->repository->getCountNotationGlobalUtilisateur($idUtilisateurNotation)]);
         } 
         else 
             return redirect()->route('accueil');
@@ -507,68 +507,64 @@ class Controller extends BaseController
 
 
 
-    /* ----------------- Fonctions pour les pages se trouvant dans le dossier conducteur ----------------- */
-
-    public function showTrajetEnCours() {
-        return view('conducteur.trajets_en_cours');
-    }
-
-    public function showAnnulerTrajet() {
-        return view('conducteur.annuler_trajet');
-    }
-
-    public function showConfirmAnnulationTrajet() {
-        return view('conducteur.confirmation_annuler_trajets');
-    }
-
-
     /* ----------------- Fonctions pour les pages se trouvant dans le dossier passager ----------------- */
 
 
-    public function showReservationEnCours() {
-        return view('passager.reservation_en_cours');
-    }
+    // public function showReservationEnCours() {
+    //     return view('passager.reservation_en_cours');
+    // }
 
 
-    public function showAnnulerReservation() {
-        return view('passager.annuler_reservation');
-    }
+    // public function showAnnulerReservation() {
+    //     return view('passager.annuler_reservation');
+    // }
 
-    public function showConfirmAnnulationReservation() {
-        return view('passager.confirmation_annuler_reservation');
-    }
+    // public function showConfirmAnnulationReservation() {
+    //     return view('passager.confirmation_annuler_reservation');
+    // }
 
-    public function showPayementForm() {
-        return view('passager.payement');
-    }
+    // public function showPayementForm() {
+    //     return view('passager.payement');
+    // }
 
-    public function showRechercheTrajet() {
-        return view('passager.recherche_trajet');
-    }
+    // public function showRechercheTrajet() {
+    //     return view('passager.recherche_trajet');
+    // }
 
-    public function showDetailRechercheTrajet() {
-        return view('passager.details_result_recherche_trajet');
-    }
+    // public function showDetailRechercheTrajet() {
+    //     return view('passager.details_result_recherche_trajet');
+    // }
 
 
     /* ----------------- Fonctions pour les pages restantes ----------------- */
 
+    /**
+     * Fonction pour afficher la page Qui-sommes-nous ?
+     */
     public function showQuiSommesNous() {
         return view('qui_sommes_nous');
     }
 
+    /**
+     * Fonction pour afficher le fomulaire pour poser une question
+     */
     public function showQuestionForm() {
         return view('question');
     }
 
     /* ====== Page d'inscription ====== */
-
+    /**
+     * Fonction pour afficher le formulaire d'inscription
+     */
     public function showInscriptionForm() {
         if(session()->has('user'))
             return redirect()->route('accueil');
         return view('inscription');
     }
 
+    /**
+     * Fonction pour valider le formulaire d'inscription
+     */
     public function storeInscription(Request $request)
     {
         //var_dump('dateNaiss');
@@ -688,12 +684,18 @@ class Controller extends BaseController
 
     /* ====== Page de connexion ====== */
     // FOnction pour afficher la page de connexion
+    /**
+     * Fonction pour afficher le formulaire de connexion
+     */
     public function showConnexionForm() {
         if(session()->has('user'))
             return redirect()->route('accueil');
         return view('connexion');
     }
 
+    /**
+     * Fonction pour valider le formulaire de connexion
+     */
     public function Connexion()
     {
         $rules = [
@@ -722,6 +724,9 @@ class Controller extends BaseController
         }
     }
 
+    /**
+     * Fonction pour la déconnexion
+     */
     public function logout(Request $request) {
         $request->session()->forget('user'); 
         return redirect()->route('accueil');
@@ -746,6 +751,9 @@ class Controller extends BaseController
         return view('home');
     }
 
+    /**
+     * Fonction pour la recherche de trajet sur la page d'accueil
+     */
     public function accueil(Request $request)
     {
         $messages = [
@@ -805,18 +813,6 @@ class Controller extends BaseController
         $villeArr = $validatedData['villeArr'];
         $cpArr = $validatedData['cpArr'];
 
-        /*$trajet= [
-            'dateDep' => '2022-02-21 07:00:00',
-            'numRueDep' => 'rue',
-            'adresseRueDep' => 'rue',
-            'villeDep' => 'Marseille',
-            'cpDep' => 13013,
-            'nbPlace' => 3,
-            'numRueArr' => 3,
-            'adresseRueArr' => 'rue',
-            'villeArr' => 'Marseille',
-            'cpArr' => 13009
-        ];*/
 
         //Pour récupérer les données saisies par l'utilisateur
         $trajet=$this->repository->createDataRechercheTrajetForm(

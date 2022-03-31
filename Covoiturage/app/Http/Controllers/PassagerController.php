@@ -23,6 +23,9 @@ class PassagerController extends BaseController
         $this->nb = 1;
     }
 
+    /**
+     * Fonction pour valider le formulaire de recherche de trajet
+     */
     public function rechercheTrajet(Request $request)
     {
         $messages = [
@@ -83,19 +86,6 @@ class PassagerController extends BaseController
         $villeArr = $validatedData['villeArr'];
         $cpArr = $validatedData['cpArr'];
 
-        /*$trajet= [
-            'dateDep' => '2022-02-21 07:00:00',
-            'numRueDep' => 'rue',
-            'adresseRueDep' => 'rue',
-            'villeDep' => 'Marseille',
-            'cpDep' => 13013,
-            'nbPlace' => 3,
-            'numRueArr' => 3,
-            'adresseRueArr' => 'rue',
-            'villeArr' => 'Marseille',
-            'cpArr' => 13009
-        ];*/
-
         //Pour récupérer les données saisies par l'utilisateur
         $trajet=$this->repository->createDataRechercheTrajetForm($dateDep, $numRueDep, $adresseRueDep, $villeDep, $cpDep, $nbPlace, $numRueArr, $adresseRueArr, $villeArr, $cpArr);
 
@@ -110,6 +100,9 @@ class PassagerController extends BaseController
         }
     }
 
+    /**
+     * Fonction pour afficher le formulaire de recherche d'un trajet
+     */
     public function showFormRechercheTrajet()
     {
         //Les trajets les moins chers
@@ -131,15 +124,20 @@ class PassagerController extends BaseController
         'unProfil' => $unProfil, 'uneNote' => $uneNote, 'passagers' => $passagers]);
     }
 
+    
     public function reservation()
     {
         //Action à faire lorqu'on clique sur le bouton réserver
         return redirect()->route('accueil');
     }
 
+    /**
+     * Fonction pour montrer les reservations a venir pour un passager
+     * @param $idPassager : Identifiant d'un passager
+     */
     public function showReservationEnCours($idPassager) {
         if(!session()->has('user'))
-            return redirect()->route('home');
+            return redirect()->route('accueil');
         //if(session()->get('user')['id'] != $idPassager)
         //    return redirect()->route('home');
         // les reservations en cours d'un passager
@@ -167,7 +165,10 @@ class PassagerController extends BaseController
                                                       'conducteurs' => $conducteurs]);
     }
 
-
+    /**
+     * Fonction pour afficher le formulaire d'annulation d'une reservation
+     * @param $idReservation : Identifiant d'une reservation
+     */
     public function showAnnulationReservation($idReservation) {
         if(!session()->has('user'))
             return redirect()->route('connexion');
@@ -182,6 +183,10 @@ class PassagerController extends BaseController
         return view('/passager/annuler_reservation', ['idReservation' => $idReservation]);
     }
 
+    /**
+     * Fonction pour valider le formulaire d'annulation de reservation
+     * @param $idreservation : Identifiant d'une réservation
+     */
     public function acceptAnnulerReservation(Request $request, $idReservation)
     {   
         if(!session()->has('user'))
@@ -208,6 +213,9 @@ class PassagerController extends BaseController
         return redirect()->route('confirmation_annuler_reservation');        
     }
 
+    /**
+     * Fonction pour valider l'annulation d'une reservation
+     */
     public function showConfirmAnnulationReservation() 
     {
         if(!session()->has('user'))
@@ -217,6 +225,9 @@ class PassagerController extends BaseController
     }
 
 
+    /**
+     * FOnction pour reserver un trajet
+     */
     public function reserver(Request $request) {
         if(!session()->has('user'))
             return redirect()->route('connexion');
